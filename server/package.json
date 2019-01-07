@@ -11,8 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "colyseus": "^0.9.22",
-    "colyseus.js": "^0.6.0-alpha.1",
+    "colyseus": "^0.9.24",
     "express": "^4.14.0",
     "nodemon": "^1.7.1",
     "serve-index": "^1.8.0"

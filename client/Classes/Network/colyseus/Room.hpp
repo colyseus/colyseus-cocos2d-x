@@ -22,11 +22,26 @@ class Room : public cocos2d::Ref
 public:
     virtual ~Room();
     Room (Client *client,const std::string& name);
+
+    RoomEventHandle _onJoinRoom;
+    RoomEventHandle _onError;
+    RoomEventHandle _onLeave;
+    RoomEventHandle _onPatch;
+    RoomEventHandle _onData;
+    RoomEventHandle _onSetRoomState;
+
     void setState(msgpack::object state, int remoteCurrentTime, int remoteElapsedTime);
     void leave(bool requestLeave = true);
     void receiveData (NetworkData* data);
     void applyPatch (const char* bytes, int len);
     void emitError (MessageEventArgs *args);
+
+    template <typename T>
+    inline void sendData (T data)
+    {
+        this->_client->send((int)Protocol::ROOM_DATA,this->_id,data);
+    }
+
 private:
     Client *_client;
     std::string _name;
@@ -34,18 +49,5 @@ private:
     CC_SYNTHESIZE(int, _id, ID);
     CC_SYNTHESIZE(char *, _previousState, PreviousState);
     CC_SYNTHESIZE(int, _previousStateSize, PreviousStateSize);
-public:
-    RoomEventHandle _onJoinRoom;
-    RoomEventHandle _onError;
-    RoomEventHandle _onLeave;
-    RoomEventHandle _onPatch;
-    RoomEventHandle _onData;
-    RoomEventHandle _onSetRoomState;
-    template <typename T>
-    inline void sendData (T data)
-    {
-        this->_client->send((int)Protocol::ROOM_DATA,this->_id,data);
-    }
-
 };
 #endif /* Room_hpp */
