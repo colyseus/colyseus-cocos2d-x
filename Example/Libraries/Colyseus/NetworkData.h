@@ -1,11 +1,3 @@
-//
-//  NetworkEventDefine.h
-//  CocosEngine
-//
-//  Created by Hung Hoang Manh on 3/22/17.
-//
-//
-
 #ifndef NetworkData_h
 #define NetworkData_h
 

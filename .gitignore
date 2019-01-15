@@ -1,3 +1,6 @@
+cocos2d/
+build/
+
 # OSX - https://github.com/github/gitignore/blob/master/Global/OSX.gitignore
 .DS_Store
 .AppleDouble
@@ -33,6 +36,7 @@ ehthumbs.db
 
 # Folder config file
 Desktop.ini
+.vscode
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/

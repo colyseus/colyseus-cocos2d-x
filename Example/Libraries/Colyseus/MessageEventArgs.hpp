@@ -1,11 +1,3 @@
-//
-//  MessageEventArgs.hpp
-//  CocosEngine
-//
-//  Created by Hung Hoang Manh on 3/22/17.
-//
-//
-
 #ifndef MessageEventArgs_hpp
 #define MessageEventArgs_hpp
 

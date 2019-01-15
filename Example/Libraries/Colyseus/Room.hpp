@@ -13,7 +13,7 @@
 #include "MessageEventArgs.hpp"
 #include "Protocol.hpp"
 #include "Client.hpp"
-#include "DeltaContainer.h"
+#include "DeltaContainer.hpp"
 
 typedef std::function<void(cocos2d::Ref*,cocos2d::Ref*)> RoomEventHandle;
 

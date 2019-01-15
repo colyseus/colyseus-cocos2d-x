@@ -12,35 +12,24 @@
 #include <stdio.h>
 #include "network/WebSocket.h"
 #include "msgpack.hpp"
+#include "Connection.hpp"
 
 class Room;
 using namespace cocos2d::network;
 
-typedef std::function<void(int)> ClientCallback;
-
-class Client : public WebSocket::Delegate
+class Client
 {
 public:
-    enum RESPONSE_TYPE
-    {
-        ON_OPEN = 0,
-        ON_MESSAGE,
-        ON_CLOSE,
-        ON_ERROR,
-        ON_INIT_FAIL,
-    };
-private:
-    virtual void onOpen(WebSocket* ws)override;
-    virtual void onMessage(WebSocket* ws, const WebSocket::Data& data)override;
-    virtual void onClose(WebSocket* ws)override;
-    virtual void onError(WebSocket* ws, const WebSocket::ErrorCode& error)override;
-    ClientCallback _clientCallback;
-public:
-    static Client* getInstance();
-    void start(const std::string& serverUrl,ClientCallback callback);
+    Client(const std::string& endpoint);
     virtual ~Client();
-    Room* join(const std::string& roomName, cocos2d::Ref* options);
+    
+    // Methods
+    void close();
+    void open();
 
+    Room* join(const std::string& roomName, cocos2d::Ref* options);
+    Room* rejoin(const std::string& roomName, std::string& sessionId);
+    
     void recvUserHandle(msgpack::object_array data);
     void joinRoomHandle(msgpack::object_array data);
     void joinRoomErrorDRoomHandle(msgpack::object_array data);
@@ -50,31 +39,29 @@ public:
     void roomDataHandle(msgpack::object_array data);
     void badRequestHandle(msgpack::object_array data);
 
-    void close();
-    std::string getError();
-private:
-    static Client* _instance;
-    Client();
-    std::string _id;
-    bool parseMsg(const char *data, int len);
-    WebSocket* _ws;
-    std::map<const std::string,Room*> _rooms;
-public:
+    // Properties
+    Connection* connection;
+    std::string id;
+    
+    // Callbacks
+    std::function<void>* onOpen;
+    std::function<void>* onClose;
+    std::function<void(std::string)>* onError;
+    
     Room* getRoomByName(const std::string& name);
     Room* getRoomByID(int ID);
-    std::string getClientID() { return _id; }
-    template <typename... Args>
-    inline void send(Args... args)
-    {
-        msgpack::sbuffer buffer;
-        msgpack::packer<msgpack::sbuffer> pk(&buffer);
-        msgpack::type::make_define_array(args...).msgpack_pack(pk);
-        _ws->send((unsigned char *)buffer.data(),buffer.size());
-    }
-    inline void send(unsigned char *buffer,unsigned int size)
-    {
-        _ws->send(buffer,size);
-    }
-
+    
+//    template <typename... Args>
+//    inline void send(Args... args)
+//    {
+//        msgpack::sbuffer buffer;
+//        msgpack::packer<msgpack::sbuffer> pk(&buffer);
+//        msgpack::type::make_define_array(args...).msgpack_pack(pk);
+//        _ws->send((unsigned char *)buffer.data(),buffer.size());
+//    }
+private:
+    bool parseMsg(const char *data, int len);
+    std::map<const std::string,Room*> _rooms;
 };
+
 #endif /* Client_hpp */

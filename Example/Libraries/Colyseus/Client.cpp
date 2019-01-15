@@ -1,10 +1,3 @@
-//
-//  Client.cpp
-//  CocosEngine
-//
-//  Created by Hung Hoang Manh on 3/22/17.
-//
-//
 #include <sstream>
 #include <iostream>
 
@@ -16,34 +9,37 @@
 using namespace cocos2d;
 using namespace cocos2d::network;
 
-Client* Client::_instance = nullptr;
-Client* Client::getInstance()
+Client::Client(const std::string& endpoint)
 {
-    if(_instance == nullptr)
-        _instance = new Client();
-
-    return _instance;
-}
-
-void Client::start(const std::string& serverUrl,ClientCallback callback)
-{
-    _clientCallback = callback;
-    _ws = new WebSocket();
-    if(!_ws->init(*this, serverUrl))
-    {
-        CC_SAFE_DELETE(_ws);
-        _clientCallback(RESPONSE_TYPE::ON_INIT_FAIL);
-    }
-}
-Client::Client()
-{
-    _clientCallback = nullptr;
+    this->connection = new Connection(endpoint);
 }
 
 Client::~Client()
 {
-    CC_SAFE_DELETE(_ws);
+    // this->connection->close();
 }
+
+void Client::open()
+{
+    this->connection->_onOpen = []() { log("CONNECTION OPEN!"); };
+    this->connection->_onClose = []() { log("CONNECTION CLOSED!"); };
+    this->connection->_onMessage = [](const WebSocket::Data& data) { log("RECEIVED MESSAGE!"); };
+    this->connection->_onError = [](const WebSocket::ErrorCode&) { log("WEBSOCKET ERROR!"); };
+
+    this->connection->open();
+}
+
+Room* Client::join(const std::string& roomName, cocos2d::Ref* options)
+{
+    if (this->_rooms.find(roomName) == _rooms.end())
+    {
+        std::pair<const std::string, Room*> roomPair(roomName, new Room(this, roomName));
+        this->_rooms.insert(roomPair);
+    }
+    this->connection->send((int)Protocol::JOIN_ROOM, roomName);
+    return this->_rooms.find(roomName)->second;
+}
+
 
 bool Client::parseMsg(const char *data, int len)
 {
@@ -63,34 +59,40 @@ bool Client::parseMsg(const char *data, int len)
             log("Protocol::USER_ID");
             recvUserHandle(message);
             break;
+
         case Protocol::JOIN_ROOM:
             log("Protocol::JOIN_ROOM");
             joinRoomHandle(message);
             break;
+
         case Protocol::JOIN_ERROR:
             log("Protocol::JOIN_ERROR");
             joinRoomErrorDRoomHandle(message);
             break;
+
         case Protocol::LEAVE_ROOM:
             log("Protocol::LEAVE_ROOM");
             leaveRoomHandle(message);
             break;
+
         case Protocol::ROOM_DATA:
             log("Protocol::ROOM_DATA");
             roomDataHandle(message);
             break;
+
         case Protocol::ROOM_STATE:
             log("Protocol::ROOM_STATE");
             roomStateHandle(message);
             break;
+
         case Protocol::ROOM_STATE_PATCH:
             log("Protocol::ROOM_STATE_PATCH");
             roomPatchStateHandle(message);
             break;
+
         case Protocol::BAD_REQUEST:
             log("Protocol::BAD_REQUEST");
             badRequestHandle(message);
-            break;
             break;
 
         default:
@@ -190,18 +192,6 @@ void Client::roomStateHandle(msgpack::object_array data)
 void Client::badRequestHandle(msgpack::object_array data)
 {
 }
-
-Room* Client::join(const std::string& roomName, cocos2d::Ref* options)
-{
-    if (this->_rooms.find(roomName) == _rooms.end())
-    {
-        std::pair<const std::string, Room*> roomPair(roomName,new Room(this, roomName));
-        this->_rooms.insert(roomPair);
-    }
-    this->send((int)Protocol::JOIN_ROOM, roomName);
-    return this->_rooms.find(roomName)->second;
-}
-
 
 Room* Client::getRoomByName(const std::string& name)
 {

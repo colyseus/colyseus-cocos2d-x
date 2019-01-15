@@ -1,440 +1,143 @@
-//
-//  HelloWorldScene.cpp
-//  CocosEngine
-//
-//  Created by Hoang Hung on 4/7/17.
-//
-//
+/****************************************************************************
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ 
+ http://www.cocos2d-x.org
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 
 #include "HelloWorldScene.h"
+#include "SimpleAudioEngine.h"
 
 #include "Colyseus/Client.hpp"
-#include "Colyseus/Room.hpp"
 
-#include "./GamePlay/Planet.hpp"
-#include "./GamePlay/Player.hpp"
-#include "./GamePlay/Satellite.hpp"
+USING_NS_CC;
 
-HelloWorldScene::~HelloWorldScene()
+Client* colyseus = new Client("ws://localhost:2667");
+
+Scene* HelloWorld::createScene()
 {
-    // _gameRoom->leave(true);
-    _instance = nullptr;
+    return HelloWorld::create();
 }
 
-HelloWorldScene * HelloWorldScene::_instance = nullptr;
-HelloWorldScene* HelloWorldScene::getInstance()
+// Print useful error message instead of segfaulting when files are not there.
+static void problemLoading(const char* filename)
 {
-    return _instance;
-};
-
-bool HelloWorldScene::init()
-{
-    if (!Scene::init()) return false;
-
-    auto touchListener = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorldScene::onTouchBegan, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(HelloWorldScene::onTouchEnd, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(HelloWorldScene::onTouchMove, this);
-
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-
-    Client::getInstance()->start("ws://localhost:2667", CC_CALLBACK_1(HelloWorldScene::onConnectToServer, this));
-
-    _instance = this;
-    return true;
+    printf("Error while loading: %s\n", filename);
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-
-void HelloWorldScene::onConnectToServer(int response)
+void HelloWorld::onConnectToServer()
 {
-    switch (response) {
-    case Client::RESPONSE_TYPE::ON_OPEN:
-        regirsterServerListener();
-        break;
-    case Client::RESPONSE_TYPE::ON_CLOSE:
-    case Client::RESPONSE_TYPE::ON_INIT_FAIL:
-    case Client::RESPONSE_TYPE::ON_ERROR:
-        //this->stopAllTask();
-        //SceneManager::getInstance()->replaceScene(HelloWorldScene::create()); //cheat
-        break;
-
-    default:
-        break;
-    }
+    log("Colyseus: CONNECTED TO SERVER!");
 }
 
-
-bool HelloWorldScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
+// on "init" you need to initialize your instance
+bool HelloWorld::init()
 {
-    std::string id = Client::getInstance()->getClientID();
-    Vec2 pos = touch->getLocation();
-    for(int i = 0 ; i < _planets.size() ; i++)
+    //////////////////////////////
+    // 1. super init first
+    if ( !Scene::init() )
     {
-        if(_planets[i]->getOwner() && _planets[i]->getOwner()->getID() == id &&  _planets[i]->getPosition().distance(pos) < _planets[i]->getMaxSatellite())
-        {
-            _planetsSelected.push_back(_planets[i]);
-            _planets[i]->onFocus(true);
-        }
+        return false;
     }
-    return true;
-}
 
-void HelloWorldScene::onTouchMove(cocos2d::Touch* touch, cocos2d::Event* event)
-{
-    onTouchBegan(touch,event);
-}
+    colyseus->onOpen = CC_CALLBACK_0(HelloWorld::onConnectToServer, this);
 
-void HelloWorldScene::moveSatellites(Planet* src, Planet *target,bool isCollistion)
-{
-    if(src->getID() == target->getID())
-        return;
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    int n_satellite = 0;
-    if(isCollistion)
-        n_satellite = src->attack(target);
+    /////////////////////////////
+    // 2. add a menu item with "X" image, which is clicked to quit the program
+    //    you may modify it.
+
+    // add a "close" icon to exit the progress. it's an autorelease object
+    auto closeItem = MenuItemImage::create(
+                                           "CloseNormal.png",
+                                           "CloseSelected.png",
+                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+
+    if (closeItem == nullptr ||
+        closeItem->getContentSize().width <= 0 ||
+        closeItem->getContentSize().height <= 0)
+    {
+        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
+    }
     else
-        n_satellite = src->getnSatelite();
-
-    while(n_satellite > 0)
     {
-        Satellite* obj = Satellite::create();
-        this->addChild(obj);
-        obj->setPosition(src->getPosition());
-        obj->setPlanetTarget(target);
-        obj->setPlanet(src);
-        obj->setIsCollistion(isCollistion);
-        float duration = random(1.0f,5.0f);
-        ccBezierConfig c;
-        c.endPosition = target->getPosition();
-        c.controlPoint_1 = Vec2(0,0);
-        c.controlPoint_2 = Vec2(200,300);
-        BezierTo* bezier = BezierTo::create(duration, c);
-
-        //MoveTo *moveTo = MoveTo::create(duration, target->getPosition());
-        obj->setStatus(Satellite::STATUS::MOVING);
-        obj->setVisible(true);
-        obj->runAction(bezier);
-        n_satellite--;
+        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
+        float y = origin.y + closeItem->getContentSize().height/2;
+        closeItem->setPosition(Vec2(x,y));
     }
-}
 
-void HelloWorldScene::onTouchEnd(cocos2d::Touch* touch, cocos2d::Event* event)
-{
-    Planet* target = nullptr;
-    Vec2 pos = touch->getLocation();
+    // create menu, it's an autorelease object
+    auto menu = Menu::create(closeItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
 
-    for(int i = 0 ; i < _planets.size() ; i++)
+    /////////////////////////////
+    // 3. add your codes below...
+
+    // add a label shows "Hello World"
+    // create and initialize a label
+
+    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+    if (label == nullptr)
     {
-         if(_planets[i]->getPosition().distance(pos) < _planets[i]->getMaxSatellite())
-         {
-             target = _planets[i];
-             break;
-         }
-
+        problemLoading("'fonts/Marker Felt.ttf'");
     }
-    for(int i = 0 ; i < _planetsSelected.size() ; i++)
+    else
     {
-        if(target)
-            moveSatellites(_planetsSelected[i],target);
-        _planetsSelected[i]->onFocus(false);
+        // position the label on the center of the screen
+        label->setPosition(Vec2(origin.x + visibleSize.width/2,
+                                origin.y + visibleSize.height - label->getContentSize().height));
+
+        // add the label as a child to this layer
+        this->addChild(label, 1);
     }
-    _planetsSelected.clear();
-}
 
-
-PlayerType HelloWorldScene::getPlayerWin()
-{
-    PlayerType winer = _planets[0]->getOwner()->getType();
-    for(auto it = _planets.begin() ; it != _planets.end() ; it++)
+    // add "HelloWorld" splash screen"
+    auto sprite = Sprite::create("HelloWorld.png");
+    if (sprite == nullptr)
     {
-        if(winer != (*it)->getOwner()->getType())
-            return PlayerType::PLAYER_NONE;
+        problemLoading("'HelloWorld.png'");
     }
-    return winer;
-}
-
-void HelloWorldScene::addPlayer(Player* player)
-{
-    std::pair<std::string,Player*> pair(player->getID(),player);
-    _players.insert(pair);
-}
-void HelloWorldScene::removePlayer(std::string playerID)
-{
-
-}
-
-Planet* HelloWorldScene::getPlanetByID(std::string id)
-{
-    for(int i = 0 ; i < _planets.size() ; i++)
+    else
     {
-        if(_planets[i]->getID() == id)
-            return _planets[i];
+        // position the sprite on the center of the screen
+        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+
+        // add the sprite as a child to this layer
+        this->addChild(sprite, 0);
     }
-
-    return nullptr;
+    return true;
 }
 
-void HelloWorldScene::regirsterServerListener()
+void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-    _gameRoom = Client::getInstance()->join("gameRoom", nullptr);
+    //Close the cocos2d-x game scene and quit the application
+    Director::getInstance()->end();
 
-    _gameRoom->_onSetRoomState = CC_CALLBACK_2(HelloWorldScene::onGameRoomInit,this);
-    _gameRoom->_onData = CC_CALLBACK_2(HelloWorldScene::onRoomDataUpdate,this);
-    _gameRoom->_onError = CC_CALLBACK_2(HelloWorldScene::onRoomError,this);
+    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
 
-    DeltaContainer* gameRoomState = _gameRoom->getState();
-    gameRoomState->Listen(
-        "world/planets/:id/playerID/",
-        "replace",
-        CC_CALLBACK_2(HelloWorldScene::onUpdatePlanet,this)
-    );
-    gameRoomState->Listen(
-        "players/:id",
-        "add",
-        CC_CALLBACK_2(HelloWorldScene::onAddPlayer,this)
-    );
-    gameRoomState->Listen(
-        "players/:id",
-        "remove",
-        CC_CALLBACK_2(HelloWorldScene::onPlayerRemoved,this)
-    );
-    gameRoomState->Listen(
-        "world/planets/:id/nSatellite/",
-        "replace",
-        CC_CALLBACK_2(HelloWorldScene::onSatelliteUpdate,this)
-    );
-    gameRoomState->Listen(
-        "world/planets/:id/currentState/",
-        "replace",
-        CC_CALLBACK_2(HelloWorldScene::onPlanetChangeState,this)
-    );
+    //EventCustom customEndEvent("game_scene_close_event");
+    //_eventDispatcher->dispatchEvent(&customEndEvent);
+
+
 }
-
-float getNumber(msgpack::object object)
-{
-    switch (object.type) {
-        case msgpack::type::object_type::NEGATIVE_INTEGER:
-        case msgpack::type::object_type::POSITIVE_INTEGER:
-            return object.via.i64;
-        case msgpack::type::object_type::FLOAT32:
-        case msgpack::type::object_type::FLOAT64:
-            return object.via.f64;
-            break;
-
-        default:
-            break;
-    }
-    assert(0);
-    return -1;
-}
-
-void HelloWorldScene::onGameRoomInit(cocos2d::Ref* sender,cocos2d::Ref* args)
-{
-    auto winSize = Director::getInstance()->getVisibleSize();
-    //Room* room = (Room*)sender;
-    RoomUpdateEventArgs *data = (RoomUpdateEventArgs*)args;
-    msgpack::object state = data->_state->get();
-
-    msgpack::object_map players = state.via.map.ptr[1].val.via.map;
-    for(int i = 0 ; i < players.size ; i++)
-    {
-        std::string id;
-        players.ptr[i].val.via.map.ptr[0].val.convert(id);
-        PlayerType type  = (PlayerType)players.ptr[i].val.via.map.ptr[1].val.via.i64;
-        Player *player = new Player();
-        player->setID(id);
-        player->setType(type);
-        std::pair<std::string,Player*> pair(id,player);
-        _players.insert(pair);
-    }
-
-    msgpack::object_map planets = state.via.map.ptr[0].val.via.map.ptr[1].val.via.map;
-
-    float width = getNumber(state.via.map.ptr[0].val.via.map.ptr[2].val);
-    float height = getNumber(state.via.map.ptr[0].val.via.map.ptr[3].val);
-
-    float scaleX = winSize.width/width;
-    float scaleY = winSize.height/height;
-
-    for(int i = 0 ; i < planets.size ; i++)
-    {
-        msgpack::object_map obj = planets.ptr[i].val.via.map;
-        std::string plannetID;
-        planets.ptr[i].key.convert(plannetID);
-        std::cout<<"planet ID " << plannetID << std::endl;
-        float x = getNumber(obj.ptr[0].val)*scaleX;
-        float y = getNumber(obj.ptr[1].val)*scaleY;
-
-        // int teamID = obj.ptr[2].val.via.i64;
-        msgpack::object planetOfPlayerID = obj.ptr[3].val;
-
-        std::string playerId;
-        planetOfPlayerID.convert(playerId);
-
-        int maxSatellite = getNumber(obj.ptr[4].val);
-        float spawnSpeed = getNumber(obj.ptr[5].val);
-        int nSatellite = getNumber(obj.ptr[7].val);
-        int state = getNumber(obj.ptr[8].val);
-
-        Player *player = nullptr;
-        auto it = _players.find(playerId);
-        if(it != _players.end())
-            player = it->second;
-
-        Planet* pl = Planet::createWithSize(maxSatellite, spawnSpeed, player);
-        pl->setID(plannetID);
-        pl->setPosition(x,y);
-        pl->setState(state);
-        pl->setnSatelite(nSatellite);
-        addChild(pl);
-        _planets.push_back(pl);
-    }
-}
-
-void HelloWorldScene::onAddPlayer(std::vector<std::string> matches ,msgpack::object value)
-{
-    std::cout<<"----------------------onAddPlayer---------------------"<< std::endl;
-    for(int i = 0 ; i < matches.size() ; i++)
-        std::cout<<matches[i] << std::endl;
-    std::cout<< value << std::endl;
-
-
-    std::string playerId = matches[1];
-
-    PlayerType type  = (PlayerType)value.via.map.ptr[1].val.via.i64;
-    Player *player = new Player();
-    player->setID(playerId);
-    player->setType(type);
-    std::pair<std::string,Player*> pair(playerId,player);
-    _players.insert(pair);
-}
-
-void HelloWorldScene::onPlayerRemoved(std::vector<std::string> matches ,msgpack::object value)
-{
-    std::cout<<"----------------------onPlayerRemoved---------------------"<< std::endl;
-    for(int i = 0 ; i < matches.size() ; i++)
-        std::cout<<matches[i] << std::endl;
-    std::cout<< value << std::endl;
-
-    std::string playerId = matches[1];
-    auto it = _players.begin();
-    while (it != _players.end()) {
-        if(it->second->getID() == playerId)
-            it = _players.erase(it);
-        else
-            it++;
-    }
-    auto it2 = _planets.begin();
-    while(it2 != _planets.end())
-    {
-        if((*it2)->getOwner() && (*it2)->getOwner()->getID() == playerId)
-            (*it2)->reset();
-        it2++;
-    }
-}
-
-void HelloWorldScene::onSatelliteUpdate(std::vector<std::string> matches ,msgpack::object value)
-{
-    std::cout<<"----------------------onSatelliteUpdate---------------------"<< std::endl;
-    for(int i = 0 ; i < matches.size() ; i++)
-        std::cout<<matches[i] << std::endl;
-    std::cout<< value << std::endl;
-
-    std::string planetID = matches[2];
-    int nSatellite = value.via.i64;
-
-    auto it2 = _planets.begin();
-    while(it2 != _planets.end())
-    {
-        if((*it2)->getID() == planetID)
-            (*it2)->setnSatelite(nSatellite);
-        it2++;
-    }
-}
-
-void HelloWorldScene::onPlanetChangeState(std::vector<std::string> matches ,msgpack::object value)
-{
-    std::cout<<"----------------------onPlanetChangeState---------------------"<< std::endl;
-    for(int i = 0 ; i < matches.size() ; i++)
-        std::cout<<matches[i] << std::endl;
-    std::cout<< value << std::endl;
-
-    std::string planetID = matches[2];
-    int state = value.via.i64;
-
-    auto it2 = _planets.begin();
-    while(it2 != _planets.end())
-    {
-        if((*it2)->getID() == planetID)
-            (*it2)->setState(state);
-        it2++;
-    }
-}
-
-void HelloWorldScene::onUpdatePlanet(std::vector<std::string> matches ,msgpack::object value)
-{
-    std::cout<<"----------------------onUpdatePlanet---------------------"<< std::endl;
-    for(int i = 0 ; i < matches.size() ; i++)
-        std::cout<<matches[i] << std::endl;
-    std::cout<< value << std::endl;
-
-    std::string planetID = matches[2];
-    std::string playerID;
-    value.convert(playerID);
-
-    Player *player = nullptr;
-
-    auto itPlayer = _players.find(playerID);
-    if(itPlayer != _players.end())
-        player = itPlayer->second;
-
-    if(player)
-    {
-        auto itPlanet = _planets.begin();
-        while(itPlanet != _planets.end())
-        {
-            std::cout<< "PLANET ID " << (*itPlanet)->getID() << std::endl;
-            if((*itPlanet)->getID() == planetID)
-                (*itPlanet)->setPlayer(player);
-            itPlanet++;
-        }
-    }
-}
-
-void HelloWorldScene::onRoomError(cocos2d::Ref* room,cocos2d::Ref* data)
-{
-    std::cout<<"----------------------onRoomError---------------------"<< std::endl;
-}
-
-void HelloWorldScene::onRoomDataUpdate(cocos2d::Ref* room,cocos2d::Ref* netWorkData)
-{
-    msgpack::object *data = ((MessageEventArgs*)netWorkData)->_data->_data;
-    int command = data->via.array.ptr[0].via.i64;
-    switch (command) {
-        case Command::SEND_ATTACK_TO_ONOTHER:
-        {
-            std::string srcPlanetId;
-            data->via.array.ptr[1].convert(srcPlanetId);
-            std::string desPlanetId;
-            data->via.array.ptr[2].convert(desPlanetId);
-
-            moveSatellites(getPlanetByID(srcPlanetId), getPlanetByID(desPlanetId),false);
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-void HelloWorldScene::depart(Planet* src, Planet *des)
-{
-    msgpack::type::tuple<int,std::string,std::string,int> message((int)HelloWorldScene::Command::DEPART,src->getID(), des->getID(),src->getnSatelite());
-    _gameRoom->sendData(message);
-}
-
-void HelloWorldScene::attack(Planet* src, Planet *des,int nSatellite)
-{
-    msgpack::type::tuple<int,std::string,std::string,int> message((int)HelloWorldScene::Command::ATTACK,src->getID(), des->getID(),nSatellite);
-    _gameRoom->sendData(message);
-}
-

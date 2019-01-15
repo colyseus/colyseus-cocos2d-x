@@ -9,7 +9,7 @@
 #include "Room.hpp"
 
 #define FOSSIL_ENABLE_DELTA_CKSUM_TEST 1 // enable checksum on fossil-delta
-#include "fossil/delta.c"
+#include "Colyseus/fossil/delta.c"
 
 #include <sstream>
 #include <iostream>

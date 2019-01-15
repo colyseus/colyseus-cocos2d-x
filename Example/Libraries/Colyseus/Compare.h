@@ -1,11 +1,3 @@
-//
-//  Compare.h
-//  CocosEngine
-//
-//  Created by Hung Hoang Manh on 3/24/17.
-//
-//
-
 #ifndef Compare_h
 #define Compare_h
 

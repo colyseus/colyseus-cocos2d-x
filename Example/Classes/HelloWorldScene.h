@@ -1,78 +1,47 @@
-//
-//  HelloWorldScene.hpp
-//  CocosEngine
-//
-//  Created by Hoang Hung on 4/7/17.
-//
-//
+/****************************************************************************
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ 
+ http://www.cocos2d-x.org
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 
-#ifndef HelloWorldScene_hpp
-#define HelloWorldScene_hpp
+#ifndef __HELLOWORLD_SCENE_H__
+#define __HELLOWORLD_SCENE_H__
 
-#include <stdio.h>
+#include "cocos2d.h"
 
-#include "Header.h"
-#include "./GamePlay/Player.hpp"
-
-
-class Planet;
-class Satellite;
-class Room;
-
-class HelloWorldScene : public cocos2d::Scene
+class HelloWorld : public cocos2d::Scene
 {
-    enum Command {
-        DEPART = 1,
-        ATTACK,
-        SEND_ATTACK_TO_ONOTHER,
-    };
+public:
+    void onConnectToServer();
 
 public:
-    bool init();
-    void onConnectToServer(int response);
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchEnd(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchMove(cocos2d::Touch* touch, cocos2d::Event* event);
+    static cocos2d::Scene *createScene();
 
-public:
-    CREATE_FUNC(HelloWorldScene);
-    virtual ~HelloWorldScene();
-    CC_SYNTHESIZE(std::vector<Planet*>, _planets, Planets);
-    CC_SYNTHESIZE(std::vector<Planet*>, _planetsSelected, PlanetsSelected);
+    virtual bool init();
 
-    Planet* getPlanetByID(std::string id);
-    void addPlayer(Player* player);
-    void removePlayer(std::string playerID);
-    void moveSatellites(Planet* src, Planet *des, bool isCollistion = true);
+    // a selector callback
+    void menuCloseCallback(cocos2d::Ref *pSender);
 
-
-    PlayerType getPlayerWin();
-
-private: //recieve message
-    void regirsterServerListener();
-    void onGameRoomInit(cocos2d::Ref* sender,cocos2d::Ref* args);
-    void onAddPlayer(std::vector<std::string>,msgpack::object);
-    void onPlayerRemoved(std::vector<std::string>,msgpack::object);
-    void onUpdatePlanet(std::vector<std::string> matches ,msgpack::object value);
-    void onRoomDataUpdate(cocos2d::Ref* room,cocos2d::Ref* data);
-    void onRoomError(cocos2d::Ref* room,cocos2d::Ref* data);
-    void onSatelliteUpdate(std::vector<std::string> matches ,msgpack::object value);
-    void onPlanetChangeState(std::vector<std::string> matches ,msgpack::object value);
-
-
-    Room* _gameRoom;
-    std::map<std::string,Player*> _players;
-
-private: //send command
-    void depart(Planet* src, Planet *des);
-    void attack(Planet* src, Planet *des,int nSatellite);
-
-private:
-    static HelloWorldScene * _instance;
-    static HelloWorldScene* getInstance();
-    friend class Planet;
-    friend class Satellite;
-
-
+    // implement the "static create()" method manually
+    CREATE_FUNC(HelloWorld);
 };
-#endif /* HelloWorldScene_hpp */
+
+#endif // __HELLOWORLD_SCENE_H__

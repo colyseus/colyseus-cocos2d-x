@@ -1,11 +1,3 @@
- //
-//  DeltaContainer.h
-//  CocosEngine
-//
-//  Created by Hung Hoang Manh on 3/24/17.
-//
-//
-
 #ifndef DeltaContainer_h
 #define DeltaContainer_h
 
