@@ -26,13 +26,15 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "msgpack.hpp"
+#include "Colyseus/Room.hpp"
 
 class HelloWorld : public cocos2d::Scene
 {
 public:
     void onConnectToServer();
     void onJoinRoom();
-    void onRoomMessage();
+    void onRoomMessage(Room*, msgpack::object);
 
 public:
     static cocos2d::Scene *createScene();

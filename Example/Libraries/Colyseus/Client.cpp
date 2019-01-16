@@ -44,20 +44,23 @@ Room* Client::join(const std::string roomName, std::map<std::string, std::string
 
 void Client::_onOpen()
 {
-    if (!id.empty())
-    {
+    if (!id.empty() && this->onOpen) {
         this->onOpen(this);
     }
 }
 
 void Client::_onClose()
 {
-    this->onClose(this);
+    if (this->onClose) {
+        this->onClose(this);
+    }
 }
 
 void Client::_onError(const WebSocket::ErrorCode& error)
 {
-    this->onError(this, error);
+    if (this->onError) {
+        this->onError(this, error);
+    }
 }
 
 void Client::_onMessage(const WebSocket::Data& data)
@@ -81,7 +84,9 @@ void Client::_onMessage(const WebSocket::Data& data)
         {
             log("Protocol::USER_ID");
             id = message.ptr[1].convert(id);
-            this->onOpen(this);
+            if (this->onOpen) {
+                this->onOpen(this);
+            }
             break;
         }
         case Protocol::JOIN_ROOM:
@@ -89,7 +94,6 @@ void Client::_onMessage(const WebSocket::Data& data)
             log("Protocol::JOIN_ROOM");
             
             std::string requestId = message.ptr[2].via.str.ptr;
-            std::cout << "requestId: " << requestId << std::endl;
             Room* room = this->_connectingRooms.at(requestId);
             
             room->roomId = message.ptr[1].convert(room->roomId);
@@ -132,9 +136,6 @@ Connection* Client::createConnection(std::string& path, std::map<std::string, st
             queryString += "&";
         }
     }
-    
-    std::cout << "LETS CREATE ROOM CONNECTION" << std::endl;
-    std::cout << (this->endpoint + "/" + path + "?" + queryString) << std::endl;
 
     return new Connection( this->endpoint + "/" + path + "?" + queryString );
 }

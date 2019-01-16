@@ -23,12 +23,10 @@ void Connection::open()
     _ws = new WebSocket();
     if(!_ws->init(*this, endpoint))
     {
-        CC_SAFE_DELETE(_ws);
-        
         // TODO: call _onError too
         // this->_onError(this, new WebSocket::ErrorCode);
 
-        this->_onClose();
+        this->onClose(_ws);
     }
 }
 
@@ -60,8 +58,9 @@ void Connection::onMessage(WebSocket* ws, const WebSocket::Data& data)
 void Connection::onClose(WebSocket* ws)
 {
     log("websocket instance (%p) closed.", ws);
+
     CC_SAFE_DELETE(ws);
-    
+
     if (this->_onClose) {
         this->_onClose();
     }

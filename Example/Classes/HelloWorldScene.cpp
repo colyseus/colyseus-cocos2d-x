@@ -48,7 +48,14 @@ void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
     room = colyseus->join("chat", std::map<std::string, std::string>());
+    room->onMessage = CC_CALLBACK_2(HelloWorld::onRoomMessage, this);
     // room->onJoin
+}
+
+void HelloWorld::onRoomMessage(Room* sender, msgpack::object message)
+{
+    std::cout << "!! HelloWorld::onRoomMessage !!" << std::endl;
+    std::cout << message << std::endl;
 }
 
 // on "init" you need to initialize your instance

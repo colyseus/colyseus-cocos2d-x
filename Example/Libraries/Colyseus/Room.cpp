@@ -39,9 +39,11 @@ void Room::connect(Connection* connection)
 
 void Room::_onClose()
 {
+    std::cout << "Room::_onClose started" << std::endl;
     if (this->onLeave) {
         this->onLeave();
     }
+    std::cout << "Room::_onClose finished" << std::endl;
 }
 
 void Room::_onError(const WebSocket::ErrorCode& error)
