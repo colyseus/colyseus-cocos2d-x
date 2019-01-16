@@ -50,22 +50,17 @@ public:
     }
     DeltaContainer(msgpack::object_handle *data = nullptr)
     {
-        std::pair<std::string,std::regex> regexID(":id",std::regex("^([a-zA-Z0-9\\-_]+)$"));
-        matcherPlaceholders.insert(regexID);
+        std::cout << "INITIALIZE DELTA CONTAINER!" << std::endl;
 
-        std::pair<std::string,std::regex> regexNumber(":number",std::regex("^([0-9]+)$"));
-        matcherPlaceholders.insert(regexNumber);
+        matcherPlaceholders.insert(std::make_pair(":id", std::regex("^([a-zA-Z0-9\\-_]+)$")));
+        matcherPlaceholders.insert(std::make_pair(":number", std::regex("^([0-9]+)$")));
+        matcherPlaceholders.insert(std::make_pair(":string",std::regex("^(\\w+)$")));
+        matcherPlaceholders.insert(std::make_pair(":axis",std::regex("^([xyz])$")));
+        matcherPlaceholders.insert(std::make_pair(":*",std::regex("(.*)")));
 
-        std::pair<std::string,std::regex> regexString(":string",std::regex("^(\\w+)$"));
-        matcherPlaceholders.insert(regexString);
-
-        std::pair<std::string,std::regex> regexAxis(":axis",std::regex("^([xyz])$"));
-        matcherPlaceholders.insert(regexAxis);
-
-        std::pair<std::string,std::regex> regexAll(":*",std::regex("(.*)"));
-        matcherPlaceholders.insert(regexAll);
-
+        std::cout << "LETS SET DATA!" << std::endl;
         this->data = data;
+        std::cout << "LETS RESET!" << std::endl;
         this->Reset();
     }
 

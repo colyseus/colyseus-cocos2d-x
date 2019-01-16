@@ -45,22 +45,32 @@ void Connection::close()
 void Connection::onOpen(WebSocket* ws)
 {
     log("Websocket (%p) opened", ws);
-    this->_onOpen();
+    if (this->_onOpen) {
+        this->_onOpen();
+    }
 }
 
 void Connection::onMessage(WebSocket* ws, const WebSocket::Data& data)
 {
-    this->_onMessage(data);
+    if (this->_onMessage) {
+        this->_onMessage(data);
+    }
 }
 
 void Connection::onClose(WebSocket* ws)
 {
     log("websocket instance (%p) closed.", ws);
     CC_SAFE_DELETE(ws);
+    
+    if (this->_onClose) {
+        this->_onClose();
+    }
 }
 
 void Connection::onError(WebSocket* ws, const WebSocket::ErrorCode& error)
 {
     log("Error was fired, error code: %d", error);
-    this->_onError(error);
+    if (this->_onError) {
+        this->_onError(error);
+    }
 }

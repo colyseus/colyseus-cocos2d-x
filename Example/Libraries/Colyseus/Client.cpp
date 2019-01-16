@@ -32,18 +32,11 @@ void Client::connect()
 
 Room* Client::join(const std::string roomName, std::map<std::string, std::string> options)
 {
-    std::cout << "Client::join()" << std::endl;
+    std::string requestId = std::to_string(++this->requestId);
+    options.insert(std::make_pair("requestId", requestId));
 
-    int requestId = this->requestId++;
-    options.insert(std::make_pair("requestId", std::to_string(requestId)));
-
-    std::cout << "new Room" << std::endl;
     auto room = new Room(roomName, options);
-    
-    std::cout << "new Room finished" << std::endl;
     this->_connectingRooms.insert(std::make_pair(requestId, room));
-
-    std::cout << "send JOIN_ROOM message" << std::endl;
     this->connection->send((int)Protocol::JOIN_ROOM, roomName, options);
 
     return room;
@@ -95,7 +88,8 @@ void Client::_onMessage(const WebSocket::Data& data)
         {
             log("Protocol::JOIN_ROOM");
             
-            int requestId = (int) message.ptr[2].via.i64;
+            std::string requestId = message.ptr[2].via.str.ptr;
+            std::cout << "requestId: " << requestId << std::endl;
             Room* room = this->_connectingRooms.at(requestId);
             
             room->roomId = message.ptr[1].convert(room->roomId);

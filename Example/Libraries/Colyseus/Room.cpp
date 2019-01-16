@@ -16,8 +16,6 @@ Room::Room (const std::string _name, std::map<std::string, std::string> _options
     name = _name;
     options = _options;
 
-    connection = new Connection(nullptr);
-
     _previousState = NULL;
     _previousStateSize = 0;
 }
@@ -39,28 +37,24 @@ void Room::connect(Connection* connection)
     this->connection->open();
 }
 
-void Room::_onOpen()
-{
-}
-
 void Room::_onClose()
 {
-    if (this->onLeave)
-    {
+    if (this->onLeave) {
         this->onLeave();
     }
 }
 
 void Room::_onError(const WebSocket::ErrorCode& error)
 {
-    if (this->onError)
-    {
+    if (this->onError) {
         this->onError(this, error);
     }
 }
 
 void Room::_onMessage(const WebSocket::Data& data)
 {
+    std::cout << "Room:_onMessage" << std::endl;
+
     size_t len = data.len;
     const char *bytes = data.bytes;
     

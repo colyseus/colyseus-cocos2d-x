@@ -36,7 +36,7 @@ public:
     // Properties
     Connection* connection;
     std::string id;
-    
+
     // Callbacks
     std::function<void(cocos2d::Ref*)> onOpen;
     std::function<void(cocos2d::Ref*)> onClose;
@@ -58,7 +58,7 @@ private:
     std::string endpoint;
     
     std::map<const std::string, Room*> _rooms;
-    std::map<int, Room*> _connectingRooms;
+    std::map<const std::string, Room*> _connectingRooms;
     int requestId = 0;
 };
 

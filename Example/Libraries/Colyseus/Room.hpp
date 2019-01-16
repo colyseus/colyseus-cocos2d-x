@@ -36,8 +36,6 @@ public:
     std::string sessionId;
 
 private:
-    
-    void _onOpen();
     void _onClose();
     void _onError(const WebSocket::ErrorCode&);
     void _onMessage(const WebSocket::Data&);
