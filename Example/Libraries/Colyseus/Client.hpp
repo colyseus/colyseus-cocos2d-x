@@ -10,11 +10,12 @@
 #define Client_hpp
 
 #include <stdio.h>
+
 #include "network/WebSocket.h"
 #include "msgpack.hpp"
 #include "Connection.hpp"
+#include "Room.hpp"
 
-class Room;
 using namespace cocos2d::network;
 
 class Client : public cocos2d::Ref
@@ -27,17 +28,8 @@ public:
     void close();
     void connect();
 
-    Room* join(const std::string& roomName, cocos2d::Ref* options);
+    Room* join(const std::string& roomName, cocos2d::Ref* options = nullptr);
     Room* rejoin(const std::string& roomName, std::string& sessionId);
-    
-    void recvUserHandle(msgpack::object_array data);
-    void joinRoomHandle(msgpack::object_array data);
-    void joinRoomErrorDRoomHandle(msgpack::object_array data);
-    void leaveRoomHandle(msgpack::object_array data);
-    void roomPatchStateHandle(msgpack::object_array data);
-    void roomStateHandle(msgpack::object_array data);
-    void roomDataHandle(msgpack::object_array data);
-    void badRequestHandle(msgpack::object_array data);
 
     // Properties
     Connection* connection;
@@ -56,6 +48,10 @@ private:
     void _onClose();
     void _onError(const WebSocket::ErrorCode&);
     void _onMessage(const WebSocket::Data&);
+    
+    void joinRoomHandle(msgpack::object_array data);
+    void joinRoomErrorDRoomHandle(msgpack::object_array data);
+    void leaveRoomHandle(msgpack::object_array data);
     
     std::map<const std::string,Room*> _rooms;
 };

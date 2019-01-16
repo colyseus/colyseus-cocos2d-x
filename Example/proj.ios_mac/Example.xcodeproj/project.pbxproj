@@ -22,8 +22,6 @@
 		1B47A8B321EE483B00C61FD6 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A321EE483A00C61FD6 /* Client.cpp */; };
 		1B47A8B421EE483B00C61FD6 /* delta.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A721EE483A00C61FD6 /* delta.c */; };
 		1B47A8B521EE483B00C61FD6 /* delta.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A721EE483A00C61FD6 /* delta.c */; };
-		1B47A8B621EE483B00C61FD6 /* MessageEventArgs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A821EE483A00C61FD6 /* MessageEventArgs.cpp */; };
-		1B47A8B721EE483B00C61FD6 /* MessageEventArgs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A821EE483A00C61FD6 /* MessageEventArgs.cpp */; };
 		1B47A8B821EE483B00C61FD6 /* Room.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A921EE483A00C61FD6 /* Room.cpp */; };
 		1B47A8B921EE483B00C61FD6 /* Room.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A921EE483A00C61FD6 /* Room.cpp */; };
 		1B47A8BA21EE483B00C61FD6 /* Protocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8AC21EE483A00C61FD6 /* Protocol.cpp */; };
@@ -802,12 +800,9 @@
 		1B47A8A221EE483A00C61FD6 /* Protocol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Protocol.hpp; sourceTree = "<group>"; };
 		1B47A8A321EE483A00C61FD6 /* Client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client.cpp; sourceTree = "<group>"; };
 		1B47A8A421EE483A00C61FD6 /* Room.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Room.hpp; sourceTree = "<group>"; };
-		1B47A8A521EE483A00C61FD6 /* NetworkData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkData.h; sourceTree = "<group>"; };
 		1B47A8A721EE483A00C61FD6 /* delta.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = delta.c; sourceTree = "<group>"; };
-		1B47A8A821EE483A00C61FD6 /* MessageEventArgs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageEventArgs.cpp; sourceTree = "<group>"; };
 		1B47A8A921EE483A00C61FD6 /* Room.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Room.cpp; sourceTree = "<group>"; };
 		1B47A8AA21EE483A00C61FD6 /* Compare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compare.h; sourceTree = "<group>"; };
-		1B47A8AB21EE483A00C61FD6 /* MessageEventArgs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MessageEventArgs.hpp; sourceTree = "<group>"; };
 		1B47A8AC21EE483A00C61FD6 /* Protocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Protocol.cpp; sourceTree = "<group>"; };
 		1B47A8AF21EE483A00C61FD6 /* msgpack.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = msgpack.hpp; sourceTree = "<group>"; };
 		1B4D3F2A21EE60690088CD57 /* Connection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Connection.hpp; sourceTree = "<group>"; };
@@ -2251,11 +2246,8 @@
 				1B4D3F2C21EE60690088CD57 /* DeltaContainer.hpp */,
 				1B17AD2421EE796D00F9B98D /* DeltaContainer.cpp */,
 				1B47A8AA21EE483A00C61FD6 /* Compare.h */,
-				1B47A8A521EE483A00C61FD6 /* NetworkData.h */,
 				1B47A8A221EE483A00C61FD6 /* Protocol.hpp */,
 				1B47A8AC21EE483A00C61FD6 /* Protocol.cpp */,
-				1B47A8AB21EE483A00C61FD6 /* MessageEventArgs.hpp */,
-				1B47A8A821EE483A00C61FD6 /* MessageEventArgs.cpp */,
 			);
 			path = Colyseus;
 			sourceTree = "<group>";
@@ -2510,7 +2502,6 @@
 				1B17AD2521EE796D00F9B98D /* DeltaContainer.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				1B47A8B821EE483B00C61FD6 /* Room.cpp in Sources */,
-				1B47A8B621EE483B00C61FD6 /* MessageEventArgs.cpp in Sources */,
 				1AF87B8A1F6F7822007BE51C /* main.m in Sources */,
 				1B47A8B021EE483B00C61FD6 /* DeltaContainer.cpp in Sources */,
 				1B47A8B221EE483B00C61FD6 /* Client.cpp in Sources */,
@@ -2524,7 +2515,6 @@
 			files = (
 				1B47A8B521EE483B00C61FD6 /* delta.c in Sources */,
 				1B4D3F2E21EE60690088CD57 /* Connection.cpp in Sources */,
-				1B47A8B721EE483B00C61FD6 /* MessageEventArgs.cpp in Sources */,
 				1B17AD2621EE796D00F9B98D /* DeltaContainer.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				1B47A8BB21EE483B00C61FD6 /* Protocol.cpp in Sources */,

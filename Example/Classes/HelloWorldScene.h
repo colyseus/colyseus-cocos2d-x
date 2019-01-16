@@ -31,6 +31,8 @@ class HelloWorld : public cocos2d::Scene
 {
 public:
     void onConnectToServer();
+    void onJoinRoom();
+    void onRoomMessage();
 
 public:
     static cocos2d::Scene *createScene();

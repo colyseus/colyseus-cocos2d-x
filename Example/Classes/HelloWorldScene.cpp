@@ -29,7 +29,8 @@
 
 USING_NS_CC;
 
-Client* colyseus = new Client("ws://localhost:2667");
+Client* colyseus = new Client("ws://localhost:2567");
+Room* room;
 
 Scene* HelloWorld::createScene()
 {
@@ -46,6 +47,8 @@ static void problemLoading(const char* filename)
 void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
+    room = colyseus->join("chat");
+    // room->onJoin
 }
 
 // on "init" you need to initialize your instance

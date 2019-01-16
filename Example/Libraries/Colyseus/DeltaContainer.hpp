@@ -4,7 +4,7 @@
 #include <iostream>
 #include <regex>
 #include <string>
-// #include "msgpack.hpp"
+
 #include "Compare.h"
 
 template <typename T>
@@ -48,7 +48,7 @@ public:
         if(data)
             delete data;
     }
-    DeltaContainer(msgpack::object_handle *data)
+    DeltaContainer(msgpack::object_handle *data = nullptr)
     {
         std::pair<std::string,std::regex> regexID(":id",std::regex("^([a-zA-Z0-9\\-_]+)$"));
         matcherPlaceholders.insert(regexID);
