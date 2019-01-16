@@ -18,6 +18,8 @@
 
 using namespace cocos2d::network;
 
+typedef std::map<std::string, std::string> JoinOptions;
+
 class Client : public cocos2d::Ref
 {
 public:
@@ -28,8 +30,8 @@ public:
     void close();
     void connect();
 
-    Room* join(const std::string& roomName, cocos2d::Ref* options = nullptr);
-    Room* rejoin(const std::string& roomName, std::string& sessionId);
+    Room* join(const std::string roomName, JoinOptions options = JoinOptions());
+    Room* rejoin(const std::string roomName, std::string& sessionId);
 
     // Properties
     Connection* connection;
@@ -41,19 +43,23 @@ public:
     std::function<void(cocos2d::Ref*, const WebSocket::ErrorCode&)> onError;
     
     Room* getRoomByName(const std::string& name);
-    Room* getRoomByID(int ID);
 
 private:
     void _onOpen();
     void _onClose();
     void _onError(const WebSocket::ErrorCode&);
     void _onMessage(const WebSocket::Data&);
+    Connection* createConnection(std::string&, JoinOptions options = JoinOptions());
     
     void joinRoomHandle(msgpack::object_array data);
     void joinRoomErrorDRoomHandle(msgpack::object_array data);
     void leaveRoomHandle(msgpack::object_array data);
     
-    std::map<const std::string,Room*> _rooms;
+    std::string endpoint;
+    
+    std::map<const std::string, Room*> _rooms;
+    std::map<int, Room*> _connectingRooms;
+    int requestId = 0;
 };
 
 #endif /* Client_hpp */

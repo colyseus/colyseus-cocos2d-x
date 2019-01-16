@@ -47,7 +47,7 @@ static void problemLoading(const char* filename)
 void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
-    room = colyseus->join("chat");
+    room = colyseus->join("chat", std::map<std::string, std::string>());
     // room->onJoin
 }
 

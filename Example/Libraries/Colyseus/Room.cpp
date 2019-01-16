@@ -1,23 +1,23 @@
 #include "Room.hpp"
 
 #define FOSSIL_ENABLE_DELTA_CKSUM_TEST 1 // enable checksum on fossil-delta
-#include "Colyseus/fossil/delta.c"
+#include "fossil/delta.c"
 
 #include <sstream>
 #include <iostream>
 
 using namespace cocos2d;
 
-#define MAX_LEN_STATE_STR 4096
+// #define MAX_LEN_STATE_STR 4096
+#define MAX_LEN_STATE_STR 5120
 
-Room::Room (const std::string& _name, cocos2d::Ref* _options)
+Room::Room (const std::string _name, std::map<std::string, std::string> _options)
 {
     name = _name;
     options = _options;
-    
+
     connection = new Connection(nullptr);
 
-    _id = -1;
     _previousState = NULL;
     _previousStateSize = 0;
 }
@@ -25,16 +25,18 @@ Room::Room (const std::string& _name, cocos2d::Ref* _options)
 Room::~Room()
 {
     if (_previousState)
+    {
         delete _previousState;
+    }
 }
 
-void Room::connect(std::string& endpoint)
+void Room::connect(Connection* connection)
 {
-    connection->endpoint = endpoint;
-    connection->_onClose = CC_CALLBACK_0(Room::_onClose, this);
-    connection->_onError = CC_CALLBACK_1(Room::_onError, this);
-    connection->_onMessage = CC_CALLBACK_1(Room::_onMessage, this);
-    connection->open();
+    this->connection = connection;
+    this->connection->_onClose = CC_CALLBACK_0(Room::_onClose, this);
+    this->connection->_onError = CC_CALLBACK_1(Room::_onError, this);
+    this->connection->_onMessage = CC_CALLBACK_1(Room::_onMessage, this);
+    this->connection->open();
 }
 
 void Room::_onOpen()
@@ -43,15 +45,17 @@ void Room::_onOpen()
 
 void Room::_onClose()
 {
-    if (this->onLeave) {
+    if (this->onLeave)
+    {
         this->onLeave();
     }
 }
 
 void Room::_onError(const WebSocket::ErrorCode& error)
 {
-    if (this->onError) {
-        this->onError(error);
+    if (this->onError)
+    {
+        this->onError(this, error);
     }
 }
 
@@ -70,43 +74,53 @@ void Room::_onMessage(const WebSocket::Data& data)
     Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
     msgpack::object_array message(obj.via.array);
     
-    switch (protocol) {
+    switch (protocol)
+    {
         case Protocol::JOIN_ROOM:
-            id = message.ptr[1].convert(id);
-            if (onJoin) {
+        {
+            roomId = message.ptr[1].convert(roomId);
+            
+            if (this->onJoin) {
                 this->onJoin();
             }
             break;
-            
+        }
         case Protocol::JOIN_ERROR:
+        {
             log("Colyseus.Room: join error");
             //this->onError(this);
             break;
-            
+        }
         case Protocol::LEAVE_ROOM:
+        {
             log("Colyseus.Room: LEAVE_ROOM");
             break;
-            
+        }
         case Protocol::ROOM_DATA:
+        {
             log("Colyseus.Room: ROOM_DATA");
             if (this->onMessage) {
-                this->onMessage(this, message);
+                msgpack::object data;
+                data = message.ptr[1].convert(data);
+                this->onMessage(this, data);
             }
             break;
-
+        }
         case Protocol::ROOM_STATE:
+        {
             log("Colyseus.Room: ROOM_STATE");
             
             msgpack::object state;
             message.ptr[1].convert(state);
-
+            
             int64_t remoteCurrentTime = message.ptr[2].via.i64;
             int64_t remoteElapsedTime = message.ptr[3].via.i64;
             
             this->setState(state, (int)remoteCurrentTime, (int)remoteElapsedTime);
             break;
-
+        }
         case Protocol::ROOM_STATE_PATCH:
+        {
             log("Colyseus.Room: ROOM_STATE_PATCH");
             
             msgpack::object_array patchBytes = message.ptr[1].via.array;
@@ -119,10 +133,13 @@ void Room::_onMessage(const WebSocket::Data& data)
             
             this->applyPatch(patches,patchBytes.size);
             delete [] patches;
-
+            
             break;
+        }
         default:
+        {
             break;
+        }
     }
 }
 
@@ -134,8 +151,9 @@ void Room::setState(msgpack::object state, int remoteCurrentTime, int remoteElap
     msgpack::packer<msgpack::sbuffer> packer(&temp_sbuffer);
     packer.pack(state);
 
-    if (_previousState)
+    if (_previousState) {
         delete _previousState;
+    }
     _previousState = NULL;
 
     _previousStateSize = (int) temp_sbuffer.size();
@@ -149,11 +167,13 @@ void Room::setState(msgpack::object state, int remoteCurrentTime, int remoteElap
 
 void Room::leave(bool requestLeave)
 {
-    if (requestLeave && this->_id > 0) {
+    if (requestLeave && !this->roomId.empty()) {
         this->connection->send ((int)Protocol::LEAVE_ROOM);
     } else {
         log("MAY BE WAITING FOR JOIN RESPONSE");
-        if (onLeave) {
+
+        if (onLeave)
+        {
             this->onLeave();
         }
     }
@@ -175,7 +195,8 @@ void Room::applyPatch (const char* delta ,int len)
     msgpack::object_handle oh = msgpack::unpack(_previousState, _previousStateSize);
     this->Set(oh.get());
     
-    if (onStateChange) {
+    if (onStateChange)
+    {
         this->onStateChange(this);
     }
 }

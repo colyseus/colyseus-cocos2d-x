@@ -12,6 +12,7 @@ using namespace cocos2d::network;
 
 Client::Client(const std::string& endpoint)
 {
+    this->endpoint = endpoint;
     this->connection = new Connection(endpoint);
 }
 
@@ -29,20 +30,29 @@ void Client::connect()
     this->connection->open();
 }
 
-Room* Client::join(const std::string& roomName, cocos2d::Ref* options)
+Room* Client::join(const std::string roomName, std::map<std::string, std::string> options)
 {
-    if (this->_rooms.find(roomName) == _rooms.end())
-    {
-        std::pair<const std::string, Room*> roomPair(roomName, new Room(roomName, options));
-        this->_rooms.insert(roomPair);
-    }
-    this->connection->send((int)Protocol::JOIN_ROOM, roomName);
-    return this->_rooms.find(roomName)->second;
+    std::cout << "Client::join()" << std::endl;
+
+    int requestId = this->requestId++;
+    options.insert(std::make_pair("requestId", std::to_string(requestId)));
+
+    std::cout << "new Room" << std::endl;
+    auto room = new Room(roomName, options);
+    
+    std::cout << "new Room finished" << std::endl;
+    this->_connectingRooms.insert(std::make_pair(requestId, room));
+
+    std::cout << "send JOIN_ROOM message" << std::endl;
+    this->connection->send((int)Protocol::JOIN_ROOM, roomName, options);
+
+    return room;
 }
 
 void Client::_onOpen()
 {
-    if (!id.empty()) {
+    if (!id.empty())
+    {
         this->onOpen(this);
     }
 }
@@ -72,51 +82,76 @@ void Client::_onMessage(const WebSocket::Data& data)
     Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
     msgpack::object_array message(obj.via.array);
 
-    switch (protocol) {
+    switch (protocol)
+    {
         case Protocol::USER_ID:
+        {
             log("Protocol::USER_ID");
             id = message.ptr[1].convert(id);
             this->onOpen(this);
             break;
-
+        }
         case Protocol::JOIN_ROOM:
+        {
             log("Protocol::JOIN_ROOM");
-            joinRoomHandle(message);
+            
+            int requestId = (int) message.ptr[2].via.i64;
+            Room* room = this->_connectingRooms.at(requestId);
+            
+            room->roomId = message.ptr[1].convert(room->roomId);
+            room->connect(this->createConnection(room->roomId, room->options));
             break;
-
+        }
         case Protocol::JOIN_ERROR:
+        {
             log("Protocol::JOIN_ERROR");
             joinRoomErrorDRoomHandle(message);
             break;
-
+        }
         default:
+        {
             break;
+        }
     }
 }
 
-void Client::joinRoomHandle(msgpack::object_array data)
+Connection* Client::createConnection(std::string& path, std::map<std::string, std::string> options)
 {
-    int64_t roomID = data.ptr[1].via.i64;
-    std::string roomName;
-    data.ptr[2].convert(roomName);
-    std::map<const std::string,Room*>::iterator it = this->_rooms.find(roomName);
-    if(it != _rooms.end())
+    std::vector<std::string> params;
+
+    // append colyseusid to connection string.
+    params.push_back("colyseusid=" + this->id);
+    
+    for (const auto& kv : options)
     {
-        log("JOIN ROOM SUCCESSFUL roomid = %i , roomName = %s",(int)roomID,roomName.c_str());
-        (*it).second->setID(roomID);
+        params.push_back(kv.first + "=" + kv.second);
     }
-	else
+    
+    std::string queryString;
+    
+    // concat "params" with "&" separator to form query string
+    for (std::vector<std::string>::const_iterator p = params.begin(); p != params.end(); ++p)
     {
-        log("PLEASE CALL Client::join(), maybe error belong to Server");
+        queryString += *p;
+        if (p != params.end() - 1)
+        {
+            queryString += "&";
+        }
     }
+    
+    std::cout << "LETS CREATE ROOM CONNECTION" << std::endl;
+    std::cout << (this->endpoint + "/" + path + "?" + queryString) << std::endl;
+
+    return new Connection( this->endpoint + "/" + path + "?" + queryString );
 }
 
 void Client::joinRoomErrorDRoomHandle(msgpack::object_array data)
 {
     std::string roomName;
     data.ptr[2].convert(roomName);
+    
     std::map<const std::string,Room*>::iterator it = this->_rooms.find(roomName);
-    if(it != _rooms.end())
+    if (it != _rooms.end())
     {
         // (*it).second->emitError(new MessageEventArgs((*it).second,nullptr));
         _rooms.erase(it);
@@ -125,11 +160,12 @@ void Client::joinRoomErrorDRoomHandle(msgpack::object_array data)
 
 void Client::leaveRoomHandle(msgpack::object_array data)
 {
-    int64_t roomID = data.ptr[1].via.i64;
+    std::string roomID = data.ptr[1].convert(id);
+
     std::map<const std::string,Room*>::iterator it = this->_rooms.begin();
     while (it != _rooms.end())
     {
-        if(it->second->getID() == roomID)
+        if(it->second->roomId == roomID)
             return;
     }
 }
@@ -137,22 +173,12 @@ void Client::leaveRoomHandle(msgpack::object_array data)
 Room* Client::getRoomByName(const std::string& name)
 {
     std::map<const std::string,Room*>::iterator it = this->_rooms.find(name);
+
     if (it != _rooms.end())
     {
         return it->second;
     }
-    return nullptr;
-}
 
-Room* Client::getRoomByID(int ID)
-{
-    std::map<const std::string,Room*>::iterator it = this->_rooms.begin();
-    while (it != _rooms.end())
-    {
-        if(it->second->getID() == ID)
-            return it->second;
-        it++;
-    }
     return nullptr;
 }
 
