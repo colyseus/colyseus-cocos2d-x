@@ -17,7 +17,7 @@
 class Room;
 using namespace cocos2d::network;
 
-class Client
+class Client : public cocos2d::Ref
 {
 public:
     Client(const std::string& endpoint);
@@ -44,23 +44,19 @@ public:
     std::string id;
     
     // Callbacks
-    std::function<void>* onOpen;
-    std::function<void>* onClose;
-    std::function<void(std::string)>* onError;
+    std::function<void(cocos2d::Ref*)> onOpen;
+    std::function<void(cocos2d::Ref*)> onClose;
+    std::function<void(cocos2d::Ref*, const WebSocket::ErrorCode&)> onError;
     
     Room* getRoomByName(const std::string& name);
     Room* getRoomByID(int ID);
-    
-//    template <typename... Args>
-//    inline void send(Args... args)
-//    {
-//        msgpack::sbuffer buffer;
-//        msgpack::packer<msgpack::sbuffer> pk(&buffer);
-//        msgpack::type::make_define_array(args...).msgpack_pack(pk);
-//        _ws->send((unsigned char *)buffer.data(),buffer.size());
-//    }
+
 private:
-    bool parseMsg(const char *data, int len);
+    void _onOpen();
+    void _onClose();
+    void _onError(const WebSocket::ErrorCode&);
+    void _onMessage(const WebSocket::Data&);
+    
     std::map<const std::string,Room*> _rooms;
 };
 

@@ -18,7 +18,6 @@
 		1B17AD2521EE796D00F9B98D /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B17AD2421EE796D00F9B98D /* DeltaContainer.cpp */; };
 		1B17AD2621EE796D00F9B98D /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B17AD2421EE796D00F9B98D /* DeltaContainer.cpp */; };
 		1B47A8B021EE483B00C61FD6 /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A121EE483A00C61FD6 /* DeltaContainer.cpp */; };
-		1B47A8B121EE483B00C61FD6 /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A121EE483A00C61FD6 /* DeltaContainer.cpp */; };
 		1B47A8B221EE483B00C61FD6 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A321EE483A00C61FD6 /* Client.cpp */; };
 		1B47A8B321EE483B00C61FD6 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A321EE483A00C61FD6 /* Client.cpp */; };
 		1B47A8B421EE483B00C61FD6 /* delta.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A721EE483A00C61FD6 /* delta.c */; };
@@ -2526,7 +2525,6 @@
 				1B47A8B521EE483B00C61FD6 /* delta.c in Sources */,
 				1B4D3F2E21EE60690088CD57 /* Connection.cpp in Sources */,
 				1B47A8B721EE483B00C61FD6 /* MessageEventArgs.cpp in Sources */,
-				1B47A8B121EE483B00C61FD6 /* DeltaContainer.cpp in Sources */,
 				1B17AD2621EE796D00F9B98D /* DeltaContainer.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				1B47A8BB21EE483B00C61FD6 /* Protocol.cpp in Sources */,

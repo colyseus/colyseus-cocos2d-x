@@ -7,7 +7,7 @@
 
 using namespace cocos2d::network;
 
-typedef std::function<void(int)> ClientCallback;
+typedef std::function<void(cocos2d::Ref*,cocos2d::Ref*)> RoomEventHandle;
 
 class Connection : public WebSocket::Delegate
 {

@@ -18,20 +18,21 @@ using namespace cocos2d;
 
 #define MAX_LEN_STATE_STR 4096
 
-Room::Room (Client *client,const std::string& name)
+Room::Room (const std::string& _name, cocos2d::Ref* options)
 {
-    _client = client;
-    _name = name;
+    name = _name;
     _id = -1;
     _state = new DeltaContainer(nullptr);
     _previousState = NULL;
     _previousStateSize = 0;
 }
+
 Room::~Room()
 {
     if (_previousState)
         delete _previousState;
 }
+
 void Room::setState(msgpack::object state, int remoteCurrentTime, int remoteElapsedTime)
 {
     this->_state->Set(state);
@@ -52,10 +53,11 @@ void Room::setState(msgpack::object state, int remoteCurrentTime, int remoteElap
     if(_onSetRoomState)
         this->_onSetRoomState(this, args);
 }
+
 void Room::leave(bool requestLeave)
 {
     if (requestLeave && this->_id > 0) {
-        this->_client->send ((int)Protocol::LEAVE_ROOM,this->_id);
+        this->connection->send ((int)Protocol::LEAVE_ROOM, this->_id);
     } else {
         log("MAY BE WAITING FOR JOIN RESPONSE");
         if(_onLeave)

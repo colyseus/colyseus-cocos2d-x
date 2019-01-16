@@ -59,6 +59,7 @@ bool HelloWorld::init()
     }
 
     colyseus->onOpen = CC_CALLBACK_0(HelloWorld::onConnectToServer, this);
+    colyseus->open();
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();

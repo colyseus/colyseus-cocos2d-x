@@ -16,16 +16,15 @@ Client::Client(const std::string& endpoint)
 
 Client::~Client()
 {
-    // this->connection->close();
+    delete this->connection;
 }
 
 void Client::open()
 {
-    this->connection->_onOpen = []() { log("CONNECTION OPEN!"); };
-    this->connection->_onClose = []() { log("CONNECTION CLOSED!"); };
-    this->connection->_onMessage = [](const WebSocket::Data& data) { log("RECEIVED MESSAGE!"); };
-    this->connection->_onError = [](const WebSocket::ErrorCode&) { log("WEBSOCKET ERROR!"); };
-
+    this->connection->_onOpen = CC_CALLBACK_0(Client::_onOpen, this);
+    this->connection->_onClose = CC_CALLBACK_0(Client::_onClose, this);
+    this->connection->_onError = CC_CALLBACK_1(Client::_onError, this);
+    this->connection->_onMessage = CC_CALLBACK_1(Client::_onMessage, this);
     this->connection->open();
 }
 
@@ -33,31 +32,47 @@ Room* Client::join(const std::string& roomName, cocos2d::Ref* options)
 {
     if (this->_rooms.find(roomName) == _rooms.end())
     {
-        std::pair<const std::string, Room*> roomPair(roomName, new Room(this, roomName));
+        std::pair<const std::string, Room*> roomPair(roomName, new Room(roomName, options));
         this->_rooms.insert(roomPair);
     }
     this->connection->send((int)Protocol::JOIN_ROOM, roomName);
     return this->_rooms.find(roomName)->second;
 }
 
-
-bool Client::parseMsg(const char *data, int len)
+void Client::_onOpen()
 {
-    msgpack::object_handle oh = msgpack::unpack(data,len);
+    this->onOpen(this);
+}
+
+void Client::_onClose()
+{
+    this->onClose(this);
+}
+
+void Client::_onError(const WebSocket::ErrorCode& error)
+{
+    this->onError(this, error);
+}
+
+void Client::_onMessage(const WebSocket::Data& data)
+{
+    size_t len = data.len;
+    const char *bytes = data.bytes;
+
+    msgpack::object_handle oh = msgpack::unpack(bytes, len);
     msgpack::object obj = oh.get();
 
     std::cout << "-------------------------RAW---------------------------------" << std::endl;
     std::cout << obj  << std::endl;
     std::cout << "-------------------------------------------------------------" << std::endl;
 
-
-    Protocol protocol = (Protocol)obj.via.array.ptr[0].via.i64;
+    Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
     msgpack::object_array message(obj.via.array);
 
     switch (protocol) {
         case Protocol::USER_ID:
             log("Protocol::USER_ID");
-            recvUserHandle(message);
+            id = message.ptr[1].convert(id);
             break;
 
         case Protocol::JOIN_ROOM:
@@ -98,13 +113,6 @@ bool Client::parseMsg(const char *data, int len)
         default:
             break;
     }
-
-    return true;
-}
-
-void Client::recvUserHandle(msgpack::object_array data)
-{
-    data.ptr[1].convert(_id);
 }
 
 void Client::joinRoomHandle(msgpack::object_array data)
@@ -217,38 +225,5 @@ Room* Client::getRoomByID(int ID)
 
 void Client::close()
 {
-    this->_ws->close();
+    this->connection->close();
 }
-std::string Client::getError()
-{
-    CCASSERT(0, "NOT SUPPORT YET");
-	return "";
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Delegate methods
-void Client::onOpen(WebSocket* ws)
-{
-    log("Websocket (%p) opened", ws);
-    _clientCallback(RESPONSE_TYPE::ON_OPEN);
-}
-
-void Client::onMessage(WebSocket* ws, const WebSocket::Data& data)
-{
-    parseMsg(data.bytes,data.len);
-    _clientCallback(RESPONSE_TYPE::ON_MESSAGE);
-}
-
-void Client::onClose(WebSocket* ws)
-{
-    log("websocket instance (%p) closed.", ws);
-    CC_SAFE_DELETE(ws);
-    _clientCallback(RESPONSE_TYPE::ON_CLOSE);
-}
-
-void Client::onError(WebSocket* ws, const WebSocket::ErrorCode& error)
-{
-    log("Error was fired, error code: %d", error);
-    _clientCallback(RESPONSE_TYPE::ON_ERROR);
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
