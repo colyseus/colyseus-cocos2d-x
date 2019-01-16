@@ -19,7 +19,7 @@ Client::~Client()
     delete this->connection;
 }
 
-void Client::open()
+void Client::connect()
 {
     this->connection->_onOpen = CC_CALLBACK_0(Client::_onOpen, this);
     this->connection->_onClose = CC_CALLBACK_0(Client::_onClose, this);

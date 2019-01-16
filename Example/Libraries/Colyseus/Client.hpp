@@ -25,7 +25,7 @@ public:
     
     // Methods
     void close();
-    void open();
+    void connect();
 
     Room* join(const std::string& roomName, cocos2d::Ref* options);
     Room* rejoin(const std::string& roomName, std::string& sessionId);
