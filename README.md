@@ -27,12 +27,10 @@
 
 ## Usage
 
-### Including `colyseus-cocos2d-x` library.
+Add the `Source/` directory to your project's `Header Search Paths`.
 
-- Add `Libraries` to your project's `Header Search Paths`
-- Add [msgpack-c](https://github.com/msgpack/msgpack-c) to your project's `Header Search Paths`
-
-In your scene file, add the following:
+Below you can see how to use the `Client`, matchmake into a `Room`, and send and
+receive messages from the connected room.
 
 ```cpp
 #include "Colyseus/Client.h";
