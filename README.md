@@ -75,7 +75,6 @@ bool HelloWorld::init()
     client->connect();
 }
 
-
 void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
