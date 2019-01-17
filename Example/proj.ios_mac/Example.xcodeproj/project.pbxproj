@@ -28,6 +28,8 @@
 		1B47A8BB21EE483B00C61FD6 /* Protocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8AC21EE483A00C61FD6 /* Protocol.cpp */; };
 		1B4D3F2D21EE60690088CD57 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B4D3F2B21EE60690088CD57 /* Connection.cpp */; };
 		1B4D3F2E21EE60690088CD57 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B4D3F2B21EE60690088CD57 /* Connection.cpp */; };
+		1BBD8C3121F0C54A008DF6C2 /* Compare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8C3021F0C54A008DF6C2 /* Compare.cpp */; };
+		1BBD8C3221F0C54A008DF6C2 /* Compare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8C3021F0C54A008DF6C2 /* Compare.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
@@ -802,13 +804,14 @@
 		1B47A8A421EE483A00C61FD6 /* Room.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Room.hpp; sourceTree = "<group>"; };
 		1B47A8A721EE483A00C61FD6 /* delta.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = delta.c; sourceTree = "<group>"; };
 		1B47A8A921EE483A00C61FD6 /* Room.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Room.cpp; sourceTree = "<group>"; };
-		1B47A8AA21EE483A00C61FD6 /* Compare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compare.h; sourceTree = "<group>"; };
+		1B47A8AA21EE483A00C61FD6 /* Compare.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Compare.hpp; sourceTree = "<group>"; };
 		1B47A8AC21EE483A00C61FD6 /* Protocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Protocol.cpp; sourceTree = "<group>"; };
 		1B47A8AF21EE483A00C61FD6 /* msgpack.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = msgpack.hpp; sourceTree = "<group>"; };
 		1B4D3F2A21EE60690088CD57 /* Connection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Connection.hpp; sourceTree = "<group>"; };
 		1B4D3F2B21EE60690088CD57 /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
 		1B4D3F2C21EE60690088CD57 /* DeltaContainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeltaContainer.hpp; sourceTree = "<group>"; };
 		1B4D3F3621EE60E70088CD57 /* Client.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Client.hpp; sourceTree = "<group>"; };
+		1BBD8C3021F0C54A008DF6C2 /* Compare.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Compare.cpp; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Example-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -2245,7 +2248,8 @@
 				1B47A8A921EE483A00C61FD6 /* Room.cpp */,
 				1B4D3F2C21EE60690088CD57 /* DeltaContainer.hpp */,
 				1B17AD2421EE796D00F9B98D /* DeltaContainer.cpp */,
-				1B47A8AA21EE483A00C61FD6 /* Compare.h */,
+				1B47A8AA21EE483A00C61FD6 /* Compare.hpp */,
+				1BBD8C3021F0C54A008DF6C2 /* Compare.cpp */,
 				1B47A8A221EE483A00C61FD6 /* Protocol.hpp */,
 				1B47A8AC21EE483A00C61FD6 /* Protocol.cpp */,
 			);
@@ -2499,6 +2503,7 @@
 				1AF87B8B1F6F782A007BE51C /* RootViewController.mm in Sources */,
 				1B4D3F2D21EE60690088CD57 /* Connection.cpp in Sources */,
 				1B47A8B421EE483B00C61FD6 /* delta.c in Sources */,
+				1BBD8C3121F0C54A008DF6C2 /* Compare.cpp in Sources */,
 				1B17AD2521EE796D00F9B98D /* DeltaContainer.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				1B47A8B821EE483B00C61FD6 /* Room.cpp in Sources */,
@@ -2522,6 +2527,7 @@
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				1B47A8B921EE483B00C61FD6 /* Room.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				1BBD8C3221F0C54A008DF6C2 /* Compare.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

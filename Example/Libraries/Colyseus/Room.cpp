@@ -139,7 +139,7 @@ void Room::setState(msgpack::object_bin encodedState, int remoteCurrentTime, int
     
     msgpack::object_handle oh = msgpack::unpack(encodedState.ptr, encodedState.size);
     msgpack::object state = oh.get();
-    this->Set(state);
+    this->set(state);
 
     if (_previousState) {
         delete _previousState;
@@ -181,7 +181,7 @@ void Room::applyPatch (const char* delta, int len)
 
     msgpack::object_handle oh = msgpack::unpack(_previousState, _previousStateSize);
     
-    this->Set(oh.get());
+    this->set(oh.get());
     
     if (onStateChange) {
         this->onStateChange(this);
