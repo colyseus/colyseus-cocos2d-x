@@ -70,7 +70,7 @@ void Room::_onMessage(const WebSocket::Data& data)
     {
         case Protocol::JOIN_ROOM:
         {
-            roomId = message.ptr[1].convert(roomId);
+            id = message.ptr[1].convert(id);
             
             if (this->onJoin) {
                 this->onJoin();
@@ -153,7 +153,7 @@ void Room::setState(msgpack::object_bin encodedState, int remoteCurrentTime, int
 
 void Room::leave(bool requestLeave)
 {
-    if (requestLeave && !this->roomId.empty()) {
+    if (requestLeave && !this->id.empty()) {
         this->connection->send ((int)Protocol::LEAVE_ROOM);
     } else {
         log("MAY BE WAITING FOR JOIN RESPONSE");

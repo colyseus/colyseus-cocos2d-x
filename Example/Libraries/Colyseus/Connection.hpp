@@ -11,7 +11,7 @@ typedef std::function<void(cocos2d::Ref*,cocos2d::Ref*)> RoomEventHandle;
 
 class Connection : public WebSocket::Delegate
 {
-private:
+protected:
     WebSocket* _ws;
 
     virtual void onOpen(WebSocket* ws) override;

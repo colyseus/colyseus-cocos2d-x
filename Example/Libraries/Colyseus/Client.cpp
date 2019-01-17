@@ -98,8 +98,8 @@ void Client::_onMessage(const WebSocket::Data& data)
             std::string requestId = message.ptr[2].via.str.ptr;
             Room* room = this->_connectingRooms.at(requestId);
             
-            room->roomId = message.ptr[1].convert(room->roomId);
-            room->connect(this->createConnection(room->roomId, room->options));
+            room->id = message.ptr[1].convert(room->id);
+            room->connect(this->createConnection(room->id, room->options));
             break;
         }
         case Protocol::JOIN_ERROR:
@@ -162,7 +162,7 @@ void Client::leaveRoomHandle(msgpack::object_array data)
     std::map<const std::string,Room*>::iterator it = this->_rooms.begin();
     while (it != _rooms.end())
     {
-        if(it->second->roomId == roomID)
+        if(it->second->id == roomID)
             return;
     }
 }

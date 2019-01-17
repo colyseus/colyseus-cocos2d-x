@@ -44,7 +44,7 @@ public:
     
     Room* getRoomByName(const std::string& name);
 
-private:
+protected:
     void _onOpen();
     void _onClose();
     void _onError(const WebSocket::ErrorCode&);

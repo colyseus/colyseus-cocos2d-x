@@ -163,4 +163,9 @@ void HelloWorld::onRoomStateChange(Room* sender)
 {
     std::cout << "!! HelloWorld::onRoomStateChange !!" << std::endl;
     std::cout << sender->data->get() << std::endl;
+    
+    
+    auto data = std::map<std::string, int>();
+    data.insert(std::make_pair("x", 1));
+    room->send(data);
 }

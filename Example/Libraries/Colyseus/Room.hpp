@@ -15,9 +15,13 @@ public:
     // Methods
     void connect(Connection* connection);
     void leave(bool requestLeave);
+    
+    template <typename T>
+    inline void send (T data)
+    {
+        this->connection->send((int)Protocol::ROOM_DATA, this->id, data);
+    }
 
-    void setState(msgpack::object_bin, int, int);
-    void applyPatch(const char*, int);
     // void emitError (MessageEventArgs *args);
     
     // Callbacks
@@ -29,16 +33,19 @@ public:
     
     // Properties
     Connection* connection;
-    std::string roomId;
+    std::string id;
     std::map<std::string, std::string> options;
 
     std::string name;
     std::string sessionId;
 
-private:
+protected:
     void _onClose();
     void _onError(const WebSocket::ErrorCode&);
     void _onMessage(const WebSocket::Data&);
+    
+    void setState(msgpack::object_bin, int, int);
+    void applyPatch(const char*, int);
 
     const char* _previousState;
     int _previousStateSize;
