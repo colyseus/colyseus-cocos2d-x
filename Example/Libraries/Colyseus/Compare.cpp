@@ -1,10 +1,11 @@
 #include "Compare.hpp"
 
-PatchObject::PatchObject(std::vector<std::string> path,std::string op ,msgpack::object value)
+PatchObject::PatchObject(std::vector<std::string> path,std::string op, msgpack::object value)
 {
     this->path = path;
     this->op = op;
     this->value = value;
+//    this->previousValue = previousValue;
 }
 
 bool Compare::containsKey(msgpack::object_map map, msgpack::object_kv key)

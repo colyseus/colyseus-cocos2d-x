@@ -544,7 +544,7 @@ int delta_apply(
     limit = getInt(&zDelta, &lenDelta);
     if( *zDelta!='\n' ){
         /* ERROR: size integer not terminated by "\n" */
-        printf("ERROR: size integer not terminated by ""\/n""\n");
+        printf("ERROR: size integer not terminated by ""\\n""\n");
         return -1;
     }
     zDelta++; lenDelta--;

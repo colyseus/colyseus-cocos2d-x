@@ -1,5 +1,5 @@
-#ifndef DeltaContainer_h
-#define DeltaContainer_h
+#ifndef StateContainer_h
+#define StateContainer_h
 
 #include <iostream>
 #include <regex>
@@ -15,21 +15,23 @@ class Listener
 {
 public:
     T callback;
-    std::string operation;
     std::vector<std::regex> rules;
+//    std::string operation;
+    int id;
+    bool operator== (Listener<T> const& other) { return this->id == other.id; }
 };
 
-class DeltaContainer
+class StateContainer
 {
 public:
     static std::vector<std::string> splitStr(const std::string &sourceStr, char delim);
 
 public:
-    DeltaContainer(msgpack::object_handle *data = nullptr);
-    virtual ~DeltaContainer();
+    StateContainer(msgpack::object_handle *data = nullptr);
+    virtual ~StateContainer();
     
     msgpack::object_handle *data;
-    std::map<std::string, std::vector<Listener<PatchAction>>> listeners;
+    std::vector<Listener<PatchAction>> listeners;
     std::vector<Listener<FallbackAction>> fallbackListeners;
     std::map<std::string,std::regex> matcherPlaceholders;
 
@@ -37,8 +39,8 @@ public:
     void registerPlaceholder(std::string placeholder, std::regex matcher);
 
     Listener<FallbackAction> listen(FallbackAction callback);
-    Listener<PatchAction> listen(std::string segments, std::string operation, PatchAction callback);
-    void removeListener(Listener<PatchAction> listener);
+    Listener<PatchAction> listen(std::string segments, PatchAction callback, bool immediate=false);
+    void removeListener(Listener<PatchAction> &listener);
     void removeAllListeners();
     
 protected:
@@ -49,4 +51,4 @@ protected:
 
 };
 
-#endif /* DeltaContainer_h */
+#endif /* StateContainer_h */

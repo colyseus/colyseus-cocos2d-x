@@ -15,8 +15,8 @@
 		1AF87B891F6F781D007BE51C /* LaunchScreenBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AF87B5A1F6F77D6007BE51C /* LaunchScreenBackground.png */; };
 		1AF87B8A1F6F7822007BE51C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF87B5B1F6F77D6007BE51C /* main.m */; };
 		1AF87B8B1F6F782A007BE51C /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */; };
-		1B17AD2521EE796D00F9B98D /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B17AD2421EE796D00F9B98D /* DeltaContainer.cpp */; };
-		1B17AD2621EE796D00F9B98D /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B17AD2421EE796D00F9B98D /* DeltaContainer.cpp */; };
+		1B17AD2521EE796D00F9B98D /* StateContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B17AD2421EE796D00F9B98D /* StateContainer.cpp */; };
+		1B17AD2621EE796D00F9B98D /* StateContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B17AD2421EE796D00F9B98D /* StateContainer.cpp */; };
 		1B47A8B021EE483B00C61FD6 /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A121EE483A00C61FD6 /* DeltaContainer.cpp */; };
 		1B47A8B221EE483B00C61FD6 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A321EE483A00C61FD6 /* Client.cpp */; };
 		1B47A8B321EE483B00C61FD6 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A321EE483A00C61FD6 /* Client.cpp */; };
@@ -123,7 +123,7 @@
 		1AF87B5C1F6F77D6007BE51C /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		1AF87B5D1F6F77D6007BE51C /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
-		1B17AD2421EE796D00F9B98D /* DeltaContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeltaContainer.cpp; sourceTree = "<group>"; };
+		1B17AD2421EE796D00F9B98D /* StateContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StateContainer.cpp; sourceTree = "<group>"; };
 		1B47A5B021EE483800C61FD6 /* msgpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msgpack.h; sourceTree = "<group>"; };
 		1B47A5B321EE483800C61FD6 /* unpack_decl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unpack_decl.hpp; sourceTree = "<group>"; };
 		1B47A5B421EE483800C61FD6 /* parse_return.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parse_return.hpp; sourceTree = "<group>"; };
@@ -809,7 +809,7 @@
 		1B47A8AF21EE483A00C61FD6 /* msgpack.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = msgpack.hpp; sourceTree = "<group>"; };
 		1B4D3F2A21EE60690088CD57 /* Connection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Connection.hpp; sourceTree = "<group>"; };
 		1B4D3F2B21EE60690088CD57 /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
-		1B4D3F2C21EE60690088CD57 /* DeltaContainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeltaContainer.hpp; sourceTree = "<group>"; };
+		1B4D3F2C21EE60690088CD57 /* StateContainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StateContainer.hpp; sourceTree = "<group>"; };
 		1B4D3F3621EE60E70088CD57 /* Client.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Client.hpp; sourceTree = "<group>"; };
 		1BBD8C3021F0C54A008DF6C2 /* Compare.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Compare.cpp; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2246,8 +2246,8 @@
 				1B4D3F2B21EE60690088CD57 /* Connection.cpp */,
 				1B47A8A421EE483A00C61FD6 /* Room.hpp */,
 				1B47A8A921EE483A00C61FD6 /* Room.cpp */,
-				1B4D3F2C21EE60690088CD57 /* DeltaContainer.hpp */,
-				1B17AD2421EE796D00F9B98D /* DeltaContainer.cpp */,
+				1B4D3F2C21EE60690088CD57 /* StateContainer.hpp */,
+				1B17AD2421EE796D00F9B98D /* StateContainer.cpp */,
 				1B47A8AA21EE483A00C61FD6 /* Compare.hpp */,
 				1BBD8C3021F0C54A008DF6C2 /* Compare.cpp */,
 				1B47A8A221EE483A00C61FD6 /* Protocol.hpp */,
@@ -2504,7 +2504,7 @@
 				1B4D3F2D21EE60690088CD57 /* Connection.cpp in Sources */,
 				1B47A8B421EE483B00C61FD6 /* delta.c in Sources */,
 				1BBD8C3121F0C54A008DF6C2 /* Compare.cpp in Sources */,
-				1B17AD2521EE796D00F9B98D /* DeltaContainer.cpp in Sources */,
+				1B17AD2521EE796D00F9B98D /* StateContainer.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				1B47A8B821EE483B00C61FD6 /* Room.cpp in Sources */,
 				1AF87B8A1F6F7822007BE51C /* main.m in Sources */,
@@ -2520,7 +2520,7 @@
 			files = (
 				1B47A8B521EE483B00C61FD6 /* delta.c in Sources */,
 				1B4D3F2E21EE60690088CD57 /* Connection.cpp in Sources */,
-				1B17AD2621EE796D00F9B98D /* DeltaContainer.cpp in Sources */,
+				1B17AD2621EE796D00F9B98D /* StateContainer.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				1B47A8BB21EE483B00C61FD6 /* Protocol.cpp in Sources */,
 				1B47A8B321EE483B00C61FD6 /* Client.cpp in Sources */,

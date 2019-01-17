@@ -9,10 +9,11 @@
 class PatchObject
 {
 public:
-    PatchObject(std::vector<std::string> path,std::string op ,msgpack::object value);
+    PatchObject(std::vector<std::string> path, std::string op, msgpack::object value);
     std::vector<std::string> path;
     std::string op; // : "add" | "remove" | "replace";
     msgpack::object value;
+    msgpack::object previousValue;
 };
 
 class Compare

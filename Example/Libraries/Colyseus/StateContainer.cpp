@@ -1,10 +1,13 @@
 #include <iostream>
 #include <regex>
 #include <string>
+#include <algorithm>
 
-#include "DeltaContainer.hpp"
+#include "StateContainer.hpp"
 
-std::vector<std::string> DeltaContainer::splitStr(const std::string &sourceStr, char delim) {
+int listenerId = 0;
+
+std::vector<std::string> StateContainer::splitStr(const std::string &sourceStr, char delim) {
     std::vector<std::string> elems;
     std::stringstream ss(sourceStr);
     std::string unit;
@@ -15,13 +18,14 @@ std::vector<std::string> DeltaContainer::splitStr(const std::string &sourceStr, 
     return elems;
 }
 
-DeltaContainer::~DeltaContainer()
+StateContainer::~StateContainer()
 {
-    if(data)
+    if (data) {
         delete data;
+    }
 }
 
-DeltaContainer::DeltaContainer(msgpack::object_handle *data)
+StateContainer::StateContainer(msgpack::object_handle *data)
 {
     matcherPlaceholders.insert(std::make_pair(":id", std::regex("^([a-zA-Z0-9\\-_]+)$")));
     matcherPlaceholders.insert(std::make_pair(":number", std::regex("^([0-9]+)$")));
@@ -34,7 +38,7 @@ DeltaContainer::DeltaContainer(msgpack::object_handle *data)
 }
 
     
-std::vector<PatchObject> DeltaContainer::set(msgpack::object newData)
+std::vector<PatchObject> StateContainer::set(msgpack::object newData)
 {
     //        std::cout << "-------------------------set---------------------------------" << std::endl;
     std::vector<PatchObject> patches;
@@ -70,68 +74,52 @@ std::vector<PatchObject> DeltaContainer::set(msgpack::object newData)
     return patches;
 }
     
-void DeltaContainer::registerPlaceholder(std::string placeholder, std::regex matcher)
+void StateContainer::registerPlaceholder(std::string placeholder, std::regex matcher)
 {
     std::pair<std::string,std::regex> pair(placeholder,matcher);
     this->matcherPlaceholders.insert(pair);
 }
     
-Listener<FallbackAction> DeltaContainer::listen(FallbackAction callback)
+Listener<FallbackAction> StateContainer::listen(FallbackAction callback)
 {
     Listener<FallbackAction> listener;
+    listener.id = ++listenerId;
     listener.callback = callback;
-    listener.operation = "";
     listener.rules = std::vector<std::regex>();
     this->fallbackListeners.push_back(listener);
     return listener;
 }
 
-Listener<PatchAction> DeltaContainer::listen(std::string segments, std::string operation, PatchAction callback)
+Listener<PatchAction> StateContainer::listen(std::string segments, PatchAction callback, bool immediate)
 {
     std::vector<std::string> words = splitStr(segments, '/');
     std::vector<std::regex> regexpRules = parseRegexRules(words);
     Listener<PatchAction> listener;
+    listener.id = ++listenerId;
     listener.callback = callback;
-    listener.operation = operation;
     listener.rules = regexpRules;
+    listeners.push_back(listener);
     
-    auto item = listeners.find(operation);
-    if(item == listeners.end()) {
-        std::vector<Listener<PatchAction>> list;
-        list.push_back(listener);
-        std::pair<std::string, std::vector<Listener<PatchAction>>> pair(operation,list);
-        listeners.insert(pair);
-    } else {
-        item->second.push_back(listener);
+    if (immediate) {
+        checkPatches(Compare::getPatchList(msgpack::object(), this->data->get()));
     }
+
     return listener;
 }
 
-void DeltaContainer::removeListener(Listener<PatchAction> listener)
+void StateContainer::removeListener(Listener<PatchAction> &listener)
 {
-    auto it = listeners.find(listener.operation);
-    if (it != listeners.end())
-    {
-        auto patchActionList = it->second;
-        for (auto it2 = patchActionList.begin(); it2 != patchActionList.end() ;it2++)
-        {
-            if (it2->operation == listener.operation) {
-                it2 = patchActionList.erase(it2);
-            }
-        }
-    }
-    
+    listeners.erase(std::remove(listeners.begin(), listeners.end(), listener), listeners.end());
 }
     
-void DeltaContainer::removeAllListeners()
+void StateContainer::removeAllListeners()
 {
     reset();
 }
-    
 
-std::vector<std::regex> DeltaContainer::parseRegexRules (std::vector<std::string> rules)
+std::vector<std::regex> StateContainer::parseRegexRules (std::vector<std::string> rules)
 {
-    std::vector<std::regex>regexpRules;
+    std::vector<std::regex> regexpRules;
     for (int i = 0; i < rules.size(); i++)
     {
         auto segment = rules[i];
@@ -155,39 +143,34 @@ std::vector<std::regex> DeltaContainer::parseRegexRules (std::vector<std::string
 }
     
 
-void DeltaContainer::checkPatches(std::vector<PatchObject> patches)
+void StateContainer::checkPatches(std::vector<PatchObject> patches)
 {
     for (int i = (int)patches.size() - 1; i >= 0; i--)
     {
         bool matched = false;
-        auto op = patches[i].op;
-        auto it = listeners.find(op);
-        if (it != listeners.end()) {
-            std::vector<Listener<PatchAction>> list = it->second;
-            for (int j = 0; j < list.size(); j++)
-            {
-                Listener<PatchAction> listener = list[j];
-                auto matches = checkPatch(patches[i], listener);
-                if (matches.size() > 0) {
-                    listener.callback(matches, patches[i].value);
-                    matched = true;
-                }
+        for (int j = 0; j < listeners.size(); j++)
+        {
+            Listener<PatchAction> listener = listeners[j];
+            auto matches = checkPatch(patches[i], listener);
+            if (matches.size() > 0) {
+                listener.callback(matches, patches[i].value);
+                matched = true;
             }
-            
-            // check for fallback listener
-            int fallbackListenersCount = (int) fallbackListeners.size();
-            if (!matched && fallbackListenersCount > 0) {
-                for (int j = 0; j < fallbackListenersCount; j++)
-                {
-                    fallbackListeners [j].callback(patches[i].path, patches [i].op, patches [i].value);
-                }
+        }
+        
+        // check for fallback listener
+        int fallbackListenersCount = (int) fallbackListeners.size();
+        if (!matched && fallbackListenersCount > 0) {
+            for (int j = 0; j < fallbackListenersCount; j++)
+            {
+                fallbackListeners [j].callback(patches[i].path, patches [i].op, patches [i].value);
             }
         }
     }
     
 }
 
-std::vector<std::string> DeltaContainer::checkPatch(PatchObject patch, Listener<PatchAction> listener)
+std::vector<std::string> StateContainer::checkPatch(PatchObject patch, Listener<PatchAction> listener)
 {
     // skip if rules count differ from patch
     if (patch.path.size() != listener.rules.size()) {
@@ -211,7 +194,7 @@ std::vector<std::string> DeltaContainer::checkPatch(PatchObject patch, Listener<
     return pathVars;
 }
 
-void DeltaContainer::reset()
+void StateContainer::reset()
 {
     listeners.clear();
     fallbackListeners.clear();

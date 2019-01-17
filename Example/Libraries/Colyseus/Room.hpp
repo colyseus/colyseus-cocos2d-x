@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include "Protocol.hpp"
 #include "Connection.hpp"
-#include "DeltaContainer.hpp"
+#include "StateContainer.hpp"
 
-class Room : public DeltaContainer
+class Room : public StateContainer
 {
 public:
     Room (const std::string, std::map<std::string, std::string>);
