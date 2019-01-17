@@ -78,7 +78,7 @@ Download and following [installation instructions](https://github.com/cocos2d/co
 
 ## Example
 
-The example is using [colyseus-examples](https://github.com/colyseus/colyseus-examples) as a server. Please follow installation instructions on [colyseus-examples](https://github.com/colyseus/colyseus-examples)'s README.
+The example is using [colyseus-examples](https://github.com/colyseus/colyseus-examples) as a server. Please follow installation instructions from [colyseus-examples](https://github.com/colyseus/colyseus-examples)'s README.
 
 ### Running the client
 
