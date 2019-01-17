@@ -48,7 +48,7 @@ public:
 
     inline void send(unsigned char *buffer,unsigned int size)
     {
-        _ws->send(buffer,size);
+        _ws->send(buffer, size);
     }
 
 };

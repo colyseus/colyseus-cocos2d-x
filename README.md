@@ -65,9 +65,38 @@ In your scene file, add the following:
 ```cpp
 #include "Colyseus/Client.h";
 
-bool HelloWorldScene::init()
+Client* client;
+Room* room;
+
+bool HelloWorld::init()
 {
-    Client::getInstance()->start("ws://localhost:2667", CC_CALLBACK_1(HelloWorldScene::onConnectToServer, this));
+    client = new Client("ws://localhost:2667");
+    client->onOpen = CC_CALLBACK_0(HelloWorld::onConnectToServer, this);
+    client->connect();
+}
+
+
+void HelloWorld::onConnectToServer()
+{
+    log("Colyseus: CONNECTED TO SERVER!");
+    room->onMessage = CC_CALLBACK_2(HelloWorld::onRoomMessage, this);
+    room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
+
+    room->Listen("players/:id", "add", [](std::vector<std::string> path, msgpack::object change) -> void {
+        std::cout << "players/:id ADDED!" << std::endl;
+    });
+}
+
+void HelloWorld::onRoomMessage(Room* sender, msgpack::object message)
+{
+    std::cout << "!! HelloWorld::onRoomMessage !!" << std::endl;
+    std::cout << message << std::endl;
+}
+
+void HelloWorld::onRoomStateChange(Room* sender)
+{
+    std::cout << "!! HelloWorld::onRoomStateChange !!" << std::endl;
+    std::cout << sender->data->get() << std::endl;
 }
 ```
 
