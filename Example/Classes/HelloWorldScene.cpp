@@ -148,8 +148,11 @@ void HelloWorld::onConnectToServer()
     room->onMessage = CC_CALLBACK_2(HelloWorld::onRoomMessage, this);
     room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
     
-    room->listen("players/:id", [](std::vector<std::string> path, msgpack::object change) -> void {
-        std::cout << "players/:id ADDED => " << change << std::endl;
+    room->listen("players/:id", [](std::map<std::string, std::string> path, PatchObject patch) -> void {
+        std::cout << "CALLBACK FOR 'players/:id' >>" << std::endl;
+        std::cout << "OPERATION: " << patch.op << std::endl;
+        std::cout << "PLAYER ID:" << path.at(":id") << std::endl;
+        std::cout << "VALUE: " << patch.value << std::endl;
     });
 }
 

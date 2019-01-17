@@ -96,12 +96,12 @@ Listener<FallbackAction> StateContainer::listen(FallbackAction callback)
 
 Listener<PatchAction> StateContainer::listen(std::string segments, PatchAction callback, bool immediate)
 {
-    std::vector<std::string> words = splitStr(segments, '/');
-    std::vector<std::regex> regexpRules = parseRegexRules(words);
     Listener<PatchAction> listener;
+    
     listener.id = ++listenerId;
     listener.callback = callback;
-    listener.rules = regexpRules;
+    listener.segments = splitStr(segments, '/');
+    listener.rules = parseRegexRules(listener.segments);
     listeners.push_back(listener);
     
     if (immediate) {
@@ -157,7 +157,7 @@ void StateContainer::checkPatches(std::vector<PatchObject> patches)
             Listener<PatchAction> listener = listeners[j];
             auto matches = checkPatch(patches[i], listener);
             if (matches.size() > 0) {
-                listener.callback(matches, patches[i].value);
+                listener.callback(matches, patches[i]);
                 matched = true;
             }
         }
@@ -167,31 +167,30 @@ void StateContainer::checkPatches(std::vector<PatchObject> patches)
         if (!matched && fallbackListenersCount > 0) {
             for (int j = 0; j < fallbackListenersCount; j++)
             {
-                fallbackListeners [j].callback(patches[i].path, patches [i].op, patches [i].value);
+                fallbackListeners[j].callback(patches[i]);
             }
         }
     }
     
 }
 
-std::vector<std::string> StateContainer::checkPatch(PatchObject patch, Listener<PatchAction> listener)
+std::map<std::string, std::string> StateContainer::checkPatch(PatchObject patch, Listener<PatchAction> listener)
 {
     // skip if rules count differ from patch
     if (patch.path.size() != listener.rules.size()) {
-        return std::vector<std::string>();
+        return std::map<std::string, std::string>();
     }
-    std::vector<std::string> pathVars;
+    std::map<std::string, std::string> pathVars;
     
     for (int i = 0; i < listener.rules.size(); i++)
     {
         std::cmatch matches;    // same as std::match_results<const char*> cm;
-        std::regex_match(patch.path[i].c_str(),matches,listener.rules[i]);
-        if (matches.size() == 0 || matches.size() > 2)
-        {
-            return std::vector<std::string>();
-        } else if ( matches[0].length() > 1 )
-        {
-            pathVars.push_back(matches[0].str());
+        std::regex_match(patch.path[i].c_str(), matches, listener.rules[i]);
+        if (matches.size() == 0 || matches.size() > 2) {
+            return std::map<std::string, std::string>();
+
+        } else if (matches[0].length() > 1) {
+            pathVars.insert(std::make_pair(listener.segments[i], matches[0].str()));
         }
     }
     

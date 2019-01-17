@@ -7,8 +7,8 @@
 
 #include "Compare.hpp"
 
-typedef std::function<void(std::vector<std::string>,msgpack::object)> PatchAction;
-typedef std::function<void(std::vector<std::string>,std::string,msgpack::object)> FallbackAction;
+typedef std::function<void(std::map<std::string, std::string>, PatchObject)> PatchAction;
+typedef std::function<void(PatchObject)> FallbackAction;
 
 template <typename T>
 class Listener
@@ -16,6 +16,7 @@ class Listener
 public:
     T callback;
     std::vector<std::regex> rules;
+    std::vector<std::string> segments;
 //    std::string operation;
     int id;
     bool operator== (Listener<T> const& other) { return this->id == other.id; }
@@ -46,7 +47,7 @@ public:
 protected:
     std::vector<std::regex> parseRegexRules (std::vector<std::string> rules);
     void checkPatches(std::vector<PatchObject> patches);
-    std::vector<std::string> checkPatch(PatchObject patch, Listener<PatchAction> listener);
+    std::map<std::string, std::string> checkPatch(PatchObject patch, Listener<PatchAction> listener);
     void reset();
 
 };

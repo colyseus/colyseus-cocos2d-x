@@ -2247,19 +2247,19 @@
 		1BBD8F2521F11B3E008DF6C2 /* Colyseus */ = {
 			isa = PBXGroup;
 			children = (
-				1BBD8F2621F11B3E008DF6C2 /* Protocol.hpp */,
-				1BBD8F2721F11B3E008DF6C2 /* Connection.hpp */,
-				1BBD8F2821F11B3E008DF6C2 /* Compare.cpp */,
-				1BBD8F2921F11B3E008DF6C2 /* StateContainer.hpp */,
+				1BBD8F3321F11B3E008DF6C2 /* Client.hpp */,
 				1BBD8F2A21F11B3E008DF6C2 /* Client.cpp */,
 				1BBD8F2B21F11B3E008DF6C2 /* Room.hpp */,
-				1BBD8F2C21F11B3E008DF6C2 /* fossil */,
 				1BBD8F2E21F11B3E008DF6C2 /* Room.cpp */,
-				1BBD8F2F21F11B3E008DF6C2 /* Protocol.cpp */,
-				1BBD8F3021F11B3E008DF6C2 /* Connection.cpp */,
+				1BBD8F2921F11B3E008DF6C2 /* StateContainer.hpp */,
 				1BBD8F3121F11B3E008DF6C2 /* StateContainer.cpp */,
+				1BBD8F2721F11B3E008DF6C2 /* Connection.hpp */,
+				1BBD8F3021F11B3E008DF6C2 /* Connection.cpp */,
 				1BBD8F3221F11B3E008DF6C2 /* Compare.hpp */,
-				1BBD8F3321F11B3E008DF6C2 /* Client.hpp */,
+				1BBD8F2821F11B3E008DF6C2 /* Compare.cpp */,
+				1BBD8F2C21F11B3E008DF6C2 /* fossil */,
+				1BBD8F2621F11B3E008DF6C2 /* Protocol.hpp */,
+				1BBD8F2F21F11B3E008DF6C2 /* Protocol.cpp */,
 			);
 			path = Colyseus;
 			sourceTree = "<group>";
