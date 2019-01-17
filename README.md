@@ -21,37 +21,9 @@
   <h3>
 </div>
 
-## Installation
-
-Download and following [installation instructions](https://github.com/cocos2d/cocos2d-x#download-stable-versions) for [Cocos2d-X](http://www.cocos2d-x.org/download).
-
-## Running the Example
-
-### Running the server locally
-
-Ensure you have [Node v6+](http://nodejs.org/) installed. Then run these
-commands in your commandline:
-
-```
-cd server
-npm install
-npm start
-```
-
-### Running the client
-
-From the `Example` directory, run the `cocos run -p {platform-id}` command,
-e.g.:
-
-```
-# running on windows
-cocos run -p win32
-```
-
-```
-# running on mac
-cocos run -p mac
-```
+- [Usage](#installation)
+- [Installation](#installation)
+- [Example](#example)
 
 ## Usage
 
@@ -97,6 +69,30 @@ void HelloWorld::onRoomStateChange(Room* sender)
     std::cout << "!! HelloWorld::onRoomStateChange !!" << std::endl;
     std::cout << sender->data->get() << std::endl;
 }
+```
+
+
+## Installation
+
+Download and following [installation instructions](https://github.com/cocos2d/cocos2d-x#download-stable-versions) for [Cocos2d-X](http://www.cocos2d-x.org/download).
+
+## Example
+
+The example is using [colyseus-examples](https://github.com/colyseus/colyseus-examples) as a server. Please follow installation instructions on [colyseus-examples](https://github.com/colyseus/colyseus-examples)'s README.
+
+### Running the client
+
+From the `Example` directory, run the `cocos run -p {platform-id}` command,
+e.g.:
+
+```
+# running on windows
+cocos run -p win32
+```
+
+```
+# running on mac
+cocos run -p mac
 ```
 
 ## Contributors
