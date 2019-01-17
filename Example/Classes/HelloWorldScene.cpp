@@ -26,6 +26,7 @@
 #include "SimpleAudioEngine.h"
 
 #include "Colyseus/Client.hpp"
+//#include <functional>
 
 USING_NS_CC;
 
@@ -47,15 +48,25 @@ static void problemLoading(const char* filename)
 void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
-    room = colyseus->join("chat", std::map<std::string, std::string>());
+    room = colyseus->join("state_handler", std::map<std::string, std::string>());
     room->onMessage = CC_CALLBACK_2(HelloWorld::onRoomMessage, this);
-    // room->onJoin
+    room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
+    
+    room->Listen("players/:id", "add", [](std::vector<std::string> path, msgpack::object change) -> void {
+        std::cout << "players/:id ADDED!" << std::endl;
+    });
 }
 
 void HelloWorld::onRoomMessage(Room* sender, msgpack::object message)
 {
     std::cout << "!! HelloWorld::onRoomMessage !!" << std::endl;
     std::cout << message << std::endl;
+}
+
+void HelloWorld::onRoomStateChange(Room* sender)
+{
+    std::cout << "!! HelloWorld::onRoomStateChange !!" << std::endl;
+    std::cout << sender->data->get() << std::endl;
 }
 
 // on "init" you need to initialize your instance

@@ -11,13 +11,13 @@ class Room : public DeltaContainer
 public:
     Room (const std::string, std::map<std::string, std::string>);
     virtual ~Room();
-    
-    void connect(Connection* connection);
 
     // Methods
-    void setState(msgpack::object state, int remoteCurrentTime, int remoteElapsedTime);
+    void connect(Connection* connection);
     void leave(bool requestLeave);
-    void applyPatch (const char* bytes, int len);
+
+    void setState(msgpack::object_bin, int, int);
+    void applyPatch(const char*, int);
     // void emitError (MessageEventArgs *args);
     
     // Callbacks
@@ -40,7 +40,7 @@ private:
     void _onError(const WebSocket::ErrorCode&);
     void _onMessage(const WebSocket::Data&);
 
-    CC_SYNTHESIZE(char *, _previousState, PreviousState);
-    CC_SYNTHESIZE(int, _previousStateSize, PreviousStateSize);
+    const char* _previousState;
+    int _previousStateSize;
 };
 #endif /* Room_hpp */

@@ -35,6 +35,7 @@ public:
     void onConnectToServer();
     void onJoinRoom();
     void onRoomMessage(Room*, msgpack::object);
+    void onRoomStateChange(Room*);
 
 public:
     static cocos2d::Scene *createScene();

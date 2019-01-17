@@ -3,13 +3,11 @@
 #define FOSSIL_ENABLE_DELTA_CKSUM_TEST 1 // enable checksum on fossil-delta
 #include "fossil/delta.c"
 
+#include <string.h>
 #include <sstream>
 #include <iostream>
 
 using namespace cocos2d;
-
-// #define MAX_LEN_STATE_STR 4096
-#define MAX_LEN_STATE_STR 5120
 
 Room::Room (const std::string _name, std::map<std::string, std::string> _options)
 {
@@ -106,13 +104,10 @@ void Room::_onMessage(const WebSocket::Data& data)
         {
             log("Colyseus.Room: ROOM_STATE");
             
-            msgpack::object state;
-            message.ptr[1].convert(state);
-            
             int64_t remoteCurrentTime = message.ptr[2].via.i64;
             int64_t remoteElapsedTime = message.ptr[3].via.i64;
             
-            this->setState(state, (int)remoteCurrentTime, (int)remoteElapsedTime);
+            this->setState(message.ptr[1].via.bin, (int)remoteCurrentTime, (int)remoteElapsedTime);
             break;
         }
         case Protocol::ROOM_STATE_PATCH:
@@ -127,7 +122,7 @@ void Room::_onMessage(const WebSocket::Data& data)
                 patches[idx] = patchBytes.ptr[idx].via.i64;
             }
             
-            this->applyPatch(patches,patchBytes.size);
+            this->applyPatch(patches, patchBytes.size);
             delete [] patches;
             
             break;
@@ -139,22 +134,19 @@ void Room::_onMessage(const WebSocket::Data& data)
     }
 }
 
-void Room::setState(msgpack::object state, int remoteCurrentTime, int remoteElapsedTime)
+void Room::setState(msgpack::object_bin encodedState, int remoteCurrentTime, int remoteElapsedTime)
 {
+    
+    msgpack::object_handle oh = msgpack::unpack(encodedState.ptr, encodedState.size);
+    msgpack::object state = oh.get();
     this->Set(state);
-
-    msgpack::sbuffer temp_sbuffer;
-    msgpack::packer<msgpack::sbuffer> packer(&temp_sbuffer);
-    packer.pack(state);
 
     if (_previousState) {
         delete _previousState;
     }
-    _previousState = NULL;
 
-    _previousStateSize = (int) temp_sbuffer.size();
-    _previousState = new char[temp_sbuffer.size()];
-    memcpy(_previousState, temp_sbuffer.data(), temp_sbuffer.size());
+    this->_previousState = encodedState.ptr;
+    this->_previousStateSize = encodedState.size;
 
     if (onStateChange) {
         this->onStateChange(this);
@@ -168,31 +160,30 @@ void Room::leave(bool requestLeave)
     } else {
         log("MAY BE WAITING FOR JOIN RESPONSE");
 
-        if (onLeave)
-        {
+        if (onLeave) {
             this->onLeave();
         }
     }
 }
 
-void Room::applyPatch (const char* delta ,int len)
+void Room::applyPatch (const char* delta, int len)
 {
-    char * temp = new char[MAX_LEN_STATE_STR];
-    _previousStateSize = delta_apply(_previousState,_previousStateSize, delta, len, temp);
+    int newStateSize = delta_output_size(delta, len);
+    char* temp = new char[newStateSize];
+    
+    _previousStateSize = delta_apply(_previousState, _previousStateSize, delta, len, temp);
 
-    CCASSERT(_previousStateSize < MAX_LEN_STATE_STR,"MAX_LEN_STATE_STR not enought!!");
-
-    delete [] _previousState;
-    _previousState = NULL;
-    _previousState = new char[_previousStateSize];
-    memcpy(_previousState, temp, _previousStateSize);
-    delete [] temp;
+    if (_previousState) {
+        // TODO: free _previousState from memory.
+        // delete [] _previousState;
+    }
+    _previousState = temp;
 
     msgpack::object_handle oh = msgpack::unpack(_previousState, _previousStateSize);
+    
     this->Set(oh.get());
     
-    if (onStateChange)
-    {
+    if (onStateChange) {
         this->onStateChange(this);
     }
 }

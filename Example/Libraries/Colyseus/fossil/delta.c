@@ -585,7 +585,6 @@ int delta_apply(
                     printf("ERROR:  insert command gives an output larger than predicted\n");
                     return -1;
                 }
-                DEBUG1( printf("INSERT %d\n", cnt); )
                 if( cnt>lenDelta ){
                     /* ERROR: insert count exceeds size of delta */
                     printf("ERROR: insert count exceeds size of delta\n");

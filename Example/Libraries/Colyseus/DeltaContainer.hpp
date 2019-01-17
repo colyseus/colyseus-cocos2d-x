@@ -50,17 +50,13 @@ public:
     }
     DeltaContainer(msgpack::object_handle *data = nullptr)
     {
-        std::cout << "INITIALIZE DELTA CONTAINER!" << std::endl;
-
         matcherPlaceholders.insert(std::make_pair(":id", std::regex("^([a-zA-Z0-9\\-_]+)$")));
         matcherPlaceholders.insert(std::make_pair(":number", std::regex("^([0-9]+)$")));
         matcherPlaceholders.insert(std::make_pair(":string",std::regex("^(\\w+)$")));
         matcherPlaceholders.insert(std::make_pair(":axis",std::regex("^([xyz])$")));
         matcherPlaceholders.insert(std::make_pair(":*",std::regex("(.*)")));
 
-        std::cout << "LETS SET DATA!" << std::endl;
         this->data = data;
-        std::cout << "LETS RESET!" << std::endl;
         this->Reset();
     }
 
@@ -127,15 +123,14 @@ public:
         listener.rules = regexpRules;
 
         auto item = listeners.find(operation);
-        if(item == listeners.end())
-        {
+        if(item == listeners.end()) {
             std::vector<Listener<PatchAction>> list;
             list.push_back(listener);
             std::pair<std::string, std::vector<Listener<PatchAction>>> pair(operation,list);
             listeners.insert(pair);
-        }
-        else
+        } else {
             item->second.push_back(listener);
+        }
         return listener;
     }
 
