@@ -37,11 +37,9 @@ void Room::connect(Connection* connection)
 
 void Room::_onClose()
 {
-    std::cout << "Room::_onClose started" << std::endl;
     if (this->onLeave) {
         this->onLeave();
     }
-    std::cout << "Room::_onClose finished" << std::endl;
 }
 
 void Room::_onError(const WebSocket::ErrorCode& error)
@@ -53,17 +51,17 @@ void Room::_onError(const WebSocket::ErrorCode& error)
 
 void Room::_onMessage(const WebSocket::Data& data)
 {
-    std::cout << "Room:_onMessage" << std::endl;
-
     size_t len = data.len;
     const char *bytes = data.bytes;
     
     msgpack::object_handle oh = msgpack::unpack(bytes, len);
     msgpack::object obj = oh.get();
     
+#ifdef COLYSEUS_DEBUG
     std::cout << "------------------------ROOM-RAW-----------------------------" << std::endl;
     std::cout << obj << std::endl;
     std::cout << "-------------------------------------------------------------" << std::endl;
+#endif
     
     Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
     msgpack::object_array message(obj.via.array);

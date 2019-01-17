@@ -25,6 +25,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
+#define COLYSEUS_DEBUG 1
 #include "Colyseus/Client.hpp"
 //#include <functional>
 

@@ -71,9 +71,11 @@ void Client::_onMessage(const WebSocket::Data& data)
     msgpack::object_handle oh = msgpack::unpack(bytes, len);
     msgpack::object obj = oh.get();
 
+#ifdef COLYSEUS_DEBUG
     std::cout << "-----------------------CLIENT-RAW----------------------------" << std::endl;
     std::cout << obj << std::endl;
     std::cout << "-------------------------------------------------------------" << std::endl;
+#endif
 
     Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
     msgpack::object_array message(obj.via.array);

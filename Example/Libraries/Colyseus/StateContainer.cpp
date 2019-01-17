@@ -49,6 +49,8 @@ std::vector<PatchObject> StateContainer::set(msgpack::object newData)
         patches = Compare::getPatchList(this->data->get(), newData);
         this->checkPatches(patches);
     }
+
+#ifdef COLYSEUS_DEBUG
     std::cout << "------------patches.size(----------------------" << std::endl;
     for(int i = 0 ; i < patches.size();i++)
     {
@@ -58,6 +60,8 @@ std::vector<PatchObject> StateContainer::set(msgpack::object newData)
         std::cout << std::endl;
     }
     std::cout << "----------------------------------------------" << std::endl;
+#endif
+
     msgpack::sbuffer buffer;
     msgpack::packer<msgpack::sbuffer> pk(&buffer);
     pk.pack(newData);
