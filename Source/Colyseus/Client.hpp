@@ -25,7 +25,7 @@ class Client : public cocos2d::Ref
 public:
     Client(const std::string& endpoint);
     virtual ~Client();
-    
+
     // Methods
     void close();
     void connect();
@@ -41,7 +41,7 @@ public:
     std::function<void(cocos2d::Ref*)> onOpen;
     std::function<void(cocos2d::Ref*)> onClose;
     std::function<void(cocos2d::Ref*, const WebSocket::ErrorCode&)> onError;
-    
+
     Room* getRoomByName(const std::string& name);
 
 protected:
@@ -50,13 +50,13 @@ protected:
     void _onError(const WebSocket::ErrorCode&);
     void _onMessage(const WebSocket::Data&);
     Connection* createConnection(std::string&, JoinOptions options = JoinOptions());
-    
+
     void joinRoomHandle(msgpack::object_array data);
     void joinRoomErrorDRoomHandle(msgpack::object_array data);
     void leaveRoomHandle(msgpack::object_array data);
-    
+
     std::string endpoint;
-    
+
     std::map<const std::string, Room*> _rooms;
     std::map<const std::string, Room*> _connectingRooms;
     int requestId = 0;

@@ -94,10 +94,10 @@ void Client::_onMessage(const WebSocket::Data& data)
         case Protocol::JOIN_ROOM:
         {
             log("Protocol::JOIN_ROOM");
-            
-            std::string requestId = message.ptr[2].via.str.ptr;
+
+            std::string requestId = message.ptr[2].as <std::string> ();
             Room* room = this->_connectingRooms.at(requestId);
-            
+
             room->id = message.ptr[1].convert(room->id);
             room->connect(this->createConnection(room->id, room->options));
             break;
@@ -121,14 +121,14 @@ Connection* Client::createConnection(std::string& path, std::map<std::string, st
 
     // append colyseusid to connection string.
     params.push_back("colyseusid=" + this->id);
-    
+
     for (const auto& kv : options)
     {
         params.push_back(kv.first + "=" + kv.second);
     }
-    
+
     std::string queryString;
-    
+
     // concat "params" with "&" separator to form query string
     for (std::vector<std::string>::const_iterator p = params.begin(); p != params.end(); ++p)
     {
@@ -146,7 +146,7 @@ void Client::joinRoomErrorDRoomHandle(msgpack::object_array data)
 {
     std::string roomName;
     data.ptr[2].convert(roomName);
-    
+
     std::map<const std::string,Room*>::iterator it = this->_rooms.find(roomName);
     if (it != _rooms.end())
     {
