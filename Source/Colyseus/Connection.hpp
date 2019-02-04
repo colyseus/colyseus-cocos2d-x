@@ -2,8 +2,11 @@
 #define Connection_hpp
 
 #include <stdio.h>
-#include "network/WebSocket.h"
+#include <functional>
 #include "msgpack.hpp"
+
+#include "cocos2d.h"
+#include "network/WebSocket.h"
 
 using namespace cocos2d::network;
 
@@ -27,13 +30,13 @@ public:
     void open();
     void close();
     WebSocket::State getReadyState();
-    
+
     // Callbacks
     std::function<void()> _onOpen;
     std::function<void()> _onClose;
     std::function<void(const WebSocket::Data&)> _onMessage;
     std::function<void(const WebSocket::ErrorCode&)> _onError;
-    
+
     // Properties
     std::string endpoint;
 
