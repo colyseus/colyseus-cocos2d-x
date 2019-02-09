@@ -105,7 +105,10 @@ Listener<PatchAction> StateContainer::listen(std::string segments, PatchAction c
     listeners.push_back(listener);
     
     if (immediate) {
-        checkPatches(Compare::getPatchList(msgpack::object(), this->data->get()));
+        std::vector<Listener<PatchAction>> listeners;
+        listeners.push_back(listener);
+        checkPatches(Compare::getPatchList(msgpack::object(), this->data->get()), listeners);
+        listeners.clear();
     }
 
     return listener;
@@ -146,15 +149,14 @@ std::vector<std::regex> StateContainer::parseRegexRules (std::vector<std::string
     return regexpRules;
 }
     
-
-void StateContainer::checkPatches(std::vector<PatchObject> patches)
+void StateContainer::checkPatches(std::vector<PatchObject> patches, std::vector<Listener<PatchAction>> &_listeners)
 {
     for (int i = (int)patches.size() - 1; i >= 0; i--)
     {
         bool matched = false;
-        for (int j = 0; j < listeners.size(); j++)
+        for (int j = 0; j < _listeners.size(); j++)
         {
-            Listener<PatchAction> listener = listeners[j];
+            Listener<PatchAction> listener = _listeners[j];
             auto matches = checkPatch(patches[i], listener);
             if (matches.size() > 0) {
                 listener.callback(matches, patches[i]);
@@ -174,6 +176,11 @@ void StateContainer::checkPatches(std::vector<PatchObject> patches)
     
 }
 
+void StateContainer::checkPatches(std::vector<PatchObject> patches)
+{
+    this->checkPatches(patches, this->listeners);
+}
+
 std::map<std::string, std::string> StateContainer::checkPatch(PatchObject patch, Listener<PatchAction> listener)
 {
     // skip if rules count differ from patch
@@ -186,10 +193,11 @@ std::map<std::string, std::string> StateContainer::checkPatch(PatchObject patch,
     {
         std::cmatch matches;    // same as std::match_results<const char*> cm;
         std::regex_match(patch.path[i].c_str(), matches, listener.rules[i]);
+
         if (matches.size() == 0 || matches.size() > 2) {
             return std::map<std::string, std::string>();
 
-        } else if (matches[0].length() > 1) {
+        } else if (matches.size() >= 2) {
             pathVars.insert(std::make_pair(listener.segments[i], matches[0].str()));
         }
     }

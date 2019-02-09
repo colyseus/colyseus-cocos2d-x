@@ -46,8 +46,11 @@ public:
     
 protected:
     std::vector<std::regex> parseRegexRules (std::vector<std::string> rules);
+
     void checkPatches(std::vector<PatchObject> patches);
+    void checkPatches(std::vector<PatchObject> patches, std::vector<Listener<PatchAction>> &);
     std::map<std::string, std::string> checkPatch(PatchObject patch, Listener<PatchAction> listener);
+
     void reset();
 
 };
