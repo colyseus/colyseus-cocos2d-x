@@ -42,13 +42,14 @@ std::vector<PatchObject> Compare::getPatchList(const msgpack::object tree1, cons
     // Dirty check if obj is different from mirror, generate patches and update mirror
 void Compare::generate (
     const msgpack::object mirrorPacked,
-    const msgpack::object objPacked, std::vector<PatchObject> *patches,
+    const msgpack::object objPacked,
+    std::vector<PatchObject> *patches,
     std::vector<std::string> path
 ) {
-    //        std::cout << "-------------------------Generate---------------------------------" << std::endl;
-    //        std::cout << mirrorPacked  << std::endl;
-    //        std::cout << objPacked  << std::endl;
-    //        std::cout << "------------------------------------------------------------------" << std::endl;
+    // std::cout << "-----------------------------Generate-----------------------------" << std::endl;
+    // std::cout << mirrorPacked  << std::endl;
+    // std::cout << objPacked  << std::endl;
+    // std::cout << "------------------------------------------------------------------" << std::endl;
     msgpack::object_map mirror = mirrorPacked.via.map;
     msgpack::object_map obj = objPacked.via.map;
     

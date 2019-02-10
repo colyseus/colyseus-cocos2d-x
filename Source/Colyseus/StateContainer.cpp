@@ -42,6 +42,7 @@ std::vector<PatchObject> StateContainer::set(msgpack::object newData)
 {
     //        std::cout << "-------------------------set---------------------------------" << std::endl;
     std::vector<PatchObject> patches;
+
     if(this->data)
     {
         //            std::cout << "OldState = "  << this->data->get()  << std::endl;
@@ -51,7 +52,7 @@ std::vector<PatchObject> StateContainer::set(msgpack::object newData)
     }
 
 #ifdef COLYSEUS_DEBUG
-    std::cout << "------------patches.size(----------------------" << std::endl;
+    std::cout << "--------StateContainer::set (patches)---------" << std::endl;
     for(int i = 0 ; i < patches.size();i++)
     {
         std::cout<< patches[i].op << std::endl;
@@ -62,28 +63,29 @@ std::vector<PatchObject> StateContainer::set(msgpack::object newData)
     std::cout << "----------------------------------------------" << std::endl;
 #endif
 
+    // TODO: this shouldn't be necessary!
     msgpack::sbuffer buffer;
     msgpack::packer<msgpack::sbuffer> pk(&buffer);
     pk.pack(newData);
     msgpack::object_handle *oh = new msgpack::object_handle();
-    msgpack::unpack(*oh,buffer.data(), buffer.size());
-    
+    msgpack::unpack(*oh, buffer.data(), buffer.size());
+
     if(data)
         delete data;
     
-    this->data = oh;;
+    this->data = oh;
     buffer.release();
     //        std::cout << "-----------------------------------------------------------" << std::endl;
-    
+
     return patches;
 }
-    
+
 void StateContainer::registerPlaceholder(std::string placeholder, std::regex matcher)
 {
     std::pair<std::string,std::regex> pair(placeholder,matcher);
     this->matcherPlaceholders.insert(pair);
 }
-    
+
 Listener<FallbackAction> StateContainer::listen(FallbackAction callback)
 {
     Listener<FallbackAction> listener;
@@ -151,6 +153,8 @@ std::vector<std::regex> StateContainer::parseRegexRules (std::vector<std::string
     
 void StateContainer::checkPatches(std::vector<PatchObject> patches, std::vector<Listener<PatchAction>> &_listeners)
 {
+    std::cout << "CHECK PATCHES!, listeners.size() => " << _listeners.size() << std::endl;
+
     for (int i = (int)patches.size() - 1; i >= 0; i--)
     {
         bool matched = false;

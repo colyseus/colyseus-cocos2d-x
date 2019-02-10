@@ -135,12 +135,13 @@ void HelloWorld::onConnectToServer()
         std::string sessionId = path.at(":id");
 
         if (patch.op == "add") {
-            // msgpack::object_map value = patch.value.via.map;
+            // convert patch.value to specified type
+            std::map<std::string, float> value;
+            patch.value.convert(value);
 
             // add player sprite
             auto sprite = Sprite::create("HelloWorld.png");
-            // value.ptr
-            // sprite->setPosition(Vec2(data->, patch.value.y));
+            sprite->setPosition(Vec2(value.at("x"), value.at("y")));
             players.insert(sessionId, sprite);
             this->addChild(sprite, 0);
 
