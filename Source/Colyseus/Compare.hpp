@@ -19,6 +19,8 @@ public:
 class Compare
 {
 public:
+    static msgpack::object_handle *emptyState;
+
     static bool containsKey(msgpack::object_map map, msgpack::object_kv key);
     static std::vector<PatchObject> getPatchList(const msgpack::object tree1, const msgpack::object tree2);
     static void generate(

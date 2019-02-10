@@ -560,8 +560,8 @@ int delta_apply(
                     printf("ERROR: copy command not terminated by ','\n");
                     return -1;
                 }
-                zDelta++; lenDelta--;
-                DEBUG1( printf("COPY %d from %d\n", cnt, ofst); )
+                zDelta++;
+                lenDelta--;
                 total += cnt;
                 if( total>limit ){
                     /* ERROR: copy exceeds output file size */

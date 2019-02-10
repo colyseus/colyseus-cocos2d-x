@@ -193,7 +193,7 @@ void HelloWorld::onRoomStateChange(Room* sender)
 {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "HelloWorld::onRoomStateChange" << std::endl;
-    std::cout << sender->data->get() << std::endl;
+    std::cout << sender->state->get() << std::endl;
 
     // send command to move x
     auto data = std::map<std::string, float>();

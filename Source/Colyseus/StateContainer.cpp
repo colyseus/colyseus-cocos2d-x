@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "StateContainer.hpp"
+#include "Compare.hpp"
 
 int listenerId = 0;
 
@@ -20,64 +21,43 @@ std::vector<std::string> StateContainer::splitStr(const std::string &sourceStr, 
 
 StateContainer::~StateContainer()
 {
-    if (data) {
-        delete data;
+    if (state) {
+        delete state;
     }
 }
 
-StateContainer::StateContainer(msgpack::object_handle *data)
+StateContainer::StateContainer(msgpack::object_handle *state)
 {
     matcherPlaceholders.insert(std::make_pair(":id", std::regex("^([a-zA-Z0-9\\-_]+)$")));
     matcherPlaceholders.insert(std::make_pair(":number", std::regex("^([0-9]+)$")));
     matcherPlaceholders.insert(std::make_pair(":string",std::regex("^(\\w+)$")));
     matcherPlaceholders.insert(std::make_pair(":axis",std::regex("^([xyz])$")));
     matcherPlaceholders.insert(std::make_pair(":*",std::regex("(.*)")));
-    
-    this->data = data;
+
+    if (Compare::emptyState == nullptr)
+    {
+        // generate msgpack empty state only once
+        Compare::emptyState = new msgpack::object_handle();
+
+        std::stringstream emptyStateStream;
+        msgpack::pack(emptyStateStream, std::map<std::string, std::string>());
+        msgpack::unpack(*Compare::emptyState, emptyStateStream.str().data(), emptyStateStream.str().size());
+    }
+
+    this->state = Compare::emptyState;
     this->reset();
 }
 
     
-std::vector<PatchObject> StateContainer::set(msgpack::object newData)
+void StateContainer::set(msgpack::object_handle *newState)
 {
-    //        std::cout << "-------------------------set---------------------------------" << std::endl;
-    std::vector<PatchObject> patches;
+    std::vector<PatchObject> patches = Compare::getPatchList(this->state->get(), newState->get());
+    this->checkPatches(patches);
 
-    if(this->data)
-    {
-        //            std::cout << "OldState = "  << this->data->get()  << std::endl;
-        //            std::cout << "newState = "  << newData  << std::endl;
-        patches = Compare::getPatchList(this->data->get(), newData);
-        this->checkPatches(patches);
+    if (this->state != Compare::emptyState) {
+        delete this->state;
     }
-
-#ifdef COLYSEUS_DEBUG
-    std::cout << "--------StateContainer::set (patches)---------" << std::endl;
-    for(int i = 0 ; i < patches.size();i++)
-    {
-        std::cout<< patches[i].op << std::endl;
-        for(int j = 0 ;  j < patches[i].path.size() ; j++)
-            std::cout << patches[i].path[j]  << "/";
-        std::cout << std::endl;
-    }
-    std::cout << "----------------------------------------------" << std::endl;
-#endif
-
-    // TODO: this shouldn't be necessary!
-    msgpack::sbuffer buffer;
-    msgpack::packer<msgpack::sbuffer> pk(&buffer);
-    pk.pack(newData);
-    msgpack::object_handle *oh = new msgpack::object_handle();
-    msgpack::unpack(*oh, buffer.data(), buffer.size());
-
-    if(data)
-        delete data;
-    
-    this->data = oh;
-    buffer.release();
-    //        std::cout << "-----------------------------------------------------------" << std::endl;
-
-    return patches;
+    this->state = newState;
 }
 
 void StateContainer::registerPlaceholder(std::string placeholder, std::regex matcher)
@@ -109,7 +89,7 @@ Listener<PatchAction> StateContainer::listen(std::string segments, PatchAction c
     if (immediate) {
         std::vector<Listener<PatchAction>> listeners;
         listeners.push_back(listener);
-        checkPatches(Compare::getPatchList(msgpack::object(), this->data->get()), listeners);
+        checkPatches(Compare::getPatchList(Compare::emptyState->get(), this->state->get()), listeners);
         listeners.clear();
     }
 
@@ -154,6 +134,18 @@ std::vector<std::regex> StateContainer::parseRegexRules (std::vector<std::string
 void StateContainer::checkPatches(std::vector<PatchObject> patches, std::vector<Listener<PatchAction>> &_listeners)
 {
     std::cout << "CHECK PATCHES!, listeners.size() => " << _listeners.size() << std::endl;
+
+#ifdef COLYSEUS_DEBUG
+    std::cout << "--------StateContainer::set (patches)---------" << std::endl;
+    for(int i = 0 ; i < patches.size();i++)
+    {
+        std::cout<< patches[i].op << std::endl;
+        for(int j = 0 ;  j < patches[i].path.size() ; j++)
+            std::cout << patches[i].path[j]  << "/";
+        std::cout << std::endl;
+    }
+    std::cout << "----------------------------------------------" << std::endl;
+#endif
 
     for (int i = (int)patches.size() - 1; i >= 0; i--)
     {

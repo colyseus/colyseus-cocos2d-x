@@ -10,6 +10,7 @@
 using namespace cocos2d;
 
 Room::Room (const std::string _name, std::map<std::string, std::string> _options)
+: StateContainer()
 {
     name = _name;
     options = _options;
@@ -53,25 +54,25 @@ void Room::_onMessage(const WebSocket::Data& data)
 {
     size_t len = data.len;
     const char *bytes = data.bytes;
-    
+
     msgpack::object_handle oh = msgpack::unpack(bytes, len);
     msgpack::object obj = oh.get();
-    
+
 #ifdef COLYSEUS_DEBUG
     std::cout << "------------------------ROOM-RAW-----------------------------" << std::endl;
     std::cout << obj << std::endl;
     std::cout << "-------------------------------------------------------------" << std::endl;
 #endif
-    
+
     Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
     msgpack::object_array message(obj.via.array);
-    
+
     switch (protocol)
     {
         case Protocol::JOIN_ROOM:
         {
             id = message.ptr[1].convert(id);
-            
+
             if (this->onJoin) {
                 this->onJoin();
             }
@@ -101,28 +102,28 @@ void Room::_onMessage(const WebSocket::Data& data)
         case Protocol::ROOM_STATE:
         {
             log("Colyseus.Room: ROOM_STATE");
-            
+
             int64_t remoteCurrentTime = message.ptr[2].via.i64;
             int64_t remoteElapsedTime = message.ptr[3].via.i64;
-            
+
             this->setState(message.ptr[1].via.bin, (int)remoteCurrentTime, (int)remoteElapsedTime);
             break;
         }
         case Protocol::ROOM_STATE_PATCH:
         {
             log("Colyseus.Room: ROOM_STATE_PATCH");
-            
+
             msgpack::object_array patchBytes = message.ptr[1].via.array;
-            
+
             char * patches = new char[patchBytes.size];
             for(int idx = 0; idx < patchBytes.size ; idx++)
             {
                 patches[idx] = patchBytes.ptr[idx].via.i64;
             }
-            
+
             this->applyPatch(patches, patchBytes.size);
             delete [] patches;
-            
+
             break;
         }
         default:
@@ -134,9 +135,8 @@ void Room::_onMessage(const WebSocket::Data& data)
 
 void Room::setState(msgpack::object_bin encodedState, int remoteCurrentTime, int remoteElapsedTime)
 {
-    
-    msgpack::object_handle oh = msgpack::unpack(encodedState.ptr, encodedState.size);
-    msgpack::object state = oh.get();
+    msgpack::object_handle *state = new msgpack::object_handle();
+    msgpack::unpack(*state, encodedState.ptr, encodedState.size);
     this->set(state);
 
     if (_previousState) {
@@ -168,18 +168,17 @@ void Room::applyPatch (const char* delta, int len)
 {
     int newStateSize = delta_output_size(delta, len);
     char* temp = new char[newStateSize];
-    
-    _previousStateSize = delta_apply(_previousState, _previousStateSize, delta, len, temp);
 
+    _previousStateSize = delta_apply(_previousState, _previousStateSize, delta, len, temp);
     if (_previousState) {
         // TODO: free _previousState from memory.
         // delete [] _previousState;
     }
     _previousState = temp;
 
-    msgpack::object_handle oh = msgpack::unpack(_previousState, _previousStateSize);
-    
-    this->set(oh.get());
+    msgpack::object_handle *newState = new msgpack::object_handle();
+    msgpack::unpack(*newState, _previousState, _previousStateSize);
+    this->set(newState);
     
     if (onStateChange) {
         this->onStateChange(this);

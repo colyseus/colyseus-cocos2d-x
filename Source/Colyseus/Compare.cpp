@@ -1,5 +1,7 @@
 #include "Compare.hpp"
 
+msgpack::object_handle* Compare::emptyState = nullptr;
+
 PatchObject::PatchObject(std::vector<std::string> path,std::string op, msgpack::object value)
 {
     this->path = path;
@@ -15,7 +17,7 @@ bool Compare::containsKey(msgpack::object_map map, msgpack::object_kv key)
     //        std::cout << key.key  << std::endl;
     //        std::cout << key.val  << std::endl;
     //        std::cout << "========================================================" << std::endl;
-    //
+
     for(int i = 0 ; i < map.size; i++)
     {
         std::string key1;
@@ -39,16 +41,17 @@ std::vector<PatchObject> Compare::getPatchList(const msgpack::object tree1, cons
     return patches;
 }
     
-    // Dirty check if obj is different from mirror, generate patches and update mirror
+// Dirty check if obj is different from mirror, generate patches and update mirror
 void Compare::generate (
     const msgpack::object mirrorPacked,
     const msgpack::object objPacked,
     std::vector<PatchObject> *patches,
     std::vector<std::string> path
 ) {
-    // std::cout << "-----------------------------Generate-----------------------------" << std::endl;
-    // std::cout << mirrorPacked  << std::endl;
-    // std::cout << objPacked  << std::endl;
+
+    // std::cout << "----------------------- Compare::generate ------------------------" << std::endl;
+    // std::cout << "OLD: " << mirrorPacked  << std::endl;
+    // std::cout << "NEW: "  << objPacked  << std::endl;
     // std::cout << "------------------------------------------------------------------" << std::endl;
     msgpack::object_map mirror = mirrorPacked.via.map;
     msgpack::object_map obj = objPacked.via.map;
@@ -56,10 +59,10 @@ void Compare::generate (
     auto newKeys = obj.ptr;
     auto oldKeys = mirror.ptr;
     bool deleted = false;
-    for(int i = 0 ; i < mirror.size ; i++)
+    for (int i = mirror.size - 1; i >= 0 ; i--)
     {
         msgpack::object_kv kv= oldKeys[i];
-        
+
         if (containsKey(obj,kv) && containsKey(mirror,kv) && objPacked.type != msgpack::type::ARRAY)
         {
             auto oldVal = mirror.ptr[i].val;
@@ -83,7 +86,7 @@ void Compare::generate (
                 }
             }
         }
-        
+
         else {
             std::vector<std::string> removePath(path);
             std::string aa;
@@ -94,12 +97,12 @@ void Compare::generate (
             deleted = true; // property has been deleted
         }
     }
-    
+
     if (!deleted && obj.size == mirror.size) {
         return;
     }
-    
-    for(int i = 0 ; i < obj.size ; i++)
+
+    for(int i = obj.size -1 ; i >= 0; i--)
     {
         msgpack::object_kv kv= newKeys[i];
         if (!containsKey(mirror,kv) && containsKey(obj,kv))
@@ -108,7 +111,21 @@ void Compare::generate (
             std::string aa;
             kv.key.convert(aa);
             addPath.push_back(aa);
-            patches->push_back(PatchObject(addPath,"add",obj.ptr[i].val));
+
+            auto newVal = obj.ptr[i].val;
+
+            // compare deeper additions
+            if (
+                (
+                    newVal.type == msgpack::type::MAP ||
+                    newVal.type == msgpack::type::ARRAY
+                 ) &&
+                newVal.type != msgpack::type::NIL
+            ) {
+                generate(emptyState->get(), newVal, patches, addPath);
+            }
+
+            patches->push_back(PatchObject(addPath, "add", newVal));
         }
     }
     

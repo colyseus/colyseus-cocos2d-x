@@ -28,15 +28,15 @@ public:
     static std::vector<std::string> splitStr(const std::string &sourceStr, char delim);
 
 public:
-    StateContainer(msgpack::object_handle *data = nullptr);
+    StateContainer(msgpack::object_handle *state = nullptr);
     virtual ~StateContainer();
     
-    msgpack::object_handle *data;
+    msgpack::object_handle *state;
     std::vector<Listener<PatchAction>> listeners;
     std::vector<Listener<FallbackAction>> fallbackListeners;
     std::map<std::string,std::regex> matcherPlaceholders;
 
-    std::vector<PatchObject> set(msgpack::object newData);
+    void set(msgpack::object_handle *newState);
     void registerPlaceholder(std::string placeholder, std::regex matcher);
 
     Listener<FallbackAction> listen(FallbackAction callback);
