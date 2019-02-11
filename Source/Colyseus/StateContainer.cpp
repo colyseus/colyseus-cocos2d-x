@@ -133,8 +133,6 @@ std::vector<std::regex> StateContainer::parseRegexRules (std::vector<std::string
     
 void StateContainer::checkPatches(std::vector<PatchObject> patches, std::vector<Listener<PatchAction>> &_listeners)
 {
-    std::cout << "CHECK PATCHES!, listeners.size() => " << _listeners.size() << std::endl;
-
 #ifdef COLYSEUS_DEBUG
     std::cout << "--------StateContainer::set (patches)---------" << std::endl;
     for(int i = 0 ; i < patches.size();i++)

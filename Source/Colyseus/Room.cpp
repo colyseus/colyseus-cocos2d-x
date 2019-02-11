@@ -1,6 +1,6 @@
 #include "Room.hpp"
 
-#define FOSSIL_ENABLE_DELTA_CKSUM_TEST 1 // enable checksum on fossil-delta
+// #define FOSSIL_ENABLE_DELTA_CKSUM_TEST 0 // enable checksum on patches
 #include "fossil/delta.c"
 
 #include <string.h>
@@ -80,18 +80,24 @@ void Room::_onMessage(const WebSocket::Data& data)
         }
         case Protocol::JOIN_ERROR:
         {
-            log("Colyseus.Room: join error");
+#ifdef COLYSEUS_DEBUG
+            std::cout << "Colyseus.Room: join error" << std::endl;
+#endif
             //this->onError(this);
             break;
         }
         case Protocol::LEAVE_ROOM:
         {
-            log("Colyseus.Room: LEAVE_ROOM");
+#ifdef COLYSEUS_DEBUG
+            std::cout << "Colyseus.Room: LEAVE_ROOM" << std::endl;
+#endif
             break;
         }
         case Protocol::ROOM_DATA:
         {
-            log("Colyseus.Room: ROOM_DATA");
+#ifdef COLYSEUS_DEBUG
+            std::cout << "Colyseus.Room: ROOM_DATA" << std::endl;
+#endif
             if (this->onMessage) {
                 msgpack::object data;
                 data = message.ptr[1].convert(data);
@@ -101,7 +107,9 @@ void Room::_onMessage(const WebSocket::Data& data)
         }
         case Protocol::ROOM_STATE:
         {
-            log("Colyseus.Room: ROOM_STATE");
+#ifdef COLYSEUS_DEBUG
+            std::cout << "Colyseus.Room: ROOM_STATE" << std::endl;
+#endif
 
             int64_t remoteCurrentTime = message.ptr[2].via.i64;
             int64_t remoteElapsedTime = message.ptr[3].via.i64;
@@ -111,7 +119,9 @@ void Room::_onMessage(const WebSocket::Data& data)
         }
         case Protocol::ROOM_STATE_PATCH:
         {
-            log("Colyseus.Room: ROOM_STATE_PATCH");
+#ifdef COLYSEUS_DEBUG
+            std::cout << "Colyseus.Room: ROOM_STATE_PATCH" << std::endl;
+#endif
 
             msgpack::object_array patchBytes = message.ptr[1].via.array;
 
@@ -156,8 +166,6 @@ void Room::leave(bool requestLeave)
     if (requestLeave && !this->id.empty()) {
         this->connection->send ((int)Protocol::LEAVE_ROOM);
     } else {
-        log("MAY BE WAITING FOR JOIN RESPONSE");
-
         if (onLeave) {
             this->onLeave();
         }
@@ -170,6 +178,11 @@ void Room::applyPatch (const char* delta, int len)
     char* temp = new char[newStateSize];
 
     _previousStateSize = delta_apply(_previousState, _previousStateSize, delta, len, temp);
+
+    if (_previousStateSize == -1) {
+        std::cout << "FATAL ERROR: fossil/delta had an error!" << std::endl;
+    }
+
     if (_previousState) {
         // TODO: free _previousState from memory.
         // delete [] _previousState;

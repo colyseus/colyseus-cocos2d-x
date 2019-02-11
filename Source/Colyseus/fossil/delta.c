@@ -30,7 +30,7 @@
 /*
  ** Macros for turning debugging printfs on and off
  */
-#if 1
+#if COLYSEUS_DEBUG
 # define DEBUG1(X) X
 #else
 # define DEBUG1(X)
@@ -537,14 +537,14 @@ int delta_apply(
 ){
     unsigned int limit;
     unsigned int total = 0;
-#ifndef FOSSIL_OMIT_DELTA_CKSUM_TEST
+#ifdef FOSSIL_ENABLE_DELTA_CKSUM_TEST
     char *zOrigOut = zOut;
 #endif
     
     limit = getInt(&zDelta, &lenDelta);
     if( *zDelta!='\n' ){
         /* ERROR: size integer not terminated by "\n" */
-        printf("ERROR: size integer not terminated by ""\\n""\n");
+        printf("fossil-delta: ERROR: size integer not terminated by ::endl\n");
         return -1;
     }
     zDelta++; lenDelta--;
@@ -557,20 +557,20 @@ int delta_apply(
                 ofst = getInt(&zDelta, &lenDelta);
                 if( lenDelta>0 && zDelta[0]!=',' ){
                     /* ERROR: copy command not terminated by ',' */
-                    printf("ERROR: copy command not terminated by ','\n");
+                    printf("fossil-delta: ERROR: copy command not terminated by ','\n");
                     return -1;
                 }
-                zDelta++;
-                lenDelta--;
+                zDelta++; lenDelta--;
+                DEBUG1( printf("COPY %d from %d\n", cnt, ofst); )
                 total += cnt;
                 if( total>limit ){
                     /* ERROR: copy exceeds output file size */
-                    printf("ERROR: copy exceeds output file size\n");
+                    printf("fossil-delta: ERROR: copy exceeds output file size\n");
                     return -1;
                 }
                 if( ofst+cnt > lenSrc ){
                     /* ERROR: copy extends past end of input */
-                    printf("ERROR: copy extends past end of input: ofst: %d, cnt: %d, lenSrc: %d \n", ofst, cnt, lenSrc);
+                    printf("fossil-delta: ERROR: copy extends past end of input\n");
                     return -1;
                 }
                 memcpy(zOut, &zSrc[ofst], cnt);
@@ -582,12 +582,13 @@ int delta_apply(
                 total += cnt;
                 if( total>limit ){
                     /* ERROR:  insert command gives an output larger than predicted */
-                    printf("ERROR:  insert command gives an output larger than predicted\n");
+                    printf("fossil-delta: ERROR:  insert command gives an output larger than predicted\n");
                     return -1;
                 }
+                DEBUG1( printf("INSERT %d\n", cnt); )
                 if( cnt>lenDelta ){
                     /* ERROR: insert count exceeds size of delta */
-                    printf("ERROR: insert count exceeds size of delta\n");
+                    printf("fossil-delta: ERROR: insert count exceeds size of delta\n");
                     return -1;
                 }
                 memcpy(zOut, zDelta, cnt);
@@ -599,27 +600,28 @@ int delta_apply(
             case ';': {
                 zDelta++; lenDelta--;
                 zOut[0] = 0;
-#ifndef FOSSIL_OMIT_DELTA_CKSUM_TEST
+#ifdef FOSSIL_ENABLE_DELTA_CKSUM_TEST
                 if( cnt!=checksum(zOrigOut, total) ){
                     /* ERROR:  bad checksum */
+                    printf("fossil-delta: ERROR:  bad checksum\n");
                     return -1;
                 }
 #endif
                 if( total!=limit ){
                     /* ERROR: generated size does not match predicted size */
-                    printf("ERROR: generated size does not match predicted size\n");
+                    printf("fossil-delta: ERROR: generated size does not match predicted size\n");
                     return -1;
                 }
                 return total;
             }
             default: {
                 /* ERROR: unknown delta operator */
-                printf("ERROR: unknown delta operator\n");
+                printf("fossil-delta: ERROR: unknown delta operator \n");
                 return -1;
             }
         }
     }
     /* ERROR: unterminated delta */
-    printf("ERROR: unterminated delta\n");
+    printf("fossil-delta: ERROR: unterminated delta\n");
     return -1;
 }

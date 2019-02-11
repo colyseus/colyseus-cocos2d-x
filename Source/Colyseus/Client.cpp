@@ -84,7 +84,9 @@ void Client::_onMessage(const WebSocket::Data& data)
     {
         case Protocol::USER_ID:
         {
+#ifdef COLYSEUS_DEBUG
             log("Protocol::USER_ID");
+#endif
             id = message.ptr[1].convert(id);
             if (this->onOpen) {
                 this->onOpen(this);
@@ -93,7 +95,9 @@ void Client::_onMessage(const WebSocket::Data& data)
         }
         case Protocol::JOIN_ROOM:
         {
+#ifdef COLYSEUS_DEBUG
             log("Protocol::JOIN_ROOM");
+#endif
 
             std::string requestId = message.ptr[2].as <std::string> ();
             Room* room = this->_connectingRooms.at(requestId);
@@ -104,7 +108,9 @@ void Client::_onMessage(const WebSocket::Data& data)
         }
         case Protocol::JOIN_ERROR:
         {
+#ifdef COLYSEUS_DEBUG
             log("Protocol::JOIN_ERROR");
+#endif
             joinRoomErrorDRoomHandle(message);
             break;
         }

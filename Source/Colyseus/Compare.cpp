@@ -2,6 +2,11 @@
 
 msgpack::object_handle* Compare::emptyState = nullptr;
 
+void msgdebug (msgpack::object obj)
+{
+    std::cout << obj << std::endl;
+}
+
 PatchObject::PatchObject(std::vector<std::string> path,std::string op, msgpack::object value)
 {
     this->path = path;
@@ -20,13 +25,18 @@ bool Compare::containsKey(msgpack::object_map map, msgpack::object_kv key)
 
     for(int i = 0 ; i < map.size; i++)
     {
-        std::string key1;
-        map.ptr[i].key.convert(key1);
-        
-        std::string key2;
-        key.key.convert(key2);
-        if(key1 == key2)
-            return true;
+        if (map.ptr[i].key.type == msgpack::type::STR) {
+            std::string key1;
+            map.ptr[i].key.convert(key1);
+            
+            if (key.key.type == msgpack::type::STR) {
+                std::string key2;
+                key.key.convert(key2);
+                if (key1 == key2) {
+                    return true;
+                }
+            }
+        }
         
     }
     return false;
@@ -68,7 +78,7 @@ void Compare::generate (
             auto oldVal = mirror.ptr[i].val;
             auto newVal = obj.ptr[i].val;
             
-            if (oldVal.type == msgpack::type::MAP  && newVal.type == msgpack::type::MAP)
+            if (oldVal.type == msgpack::type::MAP && newVal.type == msgpack::type::MAP)
             {
                 std::vector<std::string> deeperPath(path);
                 std::string aa;
