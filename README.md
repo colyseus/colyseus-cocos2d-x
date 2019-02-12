@@ -51,7 +51,7 @@ void HelloWorld::onConnectToServer()
     room->onMessage = CC_CALLBACK_2(HelloWorld::onRoomMessage, this);
     room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
 
-    room->listen("players/:id", [](std::map<std::string, std::string> path, PatchObject patch) -> void {
+    room->listen("players/:id", [this](std::map<std::string, std::string> path, PatchObject patch) -> void {
         std::cout << "CALLBACK FOR 'players/:id' >>" << std::endl;
         std::cout << "OPERATION: " << patch.op << std::endl;
         std::cout << "PLAYER ID:" << path.at(":id") << std::endl;
@@ -68,7 +68,7 @@ void HelloWorld::onRoomMessage(Room* sender, msgpack::object message)
 void HelloWorld::onRoomStateChange(Room* sender)
 {
     std::cout << "!! HelloWorld::onRoomStateChange !!" << std::endl;
-    std::cout << sender->data->get() << std::endl;
+    std::cout << sender->state->get() << std::endl;
 }
 ```
 
