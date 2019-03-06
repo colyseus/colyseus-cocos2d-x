@@ -17,84 +17,9 @@
     <img src="https://img.shields.io/discord/525739117951320081.svg?style=for-the-badge&colorB=7581dc&logo=discord&logoColor=white">
   </a>
   <h3>
-     Multiplayer Game Client for <a href="https://github.com/cocos2d/cocos2d-x">Cocos2d-x</a>. <br /><a href="http://colyseus.io/docs/">View documentation</a>
+     Multiplayer Game Client for <a href="https://github.com/cocos2d/cocos2d-x">Cocos2d-x</a>. <br /><a href="https://docs.colyseus.io/getting-started/cocos2dx-client">View documentation</a>
   </h3>
 </div>
-
-- [Usage](#installation)
-- [Installation](#installation)
-- [Example](#example)
-
-## Usage
-
-Add the `Source/` directory to your project's `Header Search Paths`.
-
-Below you can see how to use the `Client`, matchmake into a `Room`, and send and
-receive messages from the connected room.
-
-```cpp
-#include "Colyseus/Client.h";
-
-Client* client;
-Room* room;
-
-bool HelloWorld::init()
-{
-    client = new Client("ws://localhost:2667");
-    client->onOpen = CC_CALLBACK_0(HelloWorld::onConnectToServer, this);
-    client->connect();
-}
-
-void HelloWorld::onConnectToServer()
-{
-    log("Colyseus: CONNECTED TO SERVER!");
-    room->onMessage = CC_CALLBACK_2(HelloWorld::onRoomMessage, this);
-    room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
-
-    room->listen("players/:id", [this](std::map<std::string, std::string> path, PatchObject patch) -> void {
-        std::cout << "CALLBACK FOR 'players/:id' >>" << std::endl;
-        std::cout << "OPERATION: " << patch.op << std::endl;
-        std::cout << "PLAYER ID:" << path.at(":id") << std::endl;
-        std::cout << "VALUE: " << patch.value << std::endl;
-    });
-}
-
-void HelloWorld::onRoomMessage(Room* sender, msgpack::object message)
-{
-    std::cout << "!! HelloWorld::onRoomMessage !!" << std::endl;
-    std::cout << message << std::endl;
-}
-
-void HelloWorld::onRoomStateChange(Room* sender)
-{
-    std::cout << "!! HelloWorld::onRoomStateChange !!" << std::endl;
-    std::cout << sender->state->get() << std::endl;
-}
-```
-
-
-## Installation
-
-Download and following [installation instructions](https://github.com/cocos2d/cocos2d-x#download-stable-versions) for [Cocos2d-X](http://www.cocos2d-x.org/download).
-
-## Example
-
-The example is using [colyseus-examples](https://github.com/colyseus/colyseus-examples) as a server (`02-state-handler.ts` example). Please follow installation instructions from [colyseus-examples](https://github.com/colyseus/colyseus-examples)'s README.
-
-### Running the client
-
-From the `Example` directory, run the `cocos run -p {platform-id}` command,
-e.g.:
-
-```
-# running on windows
-cocos run -p win32
-```
-
-```
-# running on mac
-cocos run -p mac
-```
 
 ## Contributors
 
