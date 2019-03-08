@@ -15,6 +15,10 @@
 		1AF87B891F6F781D007BE51C /* LaunchScreenBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AF87B5A1F6F77D6007BE51C /* LaunchScreenBackground.png */; };
 		1AF87B8A1F6F7822007BE51C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF87B5B1F6F77D6007BE51C /* main.m */; };
 		1AF87B8B1F6F782A007BE51C /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */; };
+		1B1B33022230A6DB00A7EA6E /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B1B33002230A6DB00A7EA6E /* Serializer.cpp */; };
+		1B1B33032230A6DB00A7EA6E /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B1B33002230A6DB00A7EA6E /* Serializer.cpp */; };
+		1B1B33062230AD8800A7EA6E /* FossilDeltaSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B1B33042230AD8800A7EA6E /* FossilDeltaSerializer.cpp */; };
+		1B1B33072230AD8800A7EA6E /* FossilDeltaSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B1B33042230AD8800A7EA6E /* FossilDeltaSerializer.cpp */; };
 		1B47A8B021EE483B00C61FD6 /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A121EE483A00C61FD6 /* DeltaContainer.cpp */; };
 		1BBD8F3521F11B3E008DF6C2 /* Compare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8F2821F11B3E008DF6C2 /* Compare.cpp */; };
 		1BBD8F3621F11B3E008DF6C2 /* Compare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8F2821F11B3E008DF6C2 /* Compare.cpp */; };
@@ -123,6 +127,10 @@
 		1AF87B5C1F6F77D6007BE51C /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		1AF87B5D1F6F77D6007BE51C /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
+		1B1B33002230A6DB00A7EA6E /* Serializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Serializer.cpp; sourceTree = "<group>"; };
+		1B1B33012230A6DB00A7EA6E /* Serializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Serializer.hpp; sourceTree = "<group>"; };
+		1B1B33042230AD8800A7EA6E /* FossilDeltaSerializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FossilDeltaSerializer.cpp; sourceTree = "<group>"; };
+		1B1B33052230AD8800A7EA6E /* FossilDeltaSerializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FossilDeltaSerializer.hpp; sourceTree = "<group>"; };
 		1B47A8A121EE483A00C61FD6 /* DeltaContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeltaContainer.cpp; sourceTree = "<group>"; };
 		1BBD8C3521F11B3D008DF6C2 /* msgpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msgpack.h; sourceTree = "<group>"; };
 		1BBD8C3821F11B3D008DF6C2 /* unpack_decl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unpack_decl.hpp; sourceTree = "<group>"; };
@@ -926,6 +934,17 @@
 				1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */,
 			);
 			path = ios;
+			sourceTree = "<group>";
+		};
+		1B1B32FE2230A06500A7EA6E /* Serializer */ = {
+			isa = PBXGroup;
+			children = (
+				1B1B33002230A6DB00A7EA6E /* Serializer.cpp */,
+				1B1B33012230A6DB00A7EA6E /* Serializer.hpp */,
+				1B1B33042230AD8800A7EA6E /* FossilDeltaSerializer.cpp */,
+				1B1B33052230AD8800A7EA6E /* FossilDeltaSerializer.hpp */,
+			);
+			path = Serializer;
 			sourceTree = "<group>";
 		};
 		1B4D3F3821EE674D0088CD57 /* Recovered References */ = {
@@ -2247,6 +2266,7 @@
 		1BBD8F2521F11B3E008DF6C2 /* Colyseus */ = {
 			isa = PBXGroup;
 			children = (
+				1B1B32FE2230A06500A7EA6E /* Serializer */,
 				1BBD8F3321F11B3E008DF6C2 /* Client.hpp */,
 				1BBD8F2A21F11B3E008DF6C2 /* Client.cpp */,
 				1BBD8F2B21F11B3E008DF6C2 /* Room.hpp */,
@@ -2511,6 +2531,8 @@
 				1AF87B8A1F6F7822007BE51C /* main.m in Sources */,
 				1B47A8B021EE483B00C61FD6 /* DeltaContainer.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
+				1B1B33022230A6DB00A7EA6E /* Serializer.cpp in Sources */,
+				1B1B33062230AD8800A7EA6E /* FossilDeltaSerializer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2518,7 +2540,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B1B33032230A6DB00A7EA6E /* Serializer.cpp in Sources */,
 				1BBD8F3A21F11B3E008DF6C2 /* delta.c in Sources */,
+				1B1B33072230AD8800A7EA6E /* FossilDeltaSerializer.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				1BBD8F3821F11B3E008DF6C2 /* Client.cpp in Sources */,

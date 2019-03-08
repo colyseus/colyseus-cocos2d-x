@@ -40,7 +40,7 @@ public:
     // Callbacks
     std::function<void(cocos2d::Ref*)> onOpen;
     std::function<void(cocos2d::Ref*)> onClose;
-    std::function<void(cocos2d::Ref*, const WebSocket::ErrorCode&)> onError;
+    std::function<void(cocos2d::Ref*, std::string)> onError;
 
     Room* getRoomByName(const std::string& name);
 
@@ -52,14 +52,14 @@ protected:
     Connection* createConnection(std::string&, JoinOptions options = JoinOptions());
 
     void joinRoomHandle(msgpack::object_array data);
-    void joinRoomErrorDRoomHandle(msgpack::object_array data);
     void leaveRoomHandle(msgpack::object_array data);
 
     std::string endpoint;
 
     std::map<const std::string, Room*> _rooms;
-    std::map<const std::string, Room*> _connectingRooms;
+    std::map<int, Room*> _connectingRooms;
     int requestId = 0;
+    unsigned char previousCode = 0;
 };
 
 #endif /* Client_hpp */

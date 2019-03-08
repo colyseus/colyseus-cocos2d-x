@@ -5,8 +5,9 @@
 #include "Protocol.hpp"
 #include "Connection.hpp"
 #include "StateContainer.hpp"
+#include "Serializer/Serializer.hpp"
 
-class Room : public StateContainer
+class Room 
 {
 public:
     Room (const std::string, std::map<std::string, std::string>);
@@ -14,7 +15,7 @@ public:
 
     // Methods
     void connect(Connection* connection);
-    void leave(bool requestLeave);
+    void leave(bool consented=true);
     
     template <typename T>
     inline void send (T data)
@@ -22,14 +23,17 @@ public:
         this->connection->send((int)Protocol::ROOM_DATA, this->id, data);
     }
 
-    // void emitError (MessageEventArgs *args);
+    msgpack::object_handle* getState();
+    Listener<FallbackAction> listen(FallbackAction callback);
+    Listener<PatchAction> listen(std::string segments, PatchAction callback, bool immediate=false);
+    void removeListener(Listener<PatchAction> &listener);
     
     // Callbacks
     std::function<void()> onJoin;
     std::function<void()> onLeave;
     std::function<void(Room*, msgpack::object)> onMessage;
     std::function<void(Room*)> onStateChange;
-    std::function<void(Room*, const WebSocket::ErrorCode&)> onError;
+    std::function<void(Room*, std::string)> onError;
     
     // Properties
     Connection* connection;
@@ -38,16 +42,17 @@ public:
 
     std::string name;
     std::string sessionId;
+    std::string serializerId;
 
 protected:
     void _onClose();
     void _onError(const WebSocket::ErrorCode&);
     void _onMessage(const WebSocket::Data&);
     
-    void setState(msgpack::object_bin, int, int);
+    void setState(const char*, int);
     void applyPatch(const char*, int);
 
-    const char* _previousState;
-    int _previousStateSize;
+    Serializer* serializer;
+    unsigned char previousCode = 0;
 };
 #endif /* Room_hpp */

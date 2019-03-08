@@ -30,7 +30,8 @@
 
 USING_NS_CC;
 
-Client* colyseus = new Client("ws://colyseus-examples.herokuapp.com");
+//Client* colyseus = new Client("ws://colyseus-examples.herokuapp.com");
+Client* colyseus = new Client("ws://localhost:2567");
 Room* room;
 
 Map<std::string, Sprite*> players;
@@ -193,7 +194,7 @@ void HelloWorld::onRoomStateChange(Room* sender)
 {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "HelloWorld::onRoomStateChange" << std::endl;
-    std::cout << sender->state->get() << std::endl;
+    std::cout << sender->getState()->get() << std::endl;
 
     // send command to move x
     auto data = std::map<std::string, float>();

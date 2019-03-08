@@ -20,6 +20,10 @@ Connection::~Connection()
 
 void Connection::open()
 {
+    std::cout << std::endl;
+    std::cout << "Connection:open() => " << endpoint << std::endl;
+    std::cout << std::endl;
+    
     _ws = new WebSocket();
     if(!_ws->init(*this, endpoint))
     {

@@ -32,12 +32,13 @@ void Client::connect()
 
 Room* Client::join(const std::string roomName, std::map<std::string, std::string> options)
 {
-    std::string requestId = std::to_string(++this->requestId);
+    int requestIdInt = ++this->requestId;
+    std::string requestId = std::to_string(requestIdInt);
     options.insert(std::make_pair("requestId", requestId));
 
     auto room = new Room(roomName, options);
-    this->_connectingRooms.insert(std::make_pair(requestId, room));
-    this->connection->send((int)Protocol::JOIN_ROOM, roomName, options);
+    this->_connectingRooms.insert(std::make_pair(requestIdInt, room));
+    this->connection->send((int)Protocol::JOIN_REQUEST, roomName, options);
 
     return room;
 }
@@ -58,8 +59,22 @@ void Client::_onClose()
 
 void Client::_onError(const WebSocket::ErrorCode& error)
 {
+    std::string message = "";
+    
+    switch (error) {
+        case WebSocket::ErrorCode::CONNECTION_FAILURE:
+            message = "CONNECTION_FAILURE";
+            break;
+        case WebSocket::ErrorCode::TIME_OUT:
+            message = "TIME_OUT";
+            break;
+        case WebSocket::ErrorCode::UNKNOWN:
+            message = "UNKNOWN";
+            break;
+    }
+    
     if (this->onError) {
-        this->onError(this, error);
+        this->onError(this, message);
     }
 }
 
@@ -68,56 +83,83 @@ void Client::_onMessage(const WebSocket::Data& data)
     size_t len = data.len;
     const char *bytes = data.bytes;
 
-    msgpack::object_handle oh = msgpack::unpack(bytes, len);
-    msgpack::object obj = oh.get();
+    if (this->previousCode == 0) {
+        unsigned char code = bytes[0];
 
-#ifdef COLYSEUS_DEBUG
-    std::cout << "-----------------------CLIENT-RAW----------------------------" << std::endl;
-    std::cout << obj << std::endl;
-    std::cout << "-------------------------------------------------------------" << std::endl;
-#endif
-
-    Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
-    msgpack::object_array message(obj.via.array);
-
-    switch (protocol)
-    {
-        case Protocol::USER_ID:
+        switch ((Protocol) code)
         {
+            case Protocol::USER_ID:
+            {
+
 #ifdef COLYSEUS_DEBUG
-            log("Protocol::USER_ID");
+                log("Protocol::USER_ID");
 #endif
-            id = message.ptr[1].convert(id);
-            if (this->onOpen) {
-                this->onOpen(this);
+                
+                id = colyseus_readstr(bytes, 1);
+                
+
+                std::cout << std::endl;
+                std::cout << "client->id = '" << id << "'" << std::endl;
+                std::cout << std::endl;
+
+
+                if (this->onOpen) {
+                    this->onOpen(this);
+                }
+                break;
             }
-            break;
-        }
-        case Protocol::JOIN_ROOM:
-        {
-#ifdef COLYSEUS_DEBUG
-            log("Protocol::JOIN_ROOM");
-#endif
+            case Protocol::JOIN_REQUEST:
+            {
 
-            std::string requestId = message.ptr[2].as <std::string> ();
-            Room* room = this->_connectingRooms.at(requestId);
-
-            room->id = message.ptr[1].convert(room->id);
-            room->connect(this->createConnection(room->id, room->options));
-            break;
-        }
-        case Protocol::JOIN_ERROR:
-        {
 #ifdef COLYSEUS_DEBUG
-            log("Protocol::JOIN_ERROR");
+                log("Protocol::JOIN_REQUEST");
 #endif
-            joinRoomErrorDRoomHandle(message);
-            break;
+                int requestId = bytes[1];
+                Room* room = this->_connectingRooms.at(requestId);
+                room->id = colyseus_readstr(bytes, 2);
+
+                std::cout << std::endl;
+                std::cout << "room->id = '" << room->id << "'" << std::endl;
+                std::cout << std::endl;
+
+                room->connect(this->createConnection(room->id, room->options));
+                break;
+            }
+            case Protocol::JOIN_ERROR:
+            {
+#ifdef COLYSEUS_DEBUG
+                log("Protocol::JOIN_ERROR");
+#endif
+                std::string message = colyseus_readstr(bytes, 1);
+                std::cout << "Colyseus: Error Joining Room: " << message << std::endl;
+                
+                if (this->onError) {
+                    this->onError(this, message);
+                }
+                
+                break;
+            }
+            default:
+            {
+                this->previousCode = code;
+                break;
+            }
         }
-        default:
-        {
-            break;
+
+    } else {
+        if (this->previousCode == (int) Protocol::ROOM_LIST) {
+            std::cout << len << std::endl;
+
+            // TODO: ROOM_LIST
+            /*
+             msgpack::object_handle oh = msgpack::unpack(bytes, len);
+             msgpack::object obj = oh.get();
+             
+             Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
+             msgpack::object_array message(obj.via.array);
+             */
         }
+        this->previousCode = 0;
     }
 }
 
@@ -146,19 +188,6 @@ Connection* Client::createConnection(std::string& path, std::map<std::string, st
     }
 
     return new Connection( this->endpoint + "/" + path + "?" + queryString );
-}
-
-void Client::joinRoomErrorDRoomHandle(msgpack::object_array data)
-{
-    std::string roomName;
-    data.ptr[2].convert(roomName);
-
-    std::map<const std::string,Room*>::iterator it = this->_rooms.find(roomName);
-    if (it != _rooms.end())
-    {
-        // (*it).second->emitError(new MessageEventArgs((*it).second,nullptr));
-        _rooms.erase(it);
-    }
 }
 
 void Client::leaveRoomHandle(msgpack::object_array data)
