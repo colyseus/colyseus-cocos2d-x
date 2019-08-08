@@ -51,23 +51,23 @@ struct DataChange
 
 // inline bool IsLittleEndian();
 
-// inline string decodeString(const char bytes[], Iterator *it);
-// inline int8_t decodeInt8(const char bytes[], Iterator *it);
-// inline uint8_t decodeUint8(const char bytes[], Iterator *it);
-// inline int16_t decodeInt16(const char bytes[], Iterator *it);
-// inline uint16_t decodeUint16(const char bytes[], Iterator *it);
-// inline int32_t decodeInt32(const char bytes[], Iterator *it);
-// inline uint32_t decodeUint32(const char bytes[], Iterator *it);
-// inline int64_t decodeInt64(const char bytes[], Iterator *it);
-// inline uint64_t decodeUint64(const char bytes[], Iterator *it);
-// inline float32_t decodeFloat32(const char bytes[], Iterator *it);
-// inline float64_t decodeFloat64(const char bytes[], Iterator *it);
-// inline varint_t decodeNumber(const char bytes[], Iterator *it);
-// inline bool decodeBoolean(const char bytes[], Iterator *it);
-// inline bool numberCheck(const char bytes[], Iterator *it);
-// inline bool arrayCheck (const char bytes[], Iterator *it);
-// inline bool nilCheck(const char bytes[], Iterator *it);
-// inline bool indexChangeCheck(const char bytes[], Iterator *it);
+// inline string decodeString(unsigned const char bytes[], Iterator *it);
+// inline int8_t decodeInt8(unsigned const char bytes[], Iterator *it);
+// inline uint8_t decodeUint8(unsigned const char bytes[], Iterator *it);
+// inline int16_t decodeInt16(unsigned const char bytes[], Iterator *it);
+// inline uint16_t decodeUint16(unsigned const char bytes[], Iterator *it);
+// inline int32_t decodeInt32(unsigned const char bytes[], Iterator *it);
+// inline uint32_t decodeUint32(unsigned const char bytes[], Iterator *it);
+// inline int64_t decodeInt64(unsigned const char bytes[], Iterator *it);
+// inline uint64_t decodeUint64(unsigned const char bytes[], Iterator *it);
+// inline float32_t decodeFloat32(unsigned const char bytes[], Iterator *it);
+// inline float64_t decodeFloat64(unsigned const char bytes[], Iterator *it);
+// inline varint_t decodeNumber(unsigned const char bytes[], Iterator *it);
+// inline bool decodeBoolean(unsigned const char bytes[], Iterator *it);
+// inline bool numberCheck(unsigned const char bytes[], Iterator *it);
+// inline bool arrayCheck (unsigned const char bytes[], Iterator *it);
+// inline bool nilCheck(unsigned const char bytes[], Iterator *it);
+// inline bool indexChangeCheck(unsigned const char bytes[], Iterator *it);
 
 inline bool IsLittleEndian()
 {
@@ -75,7 +75,7 @@ inline bool IsLittleEndian()
     return (int)*((unsigned char *)&i) == 1;
 }
 
-inline string decodeString(const char bytes[], Iterator *it)
+inline string decodeString(unsigned const char bytes[], Iterator *it)
 {
     auto str_size = (bytes[it->offset] & 0x1f) + 1;
     char *str = new char[str_size];
@@ -88,73 +88,73 @@ inline string decodeString(const char bytes[], Iterator *it)
     return value;
 }
 
-inline int8_t decodeInt8(const char bytes[], Iterator *it)
+inline int8_t decodeInt8(unsigned const char bytes[], Iterator *it)
 {
     return (int8_t)(bytes[it->offset++] << 24 >> 24);
 }
 
-inline uint8_t decodeUint8(const char bytes[], Iterator *it)
+inline uint8_t decodeUint8(unsigned const char bytes[], Iterator *it)
 {
     return (uint8_t)bytes[it->offset++];
 }
 
-inline int16_t decodeInt16(const char bytes[], Iterator *it)
+inline int16_t decodeInt16(unsigned const char bytes[], Iterator *it)
 {
     int16_t value = *(int16_t *)&bytes[it->offset];
     it->offset += 2;
     return value;
 }
 
-inline uint16_t decodeUint16(const char bytes[], Iterator *it)
+inline uint16_t decodeUint16(unsigned const char bytes[], Iterator *it)
 {
     uint16_t value = *(uint16_t *)&bytes[it->offset];
     it->offset += 2;
     return value;
 }
 
-inline int32_t decodeInt32(const char bytes[], Iterator *it)
+inline int32_t decodeInt32(unsigned const char bytes[], Iterator *it)
 {
     int32_t value = *(int32_t *)&bytes[it->offset];
     it->offset += 4;
     return value;
 }
 
-inline uint32_t decodeUint32(const char bytes[], Iterator *it)
+inline uint32_t decodeUint32(unsigned const char bytes[], Iterator *it)
 {
     uint32_t value = *(uint32_t *)&bytes[it->offset];
     it->offset += 4;
     return value;
 }
 
-inline int64_t decodeInt64(const char bytes[], Iterator *it)
+inline int64_t decodeInt64(unsigned const char bytes[], Iterator *it)
 {
     int64_t value = *(int64_t *)&bytes[it->offset];
     it->offset += 8;
     return value;
 }
 
-inline uint64_t decodeUint64(const char bytes[], Iterator *it)
+inline uint64_t decodeUint64(unsigned const char bytes[], Iterator *it)
 {
     uint64_t value = *(uint64_t *)&bytes[it->offset];
     it->offset += 8;
     return value;
 }
 
-inline float32_t decodeFloat32(const char bytes[], Iterator *it)
+inline float32_t decodeFloat32(unsigned const char bytes[], Iterator *it)
 {
     float32_t value = *(float32_t *)&bytes[it->offset];
     it->offset += 4;
     return value;
 }
 
-inline float64_t decodeFloat64(const char bytes[], Iterator *it)
+inline float64_t decodeFloat64(unsigned const char bytes[], Iterator *it)
 {
     float64_t value = *(float64_t *)&bytes[it->offset];
     it->offset += 8;
     return value;
 }
 
-inline varint_t decodeNumber(const char bytes[], Iterator *it)
+inline varint_t decodeNumber(unsigned const char bytes[], Iterator *it)
 {
     auto prefix = bytes[it->offset++];
     std::cout << "decodeNumber, prefix => " << ((int)prefix) << std::endl;
@@ -225,209 +225,28 @@ inline varint_t decodeNumber(const char bytes[], Iterator *it)
     }
 }
 
-inline bool decodeBoolean(const char bytes[], Iterator *it)
+inline bool decodeBoolean(unsigned const char bytes[], Iterator *it)
 {
     return decodeUint8(bytes, it) > 0;
 }
 
-inline bool numberCheck(const char bytes[], Iterator *it)
+inline bool numberCheck(unsigned const char bytes[], Iterator *it)
 {
     auto prefix = bytes[it->offset];
     return (prefix < 0x80 || (prefix >= 0xca && prefix <= 0xd3));
 }
 
-inline bool arrayCheck (const char bytes[], Iterator *it) {
+inline bool arrayCheck (unsigned const char bytes[], Iterator *it) {
   return bytes[it->offset] < 0xa0;
 }
 
-inline bool nilCheck(const char bytes[], Iterator *it) {
+inline bool nilCheck(unsigned const char bytes[], Iterator *it) {
   return bytes[it->offset] == (unsigned char) SPEC::NIL;
 }
 
-inline bool indexChangeCheck(const char bytes[], Iterator *it) {
+inline bool indexChangeCheck(unsigned const char bytes[], Iterator *it) {
   return bytes[it->offset] == (unsigned char) SPEC::INDEX_CHANGE;
 }
-
-
-// bool IsLittleEndian()
-// {
-//     int i = 1;
-//     return (int)*((unsigned char *)&i) == 1;
-// }
-
-// string decodeString(const char bytes[], Iterator *it)
-// {
-//     auto str_size = (bytes[it->offset] & 0x1f) + 1;
-//     char *str = new char[str_size];
-//     std::memcpy(str, bytes + it->offset + 1, str_size);
-//     str[str_size - 1] = '\0'; // endl
-//     it->offset += str_size;
-
-//     string value(str);
-//     delete[] str;
-//     return value;
-// }
-
-
-// int8_t decodeInt8(const char bytes[], Iterator *it)
-// {
-//     return (int8_t)(bytes[it->offset++] << 24 >> 24);
-// }
-
-// uint8_t decodeUint8(const char bytes[], Iterator *it)
-// {
-//     return (uint8_t)bytes[it->offset++];
-// }
-
-// int16_t decodeInt16(const char bytes[], Iterator *it)
-// {
-//     int16_t value = *(int16_t *)&bytes[it->offset];
-//     it->offset += 2;
-//     return value;
-// }
-
-// uint16_t decodeUint16(const char bytes[], Iterator *it)
-// {
-//     uint16_t value = *(uint16_t *)&bytes[it->offset];
-//     it->offset += 2;
-//     return value;
-// }
-
-// int32_t decodeInt32(const char bytes[], Iterator *it)
-// {
-//     int32_t value = *(int32_t *)&bytes[it->offset];
-//     it->offset += 4;
-//     return value;
-// }
-
-// uint32_t decodeUint32(const char bytes[], Iterator *it)
-// {
-//     uint32_t value = *(uint32_t *)&bytes[it->offset];
-//     it->offset += 4;
-//     return value;
-// }
-
-// int64_t decodeInt64(const char bytes[], Iterator *it)
-// {
-//     int64_t value = *(int64_t *)&bytes[it->offset];
-//     it->offset += 8;
-//     return value;
-// }
-
-// uint64_t decodeUint64(const char bytes[], Iterator *it)
-// {
-//     uint64_t value = *(uint64_t *)&bytes[it->offset];
-//     it->offset += 8;
-//     return value;
-// }
-
-// float32_t decodeFloat32(const char bytes[], Iterator *it)
-// {
-//     float32_t value = *(float32_t *)&bytes[it->offset];
-//     it->offset += 4;
-//     return value;
-// }
-
-// float64_t decodeFloat64(const char bytes[], Iterator *it)
-// {
-//     float64_t value = *(float64_t *)&bytes[it->offset];
-//     it->offset += 8;
-//     return value;
-// }
-
-// varint_t decodeNumber(const char bytes[], Iterator *it)
-// {
-//     auto prefix = bytes[it->offset++];
-//     std::cout << "decodeNumber, prefix => " << ((int)prefix) << std::endl;
-
-//     if (prefix < 0x80)
-//     {
-//         // positive fixint
-//         return (varint_t)prefix;
-//     }
-//     else if (prefix == 0xca)
-//     {
-//         // float 32
-//         return decodeFloat32(bytes, it);
-//     }
-//     else if (prefix == 0xcb)
-//     {
-//         // float 64
-//         return (varint_t) decodeFloat64(bytes, it);
-//     }
-//     else if (prefix == 0xcc)
-//     {
-//         // uint 8
-//         return (varint_t)decodeUint8(bytes, it);
-//     }
-//     else if (prefix == 0xcd)
-//     {
-//         // uint 16
-//         return (varint_t) decodeUint16(bytes, it);
-//     }
-//     else if (prefix == 0xce)
-//     {
-//         // uint 32
-//         return (varint_t) decodeUint32(bytes, it);
-//     }
-//     else if (prefix == 0xcf)
-//     {
-//         // uint 64
-//         return (varint_t) decodeUint64(bytes, it);
-//     }
-//     else if (prefix == 0xd0)
-//     {
-//         // int 8
-//         return (varint_t) decodeInt8(bytes, it);
-//     }
-//     else if (prefix == 0xd1)
-//     {
-//         // int 16
-//         return (varint_t) decodeInt16(bytes, it);
-//     }
-//     else if (prefix == 0xd2)
-//     {
-//         // int 32
-//         return (varint_t) decodeInt32(bytes, it);
-//     }
-//     else if (prefix == 0xd3)
-//     {
-//         // int 64
-//         return (varint_t) decodeInt64(bytes, it);
-//     }
-//     else if (prefix > 0xdf)
-//     {
-//         // negative fixint
-//         return (varint_t) ((0xff - prefix + 1) * -1);
-//     }
-//     else
-//     {
-//         return 0;
-//     }
-// }
-
-// bool decodeBoolean(const char bytes[], Iterator *it)
-// {
-//     return decodeUint8(bytes, it) > 0;
-// }
-
-// bool numberCheck(const char bytes[], Iterator *it)
-// {
-//     auto prefix = bytes[it->offset];
-//     return (prefix < 0x80 || (prefix >= 0xca && prefix <= 0xd3));
-// }
-
-// bool arrayCheck (const char bytes[], Iterator *it) {
-//   return bytes[it->offset] < 0xa0;
-// }
-
-// bool nilCheck(const char bytes[], Iterator *it) {
-//   return bytes[it->offset] == (unsigned char) SPEC::NIL;
-// }
-
-// bool indexChangeCheck(const char bytes[], Iterator *it) {
-//   return bytes[it->offset] == (unsigned char) SPEC::INDEX_CHANGE;
-// }
 
 template <typename T>
 class ArraySchema
@@ -444,10 +263,10 @@ class ArraySchema
     std::function<void(T, int)> onChange;
     std::function<void(T, int)> onRemove;
 
-    T &operator[](const int &index) { return items[index]; }
-    T at(const int &index) { return items[index]; }
+    inline T &operator[](const int &index) { return items[index]; }
+    inline T at(const int &index) { return items[index]; }
 
-    ArraySchema<T> clone()
+    inline ArraySchema<T> clone()
     {
         ArraySchema<T> cloned;
         cloned.items = this->items;
@@ -457,7 +276,7 @@ class ArraySchema
         return cloned;
     }
 
-    void setAt(int index, const T& value) {
+    inline void setAt(int index, const T& value) {
         if (items.size() == index) {
             items.push_back(value);
         }
@@ -466,12 +285,12 @@ class ArraySchema
         }
     }
 
-    bool has(int index)
+    inline bool has(int index)
     {
         return items.size() > index;
     }
 
-    int size()
+    inline int size()
     {
         return items.size();
     }
@@ -490,12 +309,12 @@ class MapSchema
     std::function<void(T, string)> onChange;
     std::function<void(T, string)> onRemove;
 
-    T &operator[](const char index[])
+    inline T &operator[](const char index[])
     {
         return items[index];
     }
 
-    MapSchema<T> clone()
+    inline MapSchema<T> clone()
     {
         MapSchema<T> cloned;
         cloned.items = this->items;
@@ -505,17 +324,17 @@ class MapSchema
         return cloned;
     }
 
-    T at(string key)
+    inline T at(string key)
     {
         return items.at(key);
     }
 
-    bool has(string field)
+    inline bool has(string field)
     {
         return items.find(field) != items.end();
     }
 
-    int size()
+    inline int size()
     {
         return items.size();
     }
@@ -531,12 +350,12 @@ class Schema
     ~Schema() {}
 
     template <typename T>
-    void decodeArrayPrimitive(ArraySchema<T> &array, int index, const char bytes[], Iterator *it,
-                              T (*decoder)(const char bytes[], Iterator *it) ) {
+    inline void decodeArrayPrimitive(ArraySchema<T> &array, int index, unsigned const char bytes[], Iterator *it,
+                              T (*decoder)(unsigned const char bytes[], Iterator *it) ) {
         array.setAt(index, decoder(bytes, it));
     }
 
-    void decode(const char bytes[], int totalBytes, Iterator *it = nullptr) //new Iterator())
+    inline void decode(unsigned const char bytes[], int totalBytes, Iterator *it = nullptr) //new Iterator())
     {
         bool doesOwnIterator = it == nullptr;
         if (doesOwnIterator) it = new Iterator();
@@ -834,7 +653,7 @@ class Schema
                 this->decodePrimitiveType(field, type, bytes, it);
                 hasChange = true;
             }
-            std::cout << "stepped out." << std::endl;
+            std::cout << "stepped out (child type decoding)" << std::endl;
 
             if (hasChange && this->onChange)
             {
@@ -845,14 +664,20 @@ class Schema
                 changes.push_back(dataChange);
             }
         }
+        std::cout << "stepped out (structure)." << std::endl;
 
         // trigger onChange callback.
         if (this->onChange)
         {
+            std::cout << "let's trigger changes!" << std::endl;
             this->onChange(changes);
         }
 
-        if (doesOwnIterator) delete it;
+        if (doesOwnIterator) {
+            std::cout << "let's delete iterator..." << std::endl;
+            delete it;
+        }
+        std::cout << "end of decode()" << std::endl;
     }
 
   protected:
@@ -900,7 +725,7 @@ class Schema
     virtual Schema* createInstance(std::type_index type) { return nullptr; }
 
   private:
-    void decodePrimitiveType(string field, string type, const char bytes[], Iterator *it)
+    inline void decodePrimitiveType(string field, string type, unsigned const char bytes[], Iterator *it)
     {
         if (type == "string")       { this->setString(field, decodeString(bytes, it)); }
         else if (type == "number")  { this->setNumber(field, decodeNumber(bytes, it)); }

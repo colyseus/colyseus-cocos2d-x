@@ -144,7 +144,7 @@ void HelloWorld::onConnectToServer()
         players.insert(sessionId, sprite);
         this->addChild(sprite, 0);
 
-        player->onChange = [this, &sprite, &player](std::vector<colyseus::schema::DataChange> changes) -> void {
+        player->onChange = [this, sprite, player](std::vector<colyseus::schema::DataChange> changes) -> void {
             for(int i=0; i < changes.size(); i++)   {
                 if (changes[i].field == "x") {
                     sprite->setPositionX(player->x);

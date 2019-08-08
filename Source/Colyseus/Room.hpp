@@ -122,12 +122,10 @@ protected:
     {
         size_t len = data.len;
         const char *bytes = data.bytes;
-        std::cout << "ROOM: onMessage, previousCode => " << this->previousCode << std::endl;
 
         if (this->previousCode == 0)
         {
             unsigned char code = bytes[0];
-            std::cout << "ROOM: onMessage => " << code << std::endl;
 
             switch ((Protocol)code)
             {
