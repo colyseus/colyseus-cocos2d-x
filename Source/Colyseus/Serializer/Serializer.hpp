@@ -1,15 +1,16 @@
 #ifndef Serializer_hpp
 #define Serializer_hpp
 
-#include "StateContainer.hpp"
+#include "schema.h"
 
+template <typename S>
 class Serializer
 {
 public:
 //    Serializer();
 //    virtual ~Serializer();
 
-    virtual msgpack::object_handle* getState() = 0;
+    virtual S* getState() = 0;
     virtual void setState(const char* bytes, int length) = 0;
     virtual void patch(const char* bytes, int length) = 0;
     virtual void teardown() = 0;

@@ -31,8 +31,8 @@
 USING_NS_CC;
 
 //Client* colyseus = new Client("ws://colyseus-examples.herokuapp.com");
-Client* colyseus = new Client("ws://localhost:2567");
-Room* room;
+Client* client = new Client("ws://localhost:2567");
+Room<State>* room;
 
 Map<std::string, Sprite*> players;
 
@@ -58,8 +58,8 @@ bool HelloWorld::init()
         return false;
     }
 
-    colyseus->onOpen = CC_CALLBACK_0(HelloWorld::onConnectToServer, this);
-    colyseus->connect();
+    client->onOpen = CC_CALLBACK_0(HelloWorld::onConnectToServer, this);
+    client->connect();
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -122,79 +122,60 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
-    room = colyseus->join("state_handler", std::map<std::string, std::string>());
-    room->onMessage = CC_CALLBACK_2(HelloWorld::onRoomMessage, this);
+    room = client->join<State>("state_handler", std::map<std::string, std::string>());
+    room->onMessage = CC_CALLBACK_1(HelloWorld::onRoomMessage, this);
     room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
+    room->onJoin = [this]() -> void {
+        std::cout << "JOINED THE ROOM!" << std::endl;
+    };
 
-    room->listen("players/:id", [this](std::map<std::string, std::string> path, PatchObject patch) -> void {
-        std::cout << "--------------------------------------" << std::endl;
-        std::cout << "CALLBACK FOR 'players/:id' >>" << std::endl;
-        std::cout << "OPERATION: " << patch.op << std::endl;
-        std::cout << "PLAYER ID:" << path.at(":id") << std::endl;
-        std::cout << "VALUE: " << patch.value << std::endl;
+    room->onError = [this](std::string message) -> void {
+        std::cout << "ROOM ERROR => " << message.c_str() << std::endl;
+    };
 
-        std::string sessionId = path.at(":id");
+    room->onLeave = [this]() -> void {
+        std::cout << "LEFT ROOM" << std::endl;
+    };
 
-        if (patch.op == "add") {
-            // convert patch.value to specified type
-            std::map<std::string, float> value;
-            patch.value.convert(value);
+    room->getState()->players->onAdd = [this](Player* player, string sessionId) -> void {
+        // add player sprite
+        auto sprite = Sprite::create("HelloWorld.png");
+        sprite->setPosition(player->x, player->y);
+        players.insert(sessionId, sprite);
+        this->addChild(sprite, 0);
 
-            // add player sprite
-            auto sprite = Sprite::create("HelloWorld.png");
-            sprite->setPosition(Vec2(value.at("x"), value.at("y")));
-            players.insert(sessionId, sprite);
-            this->addChild(sprite, 0);
+        player->onChange = [this, sprite, player](std::vector<colyseus::schema::DataChange> changes) -> void {
+            for(int i=0; i < changes.size(); i++)   {
+                if (changes[i].field == "x") {
+                    sprite->setPositionX(player->x);
 
-        } else if (patch.op == "remove") {
-            auto sprite = players.at(sessionId);
-            this->removeChild(sprite);
-            players.erase(sessionId);
-        }
-    });
-
-    // listen for player position changes
-    room->listen("players/:id/:axis", [this](std::map<std::string, std::string> path, PatchObject patch) -> void {
-        std::cout << "--------------------------------------" << std::endl;
-        std::cout << "CALLBACK FOR 'players/:id/:axis' >>" << std::endl;
-        std::cout << "OPERATION: " << patch.op << std::endl;
-
-        std::string convrt = "";
-        std::string result = "";
-        for (auto it = path.cbegin(); it != path.cend(); it++)
-        {
-            convrt = it->second;
-            result += (it->first) + " = " + (convrt) + ", ";
-        }
-        std::cout << "PATH =>" << result << std::endl;
-
-        std::cout << "VALUE: " << patch.value << std::endl;
-
-        if (patch.op == "replace") {
-            std::string sessionId = path.at(":id");
-
-            auto sprite = players.at(sessionId);
-            if (path.at(":axis") == "x") {
-                sprite->setPositionX(patch.value.via.f64);
-            } else {
-                sprite->setPositionY(patch.value.via.f64);
+                } else if (changes[i].field == "y") {
+                    sprite->setPositionY(player->y);
+                }
             }
-        }
-    });
+        };
+    };
+
+    room->getState()->players->onRemove = [this](Player* player, string sessionId) -> void {
+        std::cout << "onRemove called!" << std::endl;
+        auto sprite = players.at(sessionId);
+        this->removeChild(sprite);
+        players.erase(sessionId);
+        std::cout << "onRemove complete!" << std::endl;
+    };
 }
 
-void HelloWorld::onRoomMessage(Room* sender, msgpack::object message)
+void HelloWorld::onRoomMessage(msgpack::object message)
 {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "HelloWorld::onRoomMessage" << std::endl;
     std::cout << message << std::endl;
 }
 
-void HelloWorld::onRoomStateChange(Room* sender)
+void HelloWorld::onRoomStateChange(State* state)
 {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "HelloWorld::onRoomStateChange" << std::endl;
-    std::cout << sender->getState()->get() << std::endl;
 
     // send command to move x
     auto data = std::map<std::string, float>();
