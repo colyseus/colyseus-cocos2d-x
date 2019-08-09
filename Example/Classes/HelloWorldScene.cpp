@@ -157,9 +157,11 @@ void HelloWorld::onConnectToServer()
     };
 
     room->getState()->players->onRemove = [this](Player* player, string sessionId) -> void {
+        std::cout << "onRemove called!" << std::endl;
         auto sprite = players.at(sessionId);
         this->removeChild(sprite);
         players.erase(sessionId);
+        std::cout << "onRemove complete!" << std::endl;
     };
 }
 

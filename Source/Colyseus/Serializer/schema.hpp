@@ -19,6 +19,8 @@
 #include <typeinfo>
 #include <typeindex>
 
+#include "ordered_map.h"
+
 namespace colyseus
 {
 namespace schema
@@ -303,7 +305,7 @@ class MapSchema
     MapSchema() {}
     ~MapSchema() {}
 
-    std::map<string, T> items;
+    tsl::ordered_map<string, T> items;
 
     std::function<void(T, string)> onAdd;
     std::function<void(T, string)> onChange;
@@ -332,6 +334,11 @@ class MapSchema
     inline bool has(string field)
     {
         return items.find(field) != items.end();
+    }
+
+    inline void insert(string field, T value)
+    {
+        items.insert(std::pair<string, T>(field, value));
     }
 
     inline int size()
@@ -536,13 +543,17 @@ class Schema
                 int length = (int) decodeNumber(bytes, it);
                 hasChange = (length > 0);
 
+                std::cout << "MAP, LENGTH => " << length << std::endl;
+
                 bool hasIndexChange = false;
                 bool isSchemaType = this->_childSchemaTypes.find(index) != this->_childSchemaTypes.end();
+                std::cout << "MAP, IS SCHEMA TYPE? => " << isSchemaType << std::endl;
 
                 // List of previous keys
                 std::vector<string> previousKeys;
-                for (std::map<string, char *>::iterator it = valueRef->items.begin(); it != valueRef->items.end(); ++it)
+                for (tsl::ordered_map<string, char *>::iterator it = valueRef->items.begin(); it != valueRef->items.end(); ++it)
                 {
+                    std::cout << "MAP, PREVIOUS KEY => " << it->first << std::endl;
                     previousKeys.push_back(it->first);
                 }
 
@@ -550,6 +561,7 @@ class Schema
                 {
                     if (it->offset > totalBytes || bytes[it->offset] == (unsigned char)SPEC::END_OF_STRUCTURE)
                     {
+                        std::cout << "MAP: END OF STRUCTURE!" << std::endl;
                         break;
                     }
 
@@ -565,9 +577,14 @@ class Schema
                         ? previousKeys[decodeNumber(bytes, it)]
                         : decodeString(bytes, it);
 
+                    std::cout << "previousKey => " << previousKey << std::endl;
+                    std::cout << "newKey => " << newKey << std::endl;
+
                     char* item = nullptr;
                     bool foundItem = false;
                     bool isNew = (!hasIndexChange && !valueRef->has(newKey)) || (hasIndexChange && previousKey == "" && hasMapIndex);
+
+                    std::cout << "isNew => " << isNew << std::endl;
 
                     if (isNew && isSchemaType)
                     {
@@ -600,8 +617,7 @@ class Schema
                             valueRef->onRemove(item, newKey);
                         }
 
-                        delete value->items[newKey];
-                        value->items[newKey] = nullptr;
+                        value->items.erase(newKey);
                         continue;
 
                     } else if (!isSchemaType)
@@ -629,7 +645,7 @@ class Schema
                     else
                     {
                         ((Schema*) item)->decode(bytes, totalBytes, it);
-                        value->items[newKey] = item;
+                        value->insert(newKey, item);
                     }
 
                     if (isNew)
