@@ -115,7 +115,7 @@
 		1AF87B5C1F6F77D6007BE51C /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		1AF87B5D1F6F77D6007BE51C /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
-		1B06A78022FCA96500845058 /* schema.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = schema.hpp; sourceTree = "<group>"; };
+		1B06A78022FCA96500845058 /* schema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = schema.h; sourceTree = "<group>"; };
 		1B06A78122FCA96500845058 /* SchemaSerializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SchemaSerializer.hpp; sourceTree = "<group>"; };
 		1B1B33012230A6DB00A7EA6E /* Serializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Serializer.hpp; sourceTree = "<group>"; };
 		1B47A8A121EE483A00C61FD6 /* DeltaContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeltaContainer.cpp; sourceTree = "<group>"; };
@@ -921,7 +921,7 @@
 		1B1B32FE2230A06500A7EA6E /* Serializer */ = {
 			isa = PBXGroup;
 			children = (
-				1B06A78022FCA96500845058 /* schema.hpp */,
+				1B06A78022FCA96500845058 /* schema.h */,
 				1B06A78122FCA96500845058 /* SchemaSerializer.hpp */,
 				1B1B33012230A6DB00A7EA6E /* Serializer.hpp */,
 			);

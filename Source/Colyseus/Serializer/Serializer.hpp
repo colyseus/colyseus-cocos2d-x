@@ -1,7 +1,7 @@
 #ifndef Serializer_hpp
 #define Serializer_hpp
 
-#include "schema.hpp"
+#include "schema.h"
 
 template <typename S>
 class Serializer

@@ -1,13 +1,13 @@
-//
+// 
 // THIS FILE HAS BEEN GENERATED AUTOMATICALLY
 // DO NOT CHANGE IT MANUALLY UNLESS YOU KNOW WHAT YOU'RE DOING
-//
-// GENERATED USING @colyseus/schema 0.4.48
-//
+// 
+// GENERATED USING @colyseus/schema 0.4.50
+// 
 #ifndef __SCHEMA_CODEGEN_PLAYER_H__
 #define __SCHEMA_CODEGEN_PLAYER_H__ 1
 
-#include "Colyseus/Serializer/schema.hpp"
+#include "schema.h"
 #include <typeinfo>
 #include <typeindex>
 
@@ -29,11 +29,11 @@ public:
 	}
 
 	~Player() {
-
+		
 	}
 
 protected:
-	varint_t getNumber(string field)
+	inline varint_t getNumber(string field)
 	{
 		if (field == "x")
 		{

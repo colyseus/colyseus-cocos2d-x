@@ -159,7 +159,7 @@ inline float64_t decodeFloat64(unsigned const char bytes[], Iterator *it)
 inline varint_t decodeNumber(unsigned const char bytes[], Iterator *it)
 {
     auto prefix = bytes[it->offset++];
-    std::cout << "decodeNumber, prefix => " << ((int)prefix) << std::endl;
+    // std::cout << "decodeNumber, prefix => " << ((int)prefix) << std::endl;
 
     if (prefix < 0x80)
     {
@@ -256,7 +256,7 @@ class ArraySchema
   public:
     ArraySchema() {}
     ~ArraySchema() {
-        std::cout << "ArraySchema destructor!" << std::endl;
+        // std::cout << "ArraySchema destructor!" << std::endl;
     }
 
     std::vector<T> items;
@@ -372,7 +372,7 @@ class Schema
         while (it->offset < totalBytes)
         {
             unsigned char index = (unsigned char) bytes[it->offset++];
-            std::cout << "INDEX: " << ((int)index) << std::endl;
+            // std::cout << "INDEX: " << ((int)index) << std::endl;
 
             if (index == (unsigned char) SPEC::END_OF_STRUCTURE)
             {
@@ -382,10 +382,8 @@ class Schema
             string field = this->_indexes.at(index);
             string type = this->_types.at(index);
 
-            std::cout << "FIELD: " << field << std::endl;
-            // std::type_info& fieldType = typeid(this[field]);
+            // std::cout << "FIELD: " << field << std::endl;
 
-            // char *value = nullptr;
             char *change = nullptr;
 
             bool hasChange = false;
@@ -533,7 +531,7 @@ class Schema
                 }
 
                 this->setArray(field, value);
-                std::cout << "array set successfully! size => " << value->size() << std::endl;
+                // std::cout << "array set successfully! size => " << value->size() << std::endl;
             }
             else if (type == "map")
             {
@@ -543,17 +541,17 @@ class Schema
                 int length = (int) decodeNumber(bytes, it);
                 hasChange = (length > 0);
 
-                std::cout << "MAP, LENGTH => " << length << std::endl;
+                // std::cout << "MAP, LENGTH => " << length << std::endl;
 
                 bool hasIndexChange = false;
                 bool isSchemaType = this->_childSchemaTypes.find(index) != this->_childSchemaTypes.end();
-                std::cout << "MAP, IS SCHEMA TYPE? => " << isSchemaType << std::endl;
+                // std::cout << "MAP, IS SCHEMA TYPE? => " << isSchemaType << std::endl;
 
                 // List of previous keys
                 std::vector<string> previousKeys;
                 for (tsl::ordered_map<string, char *>::iterator it = valueRef->items.begin(); it != valueRef->items.end(); ++it)
                 {
-                    std::cout << "MAP, PREVIOUS KEY => " << it->first << std::endl;
+                    // std::cout << "MAP, PREVIOUS KEY => " << it->first << std::endl;
                     previousKeys.push_back(it->first);
                 }
 
@@ -561,7 +559,7 @@ class Schema
                 {
                     if (it->offset > totalBytes || bytes[it->offset] == (unsigned char)SPEC::END_OF_STRUCTURE)
                     {
-                        std::cout << "MAP: END OF STRUCTURE!" << std::endl;
+                        // std::cout << "MAP: END OF STRUCTURE!" << std::endl;
                         break;
                     }
 
@@ -577,14 +575,14 @@ class Schema
                         ? previousKeys[decodeNumber(bytes, it)]
                         : decodeString(bytes, it);
 
-                    std::cout << "previousKey => " << previousKey << std::endl;
-                    std::cout << "newKey => " << newKey << std::endl;
+                    // std::cout << "previousKey => " << previousKey << std::endl;
+                    // std::cout << "newKey => " << newKey << std::endl;
 
                     char* item = nullptr;
                     bool foundItem = false;
                     bool isNew = (!hasIndexChange && !valueRef->has(newKey)) || (hasIndexChange && previousKey == "" && hasMapIndex);
 
-                    std::cout << "isNew => " << isNew << std::endl;
+                    // std::cout << "isNew => " << isNew << std::endl;
 
                     if (isNew && isSchemaType)
                     {
@@ -609,7 +607,8 @@ class Schema
                     {
                         it->offset++;
 
-                        if (isSchemaType && item != nullptr && ((Schema*)item)->onRemove) {
+                        if (isSchemaType && item != nullptr && ((Schema*)item)->onRemove)
+                        {
                             ((Schema *)item)->onRemove();
                         }
 
@@ -669,7 +668,7 @@ class Schema
                 this->decodePrimitiveType(field, type, bytes, it);
                 hasChange = true;
             }
-            std::cout << "stepped out (child type decoding)" << std::endl;
+            // std::cout << "stepped out (child type decoding)" << std::endl;
 
             if (hasChange && this->onChange)
             {
@@ -680,20 +679,20 @@ class Schema
                 changes.push_back(dataChange);
             }
         }
-        std::cout << "stepped out (structure)." << std::endl;
+        // std::cout << "stepped out (structure)." << std::endl;
 
         // trigger onChange callback.
         if (this->onChange)
         {
-            std::cout << "let's trigger changes!" << std::endl;
+            // std::cout << "let's trigger changes!" << std::endl;
             this->onChange(changes);
         }
 
         if (doesOwnIterator) {
-            std::cout << "let's delete iterator..." << std::endl;
+            // std::cout << "let's delete iterator..." << std::endl;
             delete it;
         }
-        std::cout << "end of decode()" << std::endl;
+        // std::cout << "end of decode()" << std::endl;
     }
 
   protected:

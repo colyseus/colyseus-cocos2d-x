@@ -176,7 +176,6 @@ void HelloWorld::onRoomStateChange(State* state)
 {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "HelloWorld::onRoomStateChange" << std::endl;
-    std::cout << state << std::endl;
 
     // send command to move x
     auto data = std::map<std::string, float>();

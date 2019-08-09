@@ -5,7 +5,7 @@
 #include "Protocol.hpp"
 #include "Connection.hpp"
 
-#include "schema.hpp"
+#include "schema.h"
 #include "Serializer/Serializer.hpp"
 #include "Serializer/SchemaSerializer.hpp"
 
