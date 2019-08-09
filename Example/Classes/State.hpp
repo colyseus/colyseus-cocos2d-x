@@ -2,7 +2,7 @@
 // THIS FILE HAS BEEN GENERATED AUTOMATICALLY
 // DO NOT CHANGE IT MANUALLY UNLESS YOU KNOW WHAT YOU'RE DOING
 // 
-// GENERATED USING @colyseus/schema 0.4.50
+// GENERATED USING @colyseus/schema 0.4.51
 // 
 #ifndef __SCHEMA_CODEGEN_STATE_H__
 #define __SCHEMA_CODEGEN_STATE_H__ 1
@@ -42,7 +42,7 @@ protected:
 		return Schema::getMap(field);
 	}
 
-	void setMap(string field, MapSchema<char*> * value)
+	inline void setMap(string field, MapSchema<char*> * value)
 	{
 		if (field == "players")
 		{
@@ -53,7 +53,7 @@ protected:
 		return Schema::setMap(field, value);
 	}
 
-	Schema* createInstance(std::type_index type) {
+	inline Schema* createInstance(std::type_index type) {
 		if (type == typeid(Player))
 		{
 			return new Player();

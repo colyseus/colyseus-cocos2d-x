@@ -2,7 +2,7 @@
 // THIS FILE HAS BEEN GENERATED AUTOMATICALLY
 // DO NOT CHANGE IT MANUALLY UNLESS YOU KNOW WHAT YOU'RE DOING
 // 
-// GENERATED USING @colyseus/schema 0.4.50
+// GENERATED USING @colyseus/schema 0.4.51
 // 
 #ifndef __SCHEMA_CODEGEN_PLAYER_H__
 #define __SCHEMA_CODEGEN_PLAYER_H__ 1
@@ -47,7 +47,7 @@ protected:
 		return Schema::getNumber(field);
 	}
 
-	void setNumber(string field, varint_t value)
+	inline void setNumber(string field, varint_t value)
 	{
 		if (field == "x")
 		{
