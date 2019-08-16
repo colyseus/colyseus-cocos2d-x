@@ -21,6 +21,17 @@
   </h3>
 </div>
 
+
+## FAQ
+
+Seeing this error on Mac build?
+
+```
+App Transport Security has blocked a cleartext HTTP (http://) resource load since it is insecure. Temporary exceptions can be configured via your app's Info.plist file.
+```
+
+Check this: [https://stackoverflow.com/a/40299837/892698](https://stackoverflow.com/a/40299837/892698)
+
 ## Contributors
 
 Big thanks to [Hung Hoang](https://github.com/chunho32) for making the initial

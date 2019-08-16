@@ -118,6 +118,7 @@
 		1B06A78022FCA96500845058 /* schema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = schema.h; sourceTree = "<group>"; };
 		1B06A78122FCA96500845058 /* SchemaSerializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SchemaSerializer.hpp; sourceTree = "<group>"; };
 		1B1B33012230A6DB00A7EA6E /* Serializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Serializer.hpp; sourceTree = "<group>"; };
+		1B374E2D2307479E00261306 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
 		1B47A8A121EE483A00C61FD6 /* DeltaContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeltaContainer.cpp; sourceTree = "<group>"; };
 		1BBD8C3521F11B3D008DF6C2 /* msgpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = msgpack.h; sourceTree = "<group>"; };
 		1BBD8C3821F11B3D008DF6C2 /* unpack_decl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unpack_decl.hpp; sourceTree = "<group>"; };
@@ -928,6 +929,22 @@
 			path = Serializer;
 			sourceTree = "<group>";
 		};
+		1B374E2B2307479E00261306 /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+				1B374E2C2307479E00261306 /* nlohmann */,
+			);
+			path = thirdparty;
+			sourceTree = "<group>";
+		};
+		1B374E2C2307479E00261306 /* nlohmann */ = {
+			isa = PBXGroup;
+			children = (
+				1B374E2D2307479E00261306 /* json.hpp */,
+			);
+			path = nlohmann;
+			sourceTree = "<group>";
+		};
 		1B4D3F3821EE674D0088CD57 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -939,6 +956,7 @@
 		1BBD8C3421F11B3D008DF6C2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				1B374E2B2307479E00261306 /* thirdparty */,
 				1BBD8C3521F11B3D008DF6C2 /* msgpack.h */,
 				1BBD8C3621F11B3D008DF6C2 /* msgpack */,
 				1BBD8F2521F11B3E008DF6C2 /* Colyseus */,

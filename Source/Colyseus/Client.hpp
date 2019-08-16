@@ -12,245 +12,131 @@
 #include <stdio.h>
 
 #include "network/WebSocket.h"
+#include "network/HttpClient.h"
+
+#include "thirdparty/nlohmann/json.hpp"
+
 #include "msgpack.hpp"
 #include "Connection.hpp"
 #include "Room.hpp"
+
 // #include "Auth.hpp"
 
 using namespace cocos2d;
 using namespace cocos2d::network;
 
-typedef std::map<std::string, std::string> JoinOptions;
+typedef nlohmann::json JoinOptions;
 
 class Client : public cocos2d::Ref
 {
 public:
+    std::string endpoint;
+    // Auth* auth;
+
     Client(const std::string &endpoint)
     {
         this->endpoint = endpoint;
-        this->connection = new Connection(endpoint);
         // this->auth = new Auth(endpoint);
     }
 
-    ~Client()
-    {
-        delete this->connection;
-    }
+    ~Client() {}
 
-    // Methods
-    void close()
+    template <typename S>
+    inline void joinOrCreate(const std::string roomName, JoinOptions options, std::function<void(std::string, Room<S> *)> callback)
     {
-        this->connection->close();
-    }
-
-    void connect()
-    {
-        this->connection->_onOpen = CC_CALLBACK_0(Client::_onOpen, this);
-        this->connection->_onClose = CC_CALLBACK_0(Client::_onClose, this);
-        this->connection->_onError = CC_CALLBACK_1(Client::_onError, this);
-        this->connection->_onMessage = CC_CALLBACK_1(Client::_onMessage, this);
-        this->connection->open();
+        this->createMatchMakeRequest<S>("joinOrCreate", roomName, options, callback);
     }
 
     template <typename S>
-    Room<S> *join(const std::string roomName, JoinOptions options = JoinOptions())
+    inline void join(const std::string roomName, JoinOptions options, std::function<void(std::string, Room<S> *)> callback)
     {
-        int requestIdInt = ++this->requestId;
-        std::string requestId = std::to_string(requestIdInt);
-        options.insert(std::make_pair("requestId", requestId));
-
-        std::cout << "let's create room instance..." << std::endl;
-        char* room = (char*)new Room<S>(roomName, options);
-        std::cout << "let's cast to IRoom*" << std::endl;
-        IRoom* ref = (IRoom*) room;
-        std::cout << "okay..." << std::endl;
-
-        this->_connectingRooms.insert(std::make_pair(requestIdInt, ref));
-        this->connection->send((int)Protocol::JOIN_REQUEST, roomName, options);
-
-        std::cout << "let's return the Room<S> instance..." << std::endl;
-        return (Room<S> *)room;
+        this->createMatchMakeRequest<S>("join", roomName, options, callback);
     }
 
-    // template <typename S>
-    // Room<S>* rejoin(const std::string roomName, std::string& sessionId);
+    template <typename S>
+    inline void create(const std::string roomName, JoinOptions options, std::function<void(std::string, Room<S> *)> callback)
+    {
+        this->createMatchMakeRequest<S>("create", roomName, options, callback);
+    }
 
-    // Properties
-    Connection* connection;
-    std::string id;
-    // Auth* auth;
+    template <typename S>
+    inline void joinById(const std::string roomId, JoinOptions options, std::function<void(std::string, Room<S> *)> callback)
+    {
+        this->createMatchMakeRequest<S>("joinById", roomId, options, callback);
+    }
 
-    // Callbacks
-    std::function<void()> onOpen;
-    std::function<void()> onClose;
-    std::function<void(std::string)> onError;
+    template <typename S>
+    inline void reconnect(const std::string roomId, const std::string sessionId, std::function<void(std::string, Room<S> *)> &callback)
+    {
+        this->createMatchMakeRequest<S>("joinById", roomId, {{"sessionId", sessionId}}, callback);
+    }
 
 protected:
-    void _onOpen()
+    template <typename S>
+    inline void createMatchMakeRequest(
+        std::string method,
+        std::string roomName,
+        JoinOptions options,
+        std::function<void(std::string, Room<S> *)> callback
+    )
     {
-        if (!id.empty() && this->onOpen)
-        {
-            this->onOpen();
-        }
-    }
+        HttpRequest *req = new (std ::nothrow) HttpRequest();
+        req->setUrl(this->endpoint.replace(0, 2, "http") + "/matchmake/" + method + "/" + roomName);
+        req->setRequestType(HttpRequest::Type::POST);
 
-    void _onClose()
-    {
-        if (this->onClose)
-        {
-            this->onClose();
-        }
-    }
+        std::vector<std::string> headers;
+        headers.push_back("Accept:application/json");
+        headers.push_back("Content-Type:application/json");
+        req->setHeaders(headers);
 
-    void _onError(const WebSocket::ErrorCode &error)
-    {
-        std::string message = "";
+        std::string data = options.dump();
+        if (data == "null") { data = "{}"; }
 
-        switch (error)
-        {
-        case WebSocket::ErrorCode::CONNECTION_FAILURE:
-            message = "CONNECTION_FAILURE";
-            break;
-        case WebSocket::ErrorCode::TIME_OUT:
-            message = "TIME_OUT";
-            break;
-        case WebSocket::ErrorCode::UNKNOWN:
-            message = "UNKNOWN";
-            break;
-        }
+        req->setRequestData(data.c_str(), data.length());
 
-        if (this->onError)
-        {
-            this->onError(message);
-        }
-    }
-
-    void _onMessage(const WebSocket::Data &data)
-    {
-        size_t len = data.len;
-        const char *bytes = data.bytes;
-
-        if (this->previousCode == 0)
-        {
-            unsigned char code = bytes[0];
-
-            switch ((Protocol)code)
+        req->setResponseCallback( [this, roomName, callback] (network::HttpClient* client, network::HttpResponse* response) {
+            if (!response)
             {
-            case Protocol::USER_ID:
-            {
-
-#ifdef COLYSEUS_DEBUG
-                log("Protocol::USER_ID");
-#endif
-
-                id = colyseus_readstr(bytes, 1);
-
-                std::cout << std::endl;
-                std::cout << "client->id = '" << id << "'" << std::endl;
-                std::cout << std::endl;
-
-                if (this->onOpen)
-                {
-                    this->onOpen();
-                }
-                break;
+                callback("cocos2d::network::HttpClient => no response", nullptr);
+                return;
             }
-            case Protocol::JOIN_REQUEST:
-            {
 
-#ifdef COLYSEUS_DEBUG
-                log("Protocol::JOIN_REQUEST");
-#endif
+            if (response && response->getResponseCode() == 200) {
+                std::vector<char> *data = response->getResponseData();
+                std::string json_string(data->begin(), data->end());
+                auto json = nlohmann::json::parse(json_string);
 
-                int requestId = bytes[1];
-                IRoom *room = this->_connectingRooms.at(requestId);
-                room->id = colyseus_readstr(bytes, 2);
+                Room<S> *room = new Room<S>(roomName);
+                room->id = json["room"]["roomId"].get<std::string>();
+                room->sessionId = json["sessionId"].get<std::string>();
 
-                std::string processPath = "";
-                int nextIndex = 3 + room->id.length();
-                if (len > nextIndex) {
-                    processPath = std::string(colyseus_readstr(bytes, nextIndex)) + "/";
-                }
+                std::string processId = json["room"]["processId"].get<std::string>();
 
-                std::cout << std::endl;
-                std::cout << "room->id = '" << room->id << "'" << std::endl;
-                std::cout << std::endl;
+                room->onError = [callback](std::string message) {
+                    callback(message, nullptr);
+                };
 
-                room->connect(this->createConnection(processPath + room->id, room->options));
-                break;
+                room->onJoin = [room, callback]() {
+                    room->onError = nullptr;
+                    callback("", room);
+                };
+
+                room->connect(this->createConnection(processId + "/" + room->id + "?sessionId=" + room->sessionId));
             }
-            case Protocol::JOIN_ERROR:
-            {
-#ifdef COLYSEUS_DEBUG
-                log("Protocol::JOIN_ERROR");
-#endif
-                std::string message = colyseus_readstr(bytes, 1);
-                std::cout << "Colyseus: Error Joining Room: " << message << std::endl;
-
-                if (this->onError)
-                {
-                    this->onError(message);
-                }
-
-                break;
+            else {
+                callback(("Error " + std::to_string(response->getResponseCode()) + " in request"), nullptr);
             }
-            default:
-            {
-                this->previousCode = code;
-                break;
-            }
-            }
-        }
-        else
-        {
-            if (this->previousCode == (int)Protocol::ROOM_LIST)
-            {
-                std::cout << len << std::endl;
+        });
 
-                // TODO: ROOM_LIST
-                /*
-             msgpack::object_handle oh = msgpack::unpack(bytes, len);
-             msgpack::object obj = oh.get();
-
-             Protocol protocol = (Protocol) obj.via.array.ptr[0].via.i64;
-             msgpack::object_array message(obj.via.array);
-             */
-            }
-            this->previousCode = 0;
-        }
+        cocos2d::network::HttpClient::getInstance()->send(req);
+        req->release();
     }
 
     Connection *createConnection(std::string path, JoinOptions options = JoinOptions())
     {
-        std::vector<std::string> params;
-
-        // append colyseusid to connection string.
-        params.push_back("colyseusid=" + this->id);
-
-        for (const auto &kv : options)
-        {
-            params.push_back(kv.first + "=" + kv.second);
-        }
-
-        std::string queryString;
-
-        // concat "params" with "&" separator to form query string
-        for (std::vector<std::string>::const_iterator p = params.begin(); p != params.end(); ++p)
-        {
-            queryString += *p;
-            if (p != params.end() - 1)
-            {
-                queryString += "&";
-            }
-        }
-
-        return new Connection(this->endpoint + "/" + path + "?" + queryString);
+        return new Connection(this->endpoint + "/" + path);
     }
 
-    std::string endpoint;
-    std::map<int, IRoom*> _connectingRooms;
-    int requestId = 0;
-    unsigned char previousCode = 0;
 };
 
 #endif /* Client_hpp */

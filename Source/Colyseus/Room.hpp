@@ -9,6 +9,7 @@
 #include "Serializer/Serializer.hpp"
 #include "Serializer/SchemaSerializer.hpp"
 
+/*
 class IRoom {
 public:
     virtual ~IRoom() = default;
@@ -17,15 +18,16 @@ public:
     std::map<std::string, std::string> options;
     virtual void connect(Connection *connection) = 0;
 };
+*/
 
 template <typename S>
-class Room : IRoom
+class Room
+// : IRoom
 {
 public:
-    Room(const std::string _name, std::map<std::string, std::string> _options)
+    Room(const std::string _name)
     {
         name = _name;
-        options = _options;
         serializer = new SchemaSerializer<S>();
     }
     ~Room() {}
@@ -64,7 +66,7 @@ public:
     template <typename T>
     inline void send (T data)
     {
-        this->connection->send((int)Protocol::ROOM_DATA, this->id, data);
+        this->connection->send((int)Protocol::ROOM_DATA, data);
     }
 
     S *getState()
@@ -82,6 +84,7 @@ public:
     // Properties
     Connection* connection;
 
+    std::string id;
     std::string name;
     std::string sessionId;
     std::string serializerId;
@@ -132,9 +135,6 @@ protected:
             case Protocol::JOIN_ROOM:
             {
                 int offset = 1;
-
-                sessionId = colyseus_readstr(bytes, offset);
-                offset += sessionId.length() + 1;
 
                 serializerId = colyseus_readstr(bytes, offset);
                 offset += serializerId.length() + 1;
