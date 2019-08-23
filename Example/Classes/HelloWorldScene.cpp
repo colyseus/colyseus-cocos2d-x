@@ -131,9 +131,6 @@ void HelloWorld::onConnectToServer()
 
         room->onMessage = CC_CALLBACK_1(HelloWorld::onRoomMessage, this);
         room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
-        room->onJoin = [this]() -> void {
-            std::cout << "JOINED THE ROOM!" << std::endl;
-        };
 
         room->onError = [this](std::string message) -> void {
             std::cout << "ROOM ERROR => " << message.c_str() << std::endl;
