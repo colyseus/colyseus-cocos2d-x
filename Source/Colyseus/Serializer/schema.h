@@ -371,6 +371,9 @@ class Schema
 
         while (it->offset < totalBytes)
         {
+            bool isNil = nilCheck(bytes, it);
+            if (isNil) { it->offset++; }
+
             unsigned char index = (unsigned char) bytes[it->offset++];
             // std::cout << "INDEX: " << ((int)index) << std::endl;
 
@@ -379,34 +382,29 @@ class Schema
                 break;
             }
 
+            // TODO: for backwards compatibility, check existance of field before calling .at()
             string field = this->_indexes.at(index);
             string type = this->_types.at(index);
 
-            // std::cout << "FIELD: " << field << std::endl;
-
             char *change = nullptr;
-
             bool hasChange = false;
 
-            if (type == "ref")
+            if (isNil)
             {
-                auto childType = this->_childSchemaTypes.at(index);
+                hasChange = true;
+            }
+            else if (type == "ref")
+            {
+                Schema* value = this->getRef(field);
 
-                if (nilCheck(bytes, it)) {
-                    it->offset++;
-                    this->setRef(field, nullptr);
-
-                } else {
-                    Schema* value = this->getRef(field);
-
-                    if (value == nullptr) {
-                        value = this->createInstance(childType);
-                    }
-
-                    value->decode(bytes, totalBytes, it);
+                if (value == nullptr) {
+                    auto childType = this->_childSchemaTypes.at(index);
+                    value = this->createInstance(childType);
                 }
 
+                value->decode(bytes, totalBytes, it);
                 hasChange = true;
+
             }
             else if (type == "array")
             {
@@ -481,17 +479,6 @@ class Schema
                             isNew = true;
                         }
 
-                        if (nilCheck(bytes, it))
-                        {
-                            it->offset++;
-
-                            if (valueRef->onRemove) {
-                                valueRef->onRemove(item, newIndex);
-                            }
-
-                            continue;
-                        }
-
                         ((Schema*) item)->decode(bytes, totalBytes, it);
                         value->setAt(newIndex, item);
                     }
@@ -563,6 +550,9 @@ class Schema
                         break;
                     }
 
+                    bool isNilItem = nilCheck(bytes, it);
+                    if (isNilItem) { it->offset++; }
+
                     string previousKey = "";
                     if (indexChangeCheck(bytes, it)) {
                         it->offset++;
@@ -603,10 +593,8 @@ class Schema
                         }
                     }
 
-                    if (nilCheck(bytes, it))
+                    if (isNilItem)
                     {
-                        it->offset++;
-
                         if (isSchemaType && item != nullptr && ((Schema*)item)->onRemove)
                         {
                             ((Schema *)item)->onRemove();
