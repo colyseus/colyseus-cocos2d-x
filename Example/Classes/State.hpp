@@ -1,9 +1,9 @@
-// 
+//
 // THIS FILE HAS BEEN GENERATED AUTOMATICALLY
 // DO NOT CHANGE IT MANUALLY UNLESS YOU KNOW WHAT YOU'RE DOING
-// 
+//
 // GENERATED USING @colyseus/schema 0.4.51
-// 
+//
 #ifndef __SCHEMA_CODEGEN_STATE_H__
 #define __SCHEMA_CODEGEN_STATE_H__ 1
 
@@ -27,7 +27,7 @@ public:
 		this->_childSchemaTypes = {{0, typeid(Player)}};
 	}
 
-	~State() {
+	virtual ~State() {
 		delete this->players;
 	}
 
