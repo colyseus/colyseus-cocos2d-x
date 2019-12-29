@@ -307,9 +307,9 @@ class MapSchema
 
     tsl::ordered_map<string, T> items;
 
-    std::function<void(T, string)> onAdd;
-    std::function<void(T, string)> onChange;
-    std::function<void(T, string)> onRemove;
+    std::function<void(T, const string &)> onAdd;
+    std::function<void(T, const string &)> onChange;
+    std::function<void(T, const string &)> onRemove;
 
     inline T &operator[](const char index[])
     {

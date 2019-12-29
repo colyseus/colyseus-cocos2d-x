@@ -35,7 +35,7 @@ class HelloWorld : public cocos2d::Scene
 public:
     void onConnectToServer();
     void onJoinRoom();
-    void onRoomMessage(msgpack::object);
+    void onRoomMessage(const msgpack::object &);
     void onRoomStateChange(State*);
 
 public:

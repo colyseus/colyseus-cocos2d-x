@@ -121,7 +121,7 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
-    client->joinOrCreate<State>("state_handler", {}, [=](std::string err, Room<State>* _room) {
+    client->joinOrCreate<State>("state_handler", {}, [=](const std::string &err, Room<State>* _room) {
         if (err != "") {
             std::cout << "JOIN ERROR! " << err << std::endl;
             return;
@@ -132,7 +132,7 @@ void HelloWorld::onConnectToServer()
         room->onMessage = CC_CALLBACK_1(HelloWorld::onRoomMessage, this);
         room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
 
-        room->onError = [this](std::string message) -> void {
+        room->onError = [this](const std::string &message) -> void {
             std::cout << "ROOM ERROR => " << message.c_str() << std::endl;
         };
 
@@ -140,7 +140,7 @@ void HelloWorld::onConnectToServer()
             std::cout << "LEFT ROOM" << std::endl;
         };
 
-        room->getState()->players->onAdd = [this](Player* player, string sessionId) -> void {
+        room->getState()->players->onAdd = [this](Player* player, const string &sessionId) -> void {
             // add player sprite
             auto sprite = Sprite::create("HelloWorld.png");
             sprite->setPosition(player->x, player->y);
@@ -159,7 +159,7 @@ void HelloWorld::onConnectToServer()
             };
         };
 
-        room->getState()->players->onRemove = [this](Player* player, string sessionId) -> void {
+        room->getState()->players->onRemove = [this](Player* player, const string &sessionId) -> void {
             std::cout << "onRemove called!" << std::endl;
             auto sprite = players.at(sessionId);
             this->removeChild(sprite);
@@ -172,7 +172,7 @@ void HelloWorld::onConnectToServer()
     });
 }
 
-void HelloWorld::onRoomMessage(msgpack::object message)
+void HelloWorld::onRoomMessage(const msgpack::object &message)
 {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "HelloWorld::onRoomMessage" << std::endl;

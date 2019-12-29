@@ -77,9 +77,9 @@ public:
     // Callbacks
     std::function<void()> onJoin;
     std::function<void()> onLeave;
-    std::function<void(msgpack::object)> onMessage;
+    std::function<void(const msgpack::object &)> onMessage;
     std::function<void(S*)> onStateChange;
-    std::function<void(std::string)> onError;
+    std::function<void(const std::string &)> onError;
 
     // Properties
     Connection* connection;

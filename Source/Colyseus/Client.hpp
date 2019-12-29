@@ -42,31 +42,31 @@ public:
     ~Client() {}
 
     template <typename S>
-    inline void joinOrCreate(const std::string roomName, JoinOptions options, std::function<void(std::string, Room<S> *)> callback)
+    inline void joinOrCreate(const std::string roomName, JoinOptions options, std::function<void(const std::string &, Room<S> *)> callback)
     {
         this->createMatchMakeRequest<S>("joinOrCreate", roomName, options, callback);
     }
 
     template <typename S>
-    inline void join(const std::string roomName, JoinOptions options, std::function<void(std::string, Room<S> *)> callback)
+    inline void join(const std::string roomName, JoinOptions options, std::function<void(const std::string &, Room<S> *)> callback)
     {
         this->createMatchMakeRequest<S>("join", roomName, options, callback);
     }
 
     template <typename S>
-    inline void create(const std::string roomName, JoinOptions options, std::function<void(std::string, Room<S> *)> callback)
+    inline void create(const std::string roomName, JoinOptions options, std::function<void(const std::string &, Room<S> *)> callback)
     {
         this->createMatchMakeRequest<S>("create", roomName, options, callback);
     }
 
     template <typename S>
-    inline void joinById(const std::string roomId, JoinOptions options, std::function<void(std::string, Room<S> *)> callback)
+    inline void joinById(const std::string roomId, JoinOptions options, std::function<void(const std::string &, Room<S> *)> callback)
     {
         this->createMatchMakeRequest<S>("joinById", roomId, options, callback);
     }
 
     template <typename S>
-    inline void reconnect(const std::string roomId, const std::string sessionId, std::function<void(std::string, Room<S> *)> &callback)
+    inline void reconnect(const std::string roomId, const std::string sessionId, std::function<void(const std::string &, Room<S> *)> &callback)
     {
         this->createMatchMakeRequest<S>("joinById", roomId, {{"sessionId", sessionId}}, callback);
     }
