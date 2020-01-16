@@ -690,40 +690,40 @@ class Schema
     std::map<unsigned char, std::type_index> _childSchemaTypes;
 
     // typed virtual getters by field
-    virtual string getString(string field) { return ""; }
-    virtual varint_t getNumber(string field) { return 0; }
-    virtual bool getBoolean(string field) { return 0; }
-    virtual int8_t getInt8(string field) { return 0; }
-    virtual uint8_t getUint8(string field) { return 0; }
-    virtual int16_t getInt16(string field) { return 0; }
-    virtual uint16_t getUint16(string field) { return 0; }
-    virtual int32_t getInt32(string field) { return 0; }
-    virtual uint32_t getUint32(string field) { return 0; }
-    virtual int64_t getInt64(string field) { return 0; }
-    virtual uint64_t getUint64(string field) { return 0; }
-    virtual float32_t getFloat32(string field) { return 0; }
-    virtual float64_t getFloat64(string field) { return 0; }
-    virtual Schema* getRef(string field) { return nullptr; }
-    virtual ArraySchema<char *> *getArray(string field) { return new ArraySchema<char *>(); }
-    virtual MapSchema<char *> *getMap(string field) { return new MapSchema<char *>(); }
+    virtual string getString(const string &field) { return ""; }
+    virtual varint_t getNumber(const string &field) { return 0; }
+    virtual bool getBoolean(const string &field) { return 0; }
+    virtual int8_t getInt8(const string &field) { return 0; }
+    virtual uint8_t getUint8(const string &field) { return 0; }
+    virtual int16_t getInt16(const string &field) { return 0; }
+    virtual uint16_t getUint16(const string &field) { return 0; }
+    virtual int32_t getInt32(const string &field) { return 0; }
+    virtual uint32_t getUint32(const string &field) { return 0; }
+    virtual int64_t getInt64(const string &field) { return 0; }
+    virtual uint64_t getUint64(const string &field) { return 0; }
+    virtual float32_t getFloat32(const string &field) { return 0; }
+    virtual float64_t getFloat64(const string &field) { return 0; }
+    virtual Schema* getRef(const string &field) { return nullptr; }
+    virtual ArraySchema<char *> *getArray(const string &field) { return new ArraySchema<char *>(); }
+    virtual MapSchema<char *> *getMap(const string &field) { return new MapSchema<char *>(); }
 
     // typed virtual setters by field
-    virtual void setString(string field, string value) {}
-    virtual void setNumber(string field, varint_t value) {}
-    virtual void setBoolean(string field, bool value) {}
-    virtual void setInt8(string field, int8_t value) {}
-    virtual void setUint8(string field, uint8_t value) {}
-    virtual void setInt16(string field, int16_t value) {}
-    virtual void setUint16(string field, uint16_t value) {}
-    virtual void setInt32(string field, int32_t value) {}
-    virtual void setUint32(string field, uint32_t value) {}
-    virtual void setInt64(string field, int64_t value) {}
-    virtual void setUint64(string field, uint64_t value) {}
-    virtual void setFloat32(string field, float32_t value) {}
-    virtual void setFloat64(string field, float64_t value) {}
-    virtual void setRef(string field, Schema* value) {}
-    virtual void setArray(string field, ArraySchema<char*>*) {}
-    virtual void setMap(string field, MapSchema<char*>*) {}
+    virtual void setString(const string &field, string value) {}
+    virtual void setNumber(const string &field, varint_t value) {}
+    virtual void setBoolean(const string &field, bool value) {}
+    virtual void setInt8(const string &field, int8_t value) {}
+    virtual void setUint8(const string &field, uint8_t value) {}
+    virtual void setInt16(const string &field, int16_t value) {}
+    virtual void setUint16(const string &field, uint16_t value) {}
+    virtual void setInt32(const string &field, int32_t value) {}
+    virtual void setUint32(const string &field, uint32_t value) {}
+    virtual void setInt64(const string &field, int64_t value) {}
+    virtual void setUint64(const string &field, uint64_t value) {}
+    virtual void setFloat32(const string &field, float32_t value) {}
+    virtual void setFloat64(const string &field, float64_t value) {}
+    virtual void setRef(const string &field, Schema* value) {}
+    virtual void setArray(const string &field, ArraySchema<char*>*) {}
+    virtual void setMap(const string &field, MapSchema<char*>*) {}
 
     virtual Schema* createInstance(std::type_index type) { return nullptr; }
 
