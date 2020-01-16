@@ -326,17 +326,17 @@ class MapSchema
         return cloned;
     }
 
-    inline T at(string key)
+    inline T at(const string &key)
     {
         return items.at(key);
     }
 
-    inline bool has(string field)
+    inline bool has(const string &field)
     {
         return items.find(field) != items.end();
     }
 
-    inline void insert(string field, T value)
+    inline void insert(const string &field, T value)
     {
         items.insert(std::pair<string, T>(field, value));
     }
@@ -728,7 +728,7 @@ class Schema
     virtual Schema* createInstance(std::type_index type) { return nullptr; }
 
   private:
-    inline void decodePrimitiveType(string field, string type, unsigned const char bytes[], Iterator *it)
+    inline void decodePrimitiveType(const string &field, string type, unsigned const char bytes[], Iterator *it)
     {
         if (type == "string")       { this->setString(field, decodeString(bytes, it)); }
         else if (type == "number")  { this->setNumber(field, decodeNumber(bytes, it)); }
