@@ -11,8 +11,8 @@ public:
 //    virtual ~Serializer();
 
     virtual S* getState() = 0;
-    virtual void setState(const char* bytes, int length) = 0;
-    virtual void patch(const char* bytes, int length) = 0;
+    virtual void setState(const char* bytes, int offset, int length) = 0;
+    virtual void patch(const char* bytes, int offset, int length) = 0;
     virtual void teardown() = 0;
     virtual void handshake(const char* bytes, int offset) = 0;
 };

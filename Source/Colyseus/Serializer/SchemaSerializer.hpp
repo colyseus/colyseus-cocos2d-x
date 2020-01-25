@@ -9,17 +9,23 @@ class SchemaSerializer : public Serializer<S>
 {
 public:
     SchemaSerializer() { state = new S(); }
-    ~SchemaSerializer() { delete state; }
+    ~SchemaSerializer() {
+        delete state;
+        delete it;
+    }
 
+    colyseus::schema::Iterator *it = new colyseus::schema::Iterator();
     S* state;
     S* getState() { return state; };
 
-    void setState(const char* bytes, int length) {
-        ((colyseus::schema::Schema*)state)->decode(reinterpret_cast<unsigned const char *>(bytes), length);
+    void setState(const char* bytes, int offset, int length) {
+        it->offset = offset;
+        ((colyseus::schema::Schema*)state)->decode(reinterpret_cast<unsigned const char *>(bytes), length, it);
     }
 
-    void patch(const char* bytes, int length) {
-        ((colyseus::schema::Schema*)state)->decode(reinterpret_cast<unsigned const char *>(bytes), length);
+    void patch(const char* bytes, int offset, int length) {
+        it->offset = offset;
+        ((colyseus::schema::Schema*)state)->decode(reinterpret_cast<unsigned const char *>(bytes), length, it);
     }
 
     void handshake(const char* bytes, int offset) {

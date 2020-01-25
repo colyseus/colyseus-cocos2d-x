@@ -124,17 +124,16 @@ protected:
     void _onMessage(const WebSocket::Data &data)
     {
         size_t len = data.len;
+        size_t offset = 0;
         const char *bytes = data.bytes;
 
-        if (this->previousCode == 0)
-        {
-            unsigned char code = bytes[0];
+        unsigned char code = bytes[0];
 
-            switch ((Protocol)code)
-            {
+        switch ((Protocol)code)
+        {
             case Protocol::JOIN_ROOM:
             {
-                int offset = 1;
+                offset++;
 
                 serializerId = colyseus_readstr(bytes, offset);
                 offset += serializerId.length() + 1;
@@ -149,6 +148,8 @@ protected:
                 {
                     this->onJoin();
                 }
+
+                this->connection->send((int)Protocol::JOIN_ROOM);
                 break;
             }
             case Protocol::JOIN_ERROR:
@@ -173,17 +174,6 @@ protected:
 
                 break;
             }
-            default:
-            {
-                this->previousCode = code;
-                break;
-            }
-            }
-        }
-        else
-        {
-            switch ((Protocol)this->previousCode)
-            {
             case Protocol::ROOM_DATA:
             {
 #ifdef COLYSEUS_DEBUG
@@ -192,7 +182,7 @@ protected:
                 if (this->onMessage)
                 {
 
-                    msgpack::object_handle oh = msgpack::unpack(bytes, len);
+                    msgpack::object_handle oh = msgpack::unpack(bytes, len, offset);
                     msgpack::object data = oh.get();
 
 #ifdef COLYSEUS_DEBUG
@@ -210,7 +200,7 @@ protected:
 #ifdef COLYSEUS_DEBUG
                 std::cout << "Colyseus.Room: ROOM_STATE" << std::endl;
 #endif
-                this->setState(bytes, len);
+                this->setState(bytes, 1, len);
                 break;
             }
             case Protocol::ROOM_STATE_PATCH:
@@ -218,21 +208,20 @@ protected:
 #ifdef COLYSEUS_DEBUG
                 std::cout << "Colyseus.Room: ROOM_STATE_PATCH" << std::endl;
 #endif
-                this->applyPatch(bytes, len);
+                this->applyPatch(bytes, 1, len);
 
                 break;
             }
             default:
+            {
                 break;
             }
-
-            this->previousCode = 0;
         }
     }
 
-    void setState(const char *bytes, int length)
+    void setState(const char *bytes, int offset, int length)
     {
-        this->serializer->setState(bytes, length);
+        this->serializer->setState(bytes, offset, length);
 
         if (onStateChange)
         {
@@ -240,9 +229,9 @@ protected:
         }
     }
 
-    void applyPatch(const char *bytes, int length)
+    void applyPatch(const char *bytes, int offset, int length)
     {
-        this->serializer->patch(bytes, length);
+        this->serializer->patch(bytes, offset, length);
 
         if (onStateChange)
         {
@@ -251,6 +240,5 @@ protected:
     }
 
     Serializer<S>* serializer;
-    unsigned char previousCode = 0;
 };
 #endif /* Room_hpp */
