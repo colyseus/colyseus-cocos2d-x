@@ -414,7 +414,9 @@ class Schema
                 int newLength = decodeNumber(bytes, it);
                 int numChanges = decodeNumber(bytes, it);
 
-                hasChange = (numChanges > 0);
+                bool hasRemoval = (value->items.size() > newLength);
+                hasChange = (numChanges > 0) || hasRemoval;
+
                 bool isSchemaType = this->_childSchemaTypes.find(index) != this->_childSchemaTypes.end();
 
                 // FIXME: this may not be reliable. possibly need to encode this variable during
@@ -422,7 +424,7 @@ class Schema
                 bool hasIndexChange = false;
 
                 // ensure current array has the same length as encoded one
-                if (value->items.size() > newLength) {
+                if (hasRemoval) {
                     for (int i = newLength; i < value->items.size(); i++)
                     {
                         if (isSchemaType && ((Schema*)value->items[i])->onRemove)
