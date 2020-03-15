@@ -1,9 +1,9 @@
-//
+// 
 // THIS FILE HAS BEEN GENERATED AUTOMATICALLY
 // DO NOT CHANGE IT MANUALLY UNLESS YOU KNOW WHAT YOU'RE DOING
-//
-// GENERATED USING @colyseus/schema 0.4.51
-//
+// 
+// GENERATED USING @colyseus/schema 0.5.33
+// 
 #ifndef __SCHEMA_CODEGEN_PLAYER_H__
 #define __SCHEMA_CODEGEN_PLAYER_H__ 1
 
@@ -29,7 +29,7 @@ public:
 	}
 
 	virtual ~Player() {
-
+		
 	}
 
 protected:

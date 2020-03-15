@@ -326,6 +326,26 @@ class MapSchema
         return cloned;
     }
 
+    inline std::vector<string> keys()
+    {
+        std::cout << "GETTING PREVIOUS KEYS" << std::endl;
+        std::vector<string> keys;
+
+        for (auto kv : this->items)
+        {
+            keys.push_back(kv.first);
+        }
+
+        // for (tsl::ordered_map<string, char *>::iterator it = this->items.begin(); it != this->items.end(); ++it)
+        // {
+        //     std::cout << "MAP, PREVIOUS KEY => " << it->first << std::endl;
+        // }
+
+        std::cout << "END GETTING PREVIOUS KEYS" << std::endl;
+
+        return keys;
+    }
+
     inline T at(const string &key)
     {
         return items.at(key);
@@ -386,7 +406,6 @@ class Schema
             string field = this->_indexes.at(index);
             string type = this->_types.at(index);
 
-            char *change = nullptr;
             bool hasChange = false;
 
             if (isNil)
@@ -524,6 +543,8 @@ class Schema
             }
             else if (type == "map")
             {
+                std::cout << "Let's call getMap for " << field << std::endl;
+
                 MapSchema<char *>* valueRef = this->getMap(field);
                 MapSchema<char *>* value = valueRef; //valueRef.clone();
 
@@ -537,12 +558,7 @@ class Schema
                 // std::cout << "MAP, IS SCHEMA TYPE? => " << isSchemaType << std::endl;
 
                 // List of previous keys
-                std::vector<string> previousKeys;
-                for (tsl::ordered_map<string, char *>::iterator it = valueRef->items.begin(); it != valueRef->items.end(); ++it)
-                {
-                    // std::cout << "MAP, PREVIOUS KEY => " << it->first << std::endl;
-                    previousKeys.push_back(it->first);
-                }
+                std::vector<string> previousKeys = valueRef->keys();
 
                 for (int i = 0; i < length; i++)
                 {

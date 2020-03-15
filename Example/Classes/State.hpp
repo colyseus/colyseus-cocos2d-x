@@ -2,7 +2,7 @@
 // THIS FILE HAS BEEN GENERATED AUTOMATICALLY
 // DO NOT CHANGE IT MANUALLY UNLESS YOU KNOW WHAT YOU'RE DOING
 //
-// GENERATED USING @colyseus/schema 0.4.51
+// GENERATED USING @colyseus/schema 0.5.33
 //
 #ifndef __SCHEMA_CODEGEN_STATE_H__
 #define __SCHEMA_CODEGEN_STATE_H__ 1
@@ -34,6 +34,8 @@ public:
 protected:
 	inline MapSchema<char*> * getMap(string field)
 	{
+        std::cout << "CALLED CUSTOM getMap FOR " << field << std::endl;
+
 		if (field == "players")
 		{
 			return (MapSchema<char*> *)this->players;
