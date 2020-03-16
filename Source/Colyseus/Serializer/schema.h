@@ -587,7 +587,6 @@ class Schema
                     // std::cout << "newKey => " << newKey << std::endl;
 
                     char* item = nullptr;
-                    bool foundItem = false;
                     bool isNew = (!hasIndexChange && !valueRef->has(newKey)) || (hasIndexChange && previousKey == "" && hasMapIndex);
 
                     // std::cout << "isNew => " << isNew << std::endl;
@@ -595,7 +594,6 @@ class Schema
                     if (isNew && isSchemaType)
                     {
                         item = (char*) this->createInstance(this->_childSchemaTypes.at(index));
-                        foundItem = true;
 
                     } else if (previousKey != "")
                     {
@@ -605,9 +603,6 @@ class Schema
                     {
                         if (valueRef->has(newKey)) {
                             item = valueRef->at(newKey);
-                        }
-                        else {
-                            foundItem = false;
                         }
                     }
 
