@@ -72,16 +72,20 @@ void Auth::request(HttpRequest::Type method, std::string segments, std::vector<s
     req->setRequestType(method);
 
     if (upload != "") {
-        req->setRequestData(upload.c_str(), upload.length);
+        req->setRequestData(upload.c_str(), upload.length());
     }
 
-    req->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+    req->setResponseCallback(CC_CALLBACK_2(Auth::onHttpRequestCompleted, this));
 
     HttpClient::getInstance()->send(req);
 
     req->release();
 }
 
+void Auth::onHttpRequestCompleted(HttpClient * client, HttpResponse * response)
+{
+    // TODO: implementation needed
+}
 
 std::string Auth::getPlatform()
 {
@@ -144,7 +148,7 @@ std::string Auth::urlencode(const std::string &s)
     return escaped;
 }
 
-std::string string_join(const std::vector<std::string> &elements, const std::string &separator)
+std::string Auth::string_join(const std::vector<std::string> &elements, const std::string &separator)
 {
     if (!elements.empty())
     {

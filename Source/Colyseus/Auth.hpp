@@ -60,6 +60,7 @@ protected:
 
     void request(HttpRequest::Type method, std::string segments, std::vector<std::string> query);
     void request(HttpRequest::Type method, std::string segments, std::vector<std::string> query, std::string upload);
+    void onHttpRequestCompleted(HttpClient * client, HttpResponse * response);
 
     std::string getPlatform();
     std::string getDeviceId();

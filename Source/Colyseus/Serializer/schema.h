@@ -159,7 +159,9 @@ inline float64_t decodeFloat64(unsigned const char bytes[], Iterator *it)
 inline varint_t decodeNumber(unsigned const char bytes[], Iterator *it)
 {
     auto prefix = bytes[it->offset++];
-    // std::cout << "decodeNumber, prefix => " << ((int)prefix) << std::endl;
+#ifdef COLYSEUS_DEBUG
+    std::cout << "decodeNumber, prefix => " << ((int)prefix) << std::endl;
+#endif
 
     if (prefix < 0x80)
     {
@@ -255,9 +257,7 @@ class ArraySchema
 {
   public:
     ArraySchema() {}
-    ~ArraySchema() {
-        // std::cout << "ArraySchema destructor!" << std::endl;
-    }
+    ~ArraySchema() {}
 
     std::vector<T> items;
 
@@ -328,7 +328,9 @@ class MapSchema
 
     inline std::vector<string> keys()
     {
+#ifdef COLYSEUS_DEBUG
         std::cout << "GETTING PREVIOUS KEYS" << std::endl;
+#endif
         std::vector<string> keys;
 
         for (auto kv : this->items)
@@ -336,12 +338,16 @@ class MapSchema
             keys.push_back(kv.first);
         }
 
-        // for (tsl::ordered_map<string, char *>::iterator it = this->items.begin(); it != this->items.end(); ++it)
-        // {
-        //     std::cout << "MAP, PREVIOUS KEY => " << it->first << std::endl;
-        // }
+#ifdef COLYSEUS_DEBUG
+        for (tsl::ordered_map<string, char *>::iterator it = this->items.begin(); it != this->items.end(); ++it)
+        {
+            std::cout << "MAP, PREVIOUS KEY => " << it->first << std::endl;
+        }
+#endif
 
+#ifdef COLYSEUS_DEBUG
         std::cout << "END GETTING PREVIOUS KEYS" << std::endl;
+#endif
 
         return keys;
     }
@@ -395,7 +401,9 @@ class Schema
             if (isNil) { it->offset++; }
 
             unsigned char index = (unsigned char) bytes[it->offset++];
-            // std::cout << "INDEX: " << ((int)index) << std::endl;
+#ifdef COLYSEUS_DEBUG
+            std::cout << "INDEX: " << ((int)index) << std::endl;
+#endif
 
             if (index == (unsigned char) SPEC::END_OF_STRUCTURE)
             {
@@ -539,11 +547,15 @@ class Schema
                 }
 
                 this->setArray(field, value);
-                // std::cout << "array set successfully! size => " << value->size() << std::endl;
+#ifdef COLYSEUS_DEBUG
+                std::cout << "array set successfully! size => " << value->size() << std::endl;
+#endif
             }
             else if (type == "map")
             {
+#ifdef COLYSEUS_DEBUG
                 std::cout << "Let's call getMap for " << field << std::endl;
+#endif
 
                 MapSchema<char *>* valueRef = this->getMap(field);
                 MapSchema<char *>* value = valueRef; //valueRef.clone();
@@ -551,11 +563,15 @@ class Schema
                 int length = (int) decodeNumber(bytes, it);
                 hasChange = (length > 0);
 
-                // std::cout << "MAP, LENGTH => " << length << std::endl;
+#ifdef COLYSEUS_DEBUG
+                std::cout << "MAP, LENGTH => " << length << std::endl;
+#endif
 
                 bool hasIndexChange = false;
                 bool isSchemaType = this->_childSchemaTypes.find(index) != this->_childSchemaTypes.end();
-                // std::cout << "MAP, IS SCHEMA TYPE? => " << isSchemaType << std::endl;
+#ifdef COLYSEUS_DEBUG
+                std::cout << "MAP, IS SCHEMA TYPE? => " << isSchemaType << std::endl;
+#endif
 
                 // List of previous keys
                 std::vector<string> previousKeys = valueRef->keys();
@@ -564,7 +580,9 @@ class Schema
                 {
                     if (it->offset > totalBytes || bytes[it->offset] == (unsigned char)SPEC::END_OF_STRUCTURE)
                     {
-                        // std::cout << "MAP: END OF STRUCTURE!" << std::endl;
+#ifdef COLYSEUS_DEBUG
+                        std::cout << "MAP: END OF STRUCTURE!" << std::endl;
+#endif
                         break;
                     }
 
@@ -583,13 +601,17 @@ class Schema
                         ? previousKeys[decodeNumber(bytes, it)]
                         : decodeString(bytes, it);
 
-                    // std::cout << "previousKey => " << previousKey << std::endl;
-                    // std::cout << "newKey => " << newKey << std::endl;
+#ifdef COLYSEUS_DEBUG
+                    std::cout << "previousKey => " << previousKey << std::endl;
+                    std::cout << "newKey => " << newKey << std::endl;
+#endif
 
                     char* item = nullptr;
                     bool isNew = (!hasIndexChange && !valueRef->has(newKey)) || (hasIndexChange && previousKey == "" && hasMapIndex);
 
-                    // std::cout << "isNew => " << isNew << std::endl;
+#ifdef COLYSEUS_DEBUG
+                    std::cout << "isNew => " << isNew << std::endl;
+#endif
 
                     if (isNew && isSchemaType)
                     {
@@ -669,7 +691,9 @@ class Schema
                 this->decodePrimitiveType(field, type, bytes, it);
                 hasChange = true;
             }
-            // std::cout << "stepped out (child type decoding)" << std::endl;
+#ifdef COLYSEUS_DEBUG
+            std::cout << "stepped out (child type decoding)" << std::endl;
+#endif
 
             if (hasChange && this->onChange)
             {
@@ -680,20 +704,28 @@ class Schema
                 changes.push_back(dataChange);
             }
         }
-        // std::cout << "stepped out (structure)." << std::endl;
+#ifdef COLYSEUS_DEBUG
+        std::cout << "stepped out (structure)." << std::endl;
+#endif
 
         // trigger onChange callback.
         if (this->onChange)
         {
-            // std::cout << "let's trigger changes!" << std::endl;
+#ifdef COLYSEUS_DEBUG
+            std::cout << "let's trigger changes!" << std::endl;
+#endif
             this->onChange(changes);
         }
 
         if (doesOwnIterator) {
-            // std::cout << "let's delete iterator..." << std::endl;
+#ifdef COLYSEUS_DEBUG
+            std::cout << "let's delete iterator..." << std::endl;
+#endif
             delete it;
         }
-        // std::cout << "end of decode()" << std::endl;
+#ifdef COLYSEUS_DEBUG
+        std::cout << "end of decode()" << std::endl;
+#endif
     }
 
   protected:

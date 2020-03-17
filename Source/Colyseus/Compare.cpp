@@ -17,11 +17,13 @@ PatchObject::PatchObject(std::vector<std::string> path,std::string op, msgpack::
 
 bool Compare::containsKey(msgpack::object_map map, msgpack::object_kv key)
 {
-    //        std::cout << "======================setState=======================" << std::endl;
-    //        std::cout << map.ptr  << std::endl;
-    //        std::cout << key.key  << std::endl;
-    //        std::cout << key.val  << std::endl;
-    //        std::cout << "========================================================" << std::endl;
+#ifdef COLYSEUS_DEBUG
+    std::cout << "======================setState=======================" << std::endl;
+    std::cout << map.ptr  << std::endl;
+    std::cout << key.key  << std::endl;
+    std::cout << key.val  << std::endl;
+    std::cout << "========================================================" << std::endl;
+#endif
 
     for(int i = 0 ; i < map.size; i++)
     {
@@ -59,10 +61,13 @@ void Compare::generate (
     std::vector<std::string> path
 ) {
 
-    // std::cout << "----------------------- Compare::generate ------------------------" << std::endl;
-    // std::cout << "OLD: " << mirrorPacked  << std::endl;
-    // std::cout << "NEW: "  << objPacked  << std::endl;
-    // std::cout << "------------------------------------------------------------------" << std::endl;
+#ifdef COLYSEUS_DEBUG
+    std::cout << "----------------------- Compare::generate ------------------------" << std::endl;
+    std::cout << "OLD: " << mirrorPacked  << std::endl;
+    std::cout << "NEW: "  << objPacked  << std::endl;
+    std::cout << "------------------------------------------------------------------" << std::endl;
+#endif
+
     msgpack::object_map mirror = mirrorPacked.via.map;
     msgpack::object_map obj = objPacked.via.map;
     
