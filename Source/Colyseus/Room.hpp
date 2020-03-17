@@ -126,7 +126,9 @@ protected:
         size_t len = data.len;
         size_t offset = 0;
         const char *bytes = data.bytes;
+#ifdef COLYSEUS_DEBUG
         std::cout << "onMessage bytes =>" << bytes << std::endl;
+#endif
 
         unsigned char code = bytes[offset++];
 
@@ -134,9 +136,9 @@ protected:
         {
             case Protocol::JOIN_ROOM:
             {
-// #ifdef COLYSEUS_DEBUG
+#ifdef COLYSEUS_DEBUG
                 std::cout << "Colyseus.Room: join error" << std::endl;
-// #endif
+#endif
 
                 serializerId = colyseus_readstr(bytes, offset);
                 offset += serializerId.length() + 1;
@@ -157,9 +159,9 @@ protected:
             }
             case Protocol::JOIN_ERROR:
             {
-// #ifdef COLYSEUS_DEBUG
+#ifdef COLYSEUS_DEBUG
                 std::cout << "Colyseus.Room: join error" << std::endl;
-// #endif
+#endif
                 std::string message = colyseus_readstr(bytes, 1);
 
                 if (this->onError)
@@ -170,29 +172,29 @@ protected:
             }
             case Protocol::LEAVE_ROOM:
             {
-// #ifdef COLYSEUS_DEBUG
+#ifdef COLYSEUS_DEBUG
                 std::cout << "Colyseus.Room: LEAVE_ROOM" << std::endl;
-// #endif
+#endif
                 this->leave();
 
                 break;
             }
             case Protocol::ROOM_DATA:
             {
-// #ifdef COLYSEUS_DEBUG
+#ifdef COLYSEUS_DEBUG
                 std::cout << "Colyseus.Room: ROOM_DATA" << std::endl;
-// #endif
+#endif
                 if (this->onMessage)
                 {
 
                     msgpack::object_handle oh = msgpack::unpack(bytes, len, offset);
                     msgpack::object data = oh.get();
 
-// #ifdef COLYSEUS_DEBUG
+#ifdef COLYSEUS_DEBUG
                     std::cout << "-------------------Colyseus:onMessage------------------------" << std::endl;
                     std::cout << data << std::endl;
                     std::cout << "-------------------------------------------------------------" << std::endl;
-// #endif
+#endif
 
                     this->onMessage(data);
                 }
@@ -200,17 +202,17 @@ protected:
             }
             case Protocol::ROOM_STATE:
             {
-// #ifdef COLYSEUS_DEBUG
+#ifdef COLYSEUS_DEBUG
                 std::cout << "Colyseus.Room: ROOM_STATE" << std::endl;
-// #endif
+#endif
                 this->setState(bytes, offset, len);
                 break;
             }
             case Protocol::ROOM_STATE_PATCH:
             {
-// #ifdef COLYSEUS_DEBUG
+#ifdef COLYSEUS_DEBUG
                 std::cout << "Colyseus.Room: ROOM_STATE_PATCH" << std::endl;
-// #endif
+#endif
                 this->applyPatch(bytes, offset, len);
 
                 break;
