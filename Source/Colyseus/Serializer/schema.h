@@ -40,7 +40,7 @@ enum class SPEC : unsigned char
 
 struct Iterator
 {
-    int offset = 0;
+    size_t offset = 0;
 };
 
 // template <typename T>

@@ -18,8 +18,6 @@
 		1B47A8B021EE483B00C61FD6 /* DeltaContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B47A8A121EE483A00C61FD6 /* DeltaContainer.cpp */; };
 		1BBD8F3521F11B3E008DF6C2 /* Compare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8F2821F11B3E008DF6C2 /* Compare.cpp */; };
 		1BBD8F3621F11B3E008DF6C2 /* Compare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8F2821F11B3E008DF6C2 /* Compare.cpp */; };
-		1BBD8F3D21F11B3E008DF6C2 /* Protocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8F2F21F11B3E008DF6C2 /* Protocol.cpp */; };
-		1BBD8F3E21F11B3E008DF6C2 /* Protocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8F2F21F11B3E008DF6C2 /* Protocol.cpp */; };
 		1BBD8F3F21F11B3E008DF6C2 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8F3021F11B3E008DF6C2 /* Connection.cpp */; };
 		1BBD8F4021F11B3E008DF6C2 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD8F3021F11B3E008DF6C2 /* Connection.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -798,7 +796,6 @@
 		1BBD8F2721F11B3E008DF6C2 /* Connection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Connection.hpp; sourceTree = "<group>"; };
 		1BBD8F2821F11B3E008DF6C2 /* Compare.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Compare.cpp; sourceTree = "<group>"; };
 		1BBD8F2B21F11B3E008DF6C2 /* Room.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Room.hpp; sourceTree = "<group>"; };
-		1BBD8F2F21F11B3E008DF6C2 /* Protocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Protocol.cpp; sourceTree = "<group>"; };
 		1BBD8F3021F11B3E008DF6C2 /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
 		1BBD8F3221F11B3E008DF6C2 /* Compare.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Compare.hpp; sourceTree = "<group>"; };
 		1BBD8F3321F11B3E008DF6C2 /* Client.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Client.hpp; sourceTree = "<group>"; };
@@ -2273,7 +2270,6 @@
 				1BBD8F3221F11B3E008DF6C2 /* Compare.hpp */,
 				1BBD8F2821F11B3E008DF6C2 /* Compare.cpp */,
 				1BBD8F2621F11B3E008DF6C2 /* Protocol.hpp */,
-				1BBD8F2F21F11B3E008DF6C2 /* Protocol.cpp */,
 			);
 			path = Colyseus;
 			sourceTree = "<group>";
@@ -2504,7 +2500,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BBD8F3D21F11B3E008DF6C2 /* Protocol.cpp in Sources */,
 				1AF87B781F6F77F7007BE51C /* AppController.mm in Sources */,
 				1BBD8F3F21F11B3E008DF6C2 /* Connection.cpp in Sources */,
 				1BBD8F3521F11B3E008DF6C2 /* Compare.cpp in Sources */,
@@ -2525,7 +2520,6 @@
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				1BBD8F3621F11B3E008DF6C2 /* Compare.cpp in Sources */,
 				1BBD8F4021F11B3E008DF6C2 /* Connection.cpp in Sources */,
-				1BBD8F3E21F11B3E008DF6C2 /* Protocol.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

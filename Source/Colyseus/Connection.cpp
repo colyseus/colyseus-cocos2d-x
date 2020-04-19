@@ -66,6 +66,22 @@ void Connection::onClose(WebSocket* ws)
 void Connection::onError(WebSocket* ws, const WebSocket::ErrorCode& error)
 {
     if (this->_onError) {
-        this->_onError(error);
+        std::string message = "";
+
+        switch (error)
+        {
+        case WebSocket::ErrorCode::CONNECTION_FAILURE:
+            message = "CONNECTION_FAILURE";
+            break;
+        case WebSocket::ErrorCode::TIME_OUT:
+            message = "TIME_OUT";
+            break;
+        case WebSocket::ErrorCode::UNKNOWN:
+            message = "UNKNOWN";
+            break;
+        }
+
+        // TODO
+        this->_onError(0, message);
     }
 }

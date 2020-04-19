@@ -129,11 +129,25 @@ void HelloWorld::onConnectToServer()
 
         room = _room;
 
-        room->onMessage = CC_CALLBACK_1(HelloWorld::onRoomMessage, this);
+        room->onMessage(0, [this](const msgpack::object &message) -> void {
+            std::cout << "--------------------------------------" << std::endl;
+            std::cout << "0 message type:" << std::endl;
+            std::cout << message << std::endl;
+            std::cout << "--------------------------------------" << std::endl;
+        });
+
+        room->onMessage("hello", [this](const msgpack::object &message) -> void {
+            std::cout << "--------------------------------------" << std::endl;
+            std::cout << "'hello' message type:" << std::endl;
+            std::cout << message << std::endl;
+            std::cout << "--------------------------------------" << std::endl;
+        });
+
+        // room->onMessage = CC_CALLBACK_1(HelloWorld::onRoomMessage, this);
         room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
 
-        room->onError = [this](const std::string &message) -> void {
-            std::cout << "ROOM ERROR => " << message.c_str() << std::endl;
+        room->onError = [this](const int& code, const std::string &message) -> void {
+            std::cout << "ROOM ERROR => " << code << " => " << message.c_str() << std::endl;
         };
 
         room->onLeave = [this]() -> void {

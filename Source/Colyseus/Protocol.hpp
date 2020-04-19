@@ -1,8 +1,6 @@
 #ifndef Protocol_hpp
 #define Protocol_hpp
 
-char* colyseus_readstr(const char* bytes, int offset);
-
 enum class Protocol : int {
     // Room-related (10~19)
     JOIN_ROOM = 10,

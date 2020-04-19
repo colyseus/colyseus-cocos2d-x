@@ -112,7 +112,7 @@ protected:
 
                 std::string processId = json["room"]["processId"].get<std::string>();
 
-                room->onError = [callback](std::string message) {
+                room->onError = [callback](const int &code, const std::string &message) {
                     callback(message, nullptr);
                 };
 

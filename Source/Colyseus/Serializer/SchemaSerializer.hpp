@@ -21,17 +21,17 @@ public:
     S* state;
     S* getState() { return state; };
 
-    void setState(const char* bytes, int offset, int length) {
+    void setState(unsigned const char* bytes, int offset, int length) {
         it->offset = offset;
-        ((colyseus::schema::Schema*)state)->decode(reinterpret_cast<unsigned const char *>(bytes), length, it);
+        ((colyseus::schema::Schema*)state)->decode(bytes, length, it);
     }
 
-    void patch(const char* bytes, int offset, int length) {
+    void patch(unsigned const char* bytes, int offset, int length) {
         it->offset = offset;
-        ((colyseus::schema::Schema*)state)->decode(reinterpret_cast<unsigned const char *>(bytes), length, it);
+        ((colyseus::schema::Schema*)state)->decode(bytes, length, it);
     }
 
-    void handshake(const char* bytes, int offset) {
+    void handshake(unsigned const char* bytes, int offset) {
         // TODO: validate incoming schema with Reflection.
     }
 
