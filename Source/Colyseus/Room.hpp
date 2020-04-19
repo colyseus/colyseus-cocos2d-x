@@ -65,19 +65,16 @@ public:
         }
     }
 
-    inline void send (const int32_t& type)
+    inline void send (unsigned char type)
     {
-        // msgpack::sbuffer buffer;
-        // msgpack::packer<msgpack::sbuffer> pk(&buffer);
-        // msgpack::type::make_define_array(args...).msgpack_pack(pk);
-        // _ws->send((unsigned char *)buffer.data(), buffer.size());
-
-        //this->connection->send((int)Protocol::ROOM_DATA, message);
+        unsigned char message[2] = {(int)Protocol::ROOM_DATA, type};
+        this->connection->send(message, sizeof(message));
     }
 
     template <typename T>
     inline void send (const int32_t& type, T message)
     {
+        std::cout << "EMPTY SEND! int/msg" << std::endl;
         // msgpack::sbuffer buffer;
         // msgpack::packer<msgpack::sbuffer> pk(&buffer);
         // msgpack::type::make_define_array(args...).msgpack_pack(pk);
@@ -88,24 +85,26 @@ public:
 
     inline void send (const std::string& type)
     {
-        //this->connection->send((int)Protocol::ROOM_DATA, message);
+        const char* typeBytes = type.c_str();
+
+        unsigned char bytesToSend[strlen(typeBytes) + 2];
+        bytesToSend[0] = (int) Protocol::ROOM_DATA;
+        bytesToSend[1] = type.size() | 0xa0;
+        memcpy(bytesToSend + 2, typeBytes, sizeof(typeBytes));
+
+        this->connection->send(bytesToSend, sizeof(bytesToSend));
     }
 
     template <typename T>
     inline void send (const std::string& type, T message)
     {
+        std::cout << "EMPTY SEND! string/msg" << std::endl;
         // msgpack::sbuffer buffer;
         // msgpack::packer<msgpack::sbuffer> pk(&buffer);
         // msgpack::type::make_define_array(args...).msgpack_pack(pk);
         // _ws->send((unsigned char *)buffer.data(), buffer.size());
 
         //this->connection->send((int)Protocol::ROOM_DATA, message);
-    }
-
-    template <typename T>
-    inline void send (T data)
-    {
-        //this->connection->send((int)Protocol::ROOM_DATA, data);
     }
 
     inline Room<S>* onMessage(int type, std::function<void(const msgpack::object &)> callback)

@@ -129,6 +129,12 @@ void HelloWorld::onConnectToServer()
 
         room = _room;
 
+        // Sending a message by number type, without payload
+        room->send(0);
+
+        // Sending a message by string type, without payload
+        room->send("hello");
+
         room->onMessage(0, [this](const msgpack::object &message) -> void {
             std::cout << "--------------------------------------" << std::endl;
             std::cout << "0 message type:" << std::endl;
@@ -197,9 +203,4 @@ void HelloWorld::onRoomStateChange(State* state)
 {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "HelloWorld::onRoomStateChange" << std::endl;
-
-    // send command to move x
-    auto data = std::map<std::string, float>();
-    data.insert(std::make_pair("x", 0.1));
-    room->send(data);
 }
