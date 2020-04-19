@@ -13,7 +13,7 @@
 #include "zone.h"
 #include <stdlib.h>
 
-#ifndef _WIN32
+#if defined(unix) || defined(__unix) || defined(__linux__) || defined(__APPLE__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__QNX__) || defined(__QNXTO__) || defined(__HAIKU__)
 #include <sys/uio.h>
 #else
 struct iovec {
@@ -138,4 +138,3 @@ static inline size_t msgpack_vrefbuffer_veclen(const msgpack_vrefbuffer* vref)
 #endif
 
 #endif /* msgpack/vrefbuffer.h */
-

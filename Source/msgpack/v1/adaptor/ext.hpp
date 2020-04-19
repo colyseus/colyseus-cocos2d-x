@@ -43,10 +43,10 @@ public:
         return static_cast<int8_t>(m_data[0]);
     }
     const char* data() const {
-        return &m_data[1];
+        return &m_data[0] + 1;
     }
     char* data() {
-        return &m_data[1];
+        return &m_data[0] + 1;
     }
     uint32_t size() const {
         return static_cast<uint32_t>(m_data.size()) - 1;
@@ -104,7 +104,7 @@ struct object_with_zone<msgpack::type::ext> {
         // size limit has already been checked at ext's constructor
         uint32_t size = v.size();
         o.type = msgpack::type::EXT;
-        char* ptr = static_cast<char*>(o.zone.allocate_align(size + 1));
+        char* ptr = static_cast<char*>(o.zone.allocate_align(size + 1, MSGPACK_ZONE_ALIGNOF(char)));
         o.via.ext.ptr = ptr;
         o.via.ext.size = size;
         ptr[0] = static_cast<char>(v.type());
@@ -178,7 +178,7 @@ inline ext::ext(ext_ref const& x) {
     // size limit has already been checked at ext_ref's constructor
     m_data.reserve(x.size() + 1);
 
-    m_data.push_back(x.type());
+    m_data.push_back(static_cast<char>(x.type()));
     m_data.insert(m_data.end(), x.data(), x.data() + x.size());
 }
 

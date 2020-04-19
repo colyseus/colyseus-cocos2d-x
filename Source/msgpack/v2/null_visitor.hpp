@@ -10,8 +10,7 @@
 #ifndef MSGPACK_V2_NULL_VISITOR_HPP
 #define MSGPACK_V2_NULL_VISITOR_HPP
 
-#include "msgpack/versioning.hpp"
-#include "msgpack/cpp_config.hpp"
+#include "msgpack/v2/null_visitor_decl.hpp"
 
 namespace msgpack {
 
@@ -32,7 +31,10 @@ struct null_visitor {
     bool visit_negative_integer(int64_t /*v*/) {
         return true;
     }
-    bool visit_float(double /*v*/) {
+    bool visit_float32(float /*v*/) {
+        return true;
+    }
+    bool visit_float64(double /*v*/) {
         return true;
     }
     bool visit_str(const char* /*v*/, uint32_t /*size*/) {
