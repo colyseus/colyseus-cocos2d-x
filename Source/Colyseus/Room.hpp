@@ -271,21 +271,6 @@ protected:
                     std::cout << "Room::onMessage() missing for type => " << type << std::endl;
                 }
 
-                //                 if (this->onMessage)
-                //                 {
-
-                //                     msgpack::object_handle oh = msgpack::unpack(bytes, len, offset);
-                //                     msgpack::object data = oh.get();
-
-                // #ifdef COLYSEUS_DEBUG
-                //                     std::cout << "-------------------Colyseus:onMessage------------------------" << std::endl;
-                //                     std::cout << data << std::endl;
-                //                     std::cout << "-------------------------------------------------------------" << std::endl;
-                // #endif
-
-                //                     this->onMessage(data);
-                //                 }
-
                 break;
             }
             case Protocol::ROOM_STATE:
