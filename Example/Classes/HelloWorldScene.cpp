@@ -130,9 +130,9 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
-    client->joinOrCreate<State>("state_handler", {}, [=](const std::string &err, Room<State>* _room) {
-        if (err != "") {
-            std::cout << "JOIN ERROR! " << err << std::endl;
+    client->joinOrCreate<State>("state_handler", {}, [=](MatchMakeError *err, Room<State>* _room) {
+        if (err) {
+            std::cout << "JOIN ERROR! CODE: " << err->code << ", MESSAGE: " << err->message << std::endl;
             return;
         }
 

@@ -27,6 +27,20 @@ using namespace cocos2d::network;
 
 typedef nlohmann::json JoinOptions;
 
+class MatchMakeError
+{
+public:
+    MatchMakeError(int _code, std::string _message)
+    {
+        code = _code;
+        message = _message;
+    }
+    ~MatchMakeError() {}
+
+    int code;
+    std::string message;
+};
+
 class Client : public cocos2d::Ref
 {
 public:
@@ -42,31 +56,31 @@ public:
     ~Client() {}
 
     template <typename S>
-    inline void joinOrCreate(const std::string roomName, JoinOptions options, std::function<void(const std::string &, Room<S> *)> callback)
+    inline void joinOrCreate(const std::string roomName, JoinOptions options, std::function<void(MatchMakeError *, Room<S> *)> callback)
     {
         this->createMatchMakeRequest<S>("joinOrCreate", roomName, options, callback);
     }
 
     template <typename S>
-    inline void join(const std::string roomName, JoinOptions options, std::function<void(const std::string &, Room<S> *)> callback)
+    inline void join(const std::string roomName, JoinOptions options, std::function<void(MatchMakeError *, Room<S> *)> callback)
     {
         this->createMatchMakeRequest<S>("join", roomName, options, callback);
     }
 
     template <typename S>
-    inline void create(const std::string roomName, JoinOptions options, std::function<void(const std::string &, Room<S> *)> callback)
+    inline void create(const std::string roomName, JoinOptions options, std::function<void(MatchMakeError *, Room<S> *)> callback)
     {
         this->createMatchMakeRequest<S>("create", roomName, options, callback);
     }
 
     template <typename S>
-    inline void joinById(const std::string roomId, JoinOptions options, std::function<void(const std::string &, Room<S> *)> callback)
+    inline void joinById(const std::string roomId, JoinOptions options, std::function<void(MatchMakeError *, Room<S> *)> callback)
     {
         this->createMatchMakeRequest<S>("joinById", roomId, options, callback);
     }
 
     template <typename S>
-    inline void reconnect(const std::string roomId, const std::string sessionId, std::function<void(const std::string &, Room<S> *)> &callback)
+    inline void reconnect(const std::string roomId, const std::string sessionId, std::function<void(MatchMakeError *, Room<S> *)> &callback)
     {
         this->createMatchMakeRequest<S>("joinById", roomId, {{"sessionId", sessionId}}, callback);
     }
@@ -77,7 +91,7 @@ protected:
         std::string method,
         std::string roomName,
         JoinOptions options,
-        std::function<void(std::string, Room<S> *)> callback
+        std::function<void(MatchMakeError *, Room<S> *)> callback
     )
     {
         HttpRequest *req = new (std ::nothrow) HttpRequest();
@@ -97,7 +111,9 @@ protected:
         req->setResponseCallback( [this, roomName, callback] (network::HttpClient* client, network::HttpResponse* response) {
             if (!response)
             {
-                callback("cocos2d::network::HttpClient => no response", nullptr);
+                MatchMakeError *error = new MatchMakeError(0, "cocos2d::network::HttpClient => no response");
+                callback(error, nullptr);
+                delete error;
                 return;
             }
 
@@ -106,6 +122,18 @@ protected:
                 std::string json_string(data->begin(), data->end());
                 auto json = nlohmann::json::parse(json_string);
 
+                //
+                // Server responded with error.
+                //
+                if (json["error"].is_string())
+                {
+                    MatchMakeError *error = new MatchMakeError(json["code"].get<int>(), json["error"].get<std::string>());
+                    callback(error, nullptr);
+                    delete error;
+                    return;
+                }
+
+
                 Room<S> *room = new Room<S>(roomName);
                 room->id = json["room"]["roomId"].get<std::string>();
                 room->sessionId = json["sessionId"].get<std::string>();
@@ -113,18 +141,22 @@ protected:
                 std::string processId = json["room"]["processId"].get<std::string>();
 
                 room->onError = [callback](const int &code, const std::string &message) {
-                    callback(message, nullptr);
+                    MatchMakeError *error = new MatchMakeError(code, message);
+                    callback(error, nullptr);
+                    delete error;
                 };
 
                 room->onJoin = [room, callback]() {
                     room->onError = nullptr;
-                    callback("", room);
+                    callback(nullptr, room);
                 };
 
                 room->connect(this->createConnection(processId + "/" + room->id + "?sessionId=" + room->sessionId));
             }
             else {
-                callback(("Error " + std::to_string(response->getResponseCode()) + " in request"), nullptr);
+                MatchMakeError *error = new MatchMakeError((int)response->getResponseCode(), "server error");
+                callback(error, nullptr);
+                delete error;
             }
         });
 
