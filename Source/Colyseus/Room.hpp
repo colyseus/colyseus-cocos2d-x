@@ -74,20 +74,24 @@ public:
     template <typename T>
     inline void send (const int32_t& type, T message)
     {
-        std::cout << "EMPTY SEND! int/msg" << std::endl;
-        // msgpack::sbuffer buffer;
-        // msgpack::packer<msgpack::sbuffer> pk(&buffer);
-        // msgpack::type::make_define_array(args...).msgpack_pack(pk);
-        // _ws->send((unsigned char *)buffer.data(), buffer.size());
+        std::stringstream ss;
+        msgpack::pack(ss, message);
 
-        //this->connection->send((int)Protocol::ROOM_DATA, message);
+        std::string encoded = ss.str();
+
+        unsigned char bytesToSend[encoded.length() + 2];
+        bytesToSend[0] = (int) Protocol::ROOM_DATA;
+        bytesToSend[1] = type;
+        memcpy(bytesToSend + 2, encoded.c_str(), encoded.length());
+
+        this->connection->send(bytesToSend, sizeof(bytesToSend));
     }
 
     inline void send (const std::string& type)
     {
         const char* typeBytes = type.c_str();
 
-        unsigned char bytesToSend[strlen(typeBytes) + 2];
+        unsigned char bytesToSend[2 + strlen(typeBytes)];
         bytesToSend[0] = (int) Protocol::ROOM_DATA;
         bytesToSend[1] = type.size() | 0xa0;
         memcpy(bytesToSend + 2, typeBytes, sizeof(typeBytes));
@@ -98,13 +102,20 @@ public:
     template <typename T>
     inline void send (const std::string& type, T message)
     {
-        std::cout << "EMPTY SEND! string/msg" << std::endl;
-        // msgpack::sbuffer buffer;
-        // msgpack::packer<msgpack::sbuffer> pk(&buffer);
-        // msgpack::type::make_define_array(args...).msgpack_pack(pk);
-        // _ws->send((unsigned char *)buffer.data(), buffer.size());
+        const char* typeBytes = type.c_str();
 
-        //this->connection->send((int)Protocol::ROOM_DATA, message);
+        std::stringstream ss;
+        msgpack::pack(ss, message);
+
+        std::string encoded = ss.str();
+
+        unsigned char bytesToSend[2 + strlen(typeBytes) + encoded.length()];
+        bytesToSend[0] = (int) Protocol::ROOM_DATA;
+        bytesToSend[1] = type.size() | 0xa0;
+        memcpy(bytesToSend + 2, typeBytes, sizeof(typeBytes));
+        memcpy(bytesToSend + 2 + strlen(typeBytes), encoded.c_str(), encoded.length());
+
+        this->connection->send(bytesToSend, sizeof(bytesToSend));
     }
 
     inline Room<S>* onMessage(int type, std::function<void(const msgpack::object &)> callback)

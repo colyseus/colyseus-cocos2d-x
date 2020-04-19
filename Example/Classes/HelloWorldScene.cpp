@@ -36,6 +36,15 @@ Room<State>* room;
 
 Map<std::string, Sprite*> players;
 
+struct MessagePayload
+{
+    std::string str;
+    int num;
+    MSGPACK_DEFINE_MAP(str, num); // encode struct as map (fields + values)
+    // MSGPACK_DEFINE(str, num); // encode struct as array (only values)
+};
+
+
 Scene* HelloWorld::createScene()
 {
     return HelloWorld::create();
@@ -129,11 +138,17 @@ void HelloWorld::onConnectToServer()
 
         room = _room;
 
+        MessagePayload payload;
+        payload.str = "hello";
+        payload.num = 10;
+
         // Sending a message by number type, without payload
         room->send(0);
+        room->send(0, payload);
 
         // Sending a message by string type, without payload
         room->send("hello");
+        room->send("hello", payload);
 
         room->onMessage(0, [this](const msgpack::object &message) -> void {
             std::cout << "--------------------------------------" << std::endl;
