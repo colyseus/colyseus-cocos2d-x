@@ -10,8 +10,14 @@
 #ifndef MSGPACK_V2_PARSE_HPP
 #define MSGPACK_V2_PARSE_HPP
 
+#if MSGPACK_DEFAULT_API_VERSION >= 2
+
+#include <cstddef>
+
+#include "msgpack/unpack_define.h"
+#include "msgpack/parse_return.hpp"
+#include "msgpack/unpack_exception.hpp"
 #include "msgpack/unpack_decl.hpp"
-#include "msgpack/v2/create_object_visitor.hpp"
 
 namespace msgpack {
 
@@ -20,6 +26,10 @@ MSGPACK_API_VERSION_NAMESPACE(v2) {
 /// @endcond
 
 namespace detail {
+
+using v1::detail::fix_tag;
+using v1::detail::value;
+using v1::detail::load;
 
 template <typename VisitorHolder>
 class context {
@@ -61,27 +71,27 @@ private:
         ++m_current;
         if (size == 0) {
             if (!sv(size)) {
-                off = m_current - m_start;
+                off = static_cast<std::size_t>(m_current - m_start);
                 return PARSE_STOP_VISITOR;
             }
             if (!ev()) {
-                off = m_current - m_start;
+                off = static_cast<std::size_t>(m_current - m_start);
                 return PARSE_STOP_VISITOR;
             }
             parse_return ret = m_stack.consume(holder());
             if (ret != PARSE_CONTINUE) {
-                off = m_current - m_start;
+                off = static_cast<std::size_t>(m_current - m_start);
                 return ret;
             }
         }
         else {
             if (!sv(size)) {
-                off = m_current - m_start;
+                off = static_cast<std::size_t>(m_current - m_start);
                 return PARSE_STOP_VISITOR;
             }
             parse_return ret = m_stack.push(holder(), sv.type(), static_cast<uint32_t>(size));
             if (ret != PARSE_CONTINUE) {
-                off = m_current - m_start;
+                off = static_cast<std::size_t>(m_current - m_start);
                 return ret;
             }
         }
@@ -92,16 +102,14 @@ private:
     parse_return after_visit_proc(bool visit_result, std::size_t& off) {
         ++m_current;
         if (!visit_result) {
-            off = m_current - m_start;
+            off = static_cast<std::size_t>(m_current - m_start);
             return PARSE_STOP_VISITOR;
         }
         parse_return ret = m_stack.consume(holder());
-        if (ret == PARSE_CONTINUE) {
-            m_cs = MSGPACK_CS_HEADER;
+        if (ret != PARSE_CONTINUE) {
+            off = static_cast<std::size_t>(m_current - m_start);
         }
-        else {
-            off = m_current - m_start;
-        }
+        m_cs = MSGPACK_CS_HEADER;
         return ret;
     }
 
@@ -233,10 +241,8 @@ inline parse_return context<VisitorHolder>::execute(const char* data, std::size_
     const char* const pe = data + len;
     const char* n = MSGPACK_NULLPTR;
 
-    msgpack::object obj;
-
     if(m_current == pe) {
-        off = m_current - m_start;
+        off = static_cast<std::size_t>(m_current - m_start);
         return PARSE_CONTINUE;
     }
     bool fixed_trail_again = false;
@@ -318,7 +324,7 @@ inline parse_return context<VisitorHolder>::execute(const char* data, std::size_
                 parse_return upr = after_visit_proc(visret, off);
                 if (upr != PARSE_CONTINUE) return upr;
             } else {
-                off = m_current - m_start;
+                off = static_cast<std::size_t>(m_current - m_start);
                 holder().visitor().parse_error(off - 1, off);
                 return PARSE_PARSE_ERROR;
             }
@@ -330,7 +336,7 @@ inline parse_return context<VisitorHolder>::execute(const char* data, std::size_
                 fixed_trail_again = false;
             }
             if(static_cast<std::size_t>(pe - m_current) < m_trail) {
-                off = m_current - m_start;
+                off = static_cast<std::size_t>(m_current - m_start);
                 return PARSE_CONTINUE;
             }
             n = m_current;
@@ -341,7 +347,7 @@ inline parse_return context<VisitorHolder>::execute(const char* data, std::size_
             case MSGPACK_CS_FLOAT: {
                 union { uint32_t i; float f; } mem;
                 load<uint32_t>(mem.i, n);
-                bool visret = holder().visitor().visit_float(mem.f);
+                bool visret = holder().visitor().visit_float32(mem.f);
                 parse_return upr = after_visit_proc(visret, off);
                 if (upr != PARSE_CONTINUE) return upr;
             } break;
@@ -354,7 +360,7 @@ inline parse_return context<VisitorHolder>::execute(const char* data, std::size_
                 // https://github.com/msgpack/msgpack-perl/pull/1
                 mem.i = (mem.i & 0xFFFFFFFFUL) << 32UL | (mem.i >> 32UL);
 #endif
-                bool visret = holder().visitor().visit_float(mem.f);
+                bool visret = holder().visitor().visit_float64(mem.f);
                 parse_return upr = after_visit_proc(visret, off);
                 if (upr != PARSE_CONTINUE) return upr;
             } break;
@@ -600,14 +606,14 @@ inline parse_return context<VisitorHolder>::execute(const char* data, std::size_
                 if (ret != PARSE_CONTINUE) return ret;
             } break;
             default:
-                off = m_current - m_start;
-                holder().visitor().parse_error(n - m_start - 1, n - m_start);
+                off = static_cast<std::size_t>(m_current - m_start);
+                holder().visitor().parse_error(static_cast<std::size_t>(n - m_start - 1), static_cast<std::size_t>(n - m_start));
                 return PARSE_PARSE_ERROR;
             }
         }
     } while(m_current != pe);
 
-    off = m_current - m_start;
+    off = static_cast<std::size_t>(m_current - m_start);
     return PARSE_CONTINUE;
 }
 
@@ -623,11 +629,11 @@ class parser : public detail::context<VisitorHolder> {
 public:
     /// Constructor
     /**
-     * @param referenced If the unpacked object contains reference of the buffer, then set as true, otherwise false.
-     * @param f A judging function that msgpack::object refer to the buffer.
-     * @param user_data This parameter is passed to f.
+     * @param hook The handler that is called when buffer is allocated internally.
+     *             `hook` should be callable with char* parameter.
+     *             `parser` gives a chance to prepare finalizer.
+     *              See https://github.com/msgpack/msgpack-c/wiki/v2_0_cpp_visitor#parse-api
      * @param initial_buffer_size The memory size to allocate when unpacker is constructed.
-     * @param limit The size limit information of msgpack::object.
      *
      */
     parser(ReferencedBufferHook& hook,
@@ -1000,23 +1006,23 @@ inline void parser<VisitorHolder, ReferencedBufferHook>::remove_nonparsed_buffer
 
 template <typename Visitor>
 inline bool parse(const char* data, size_t len, size_t& off, Visitor& v) {
-    parse_return ret = detail::parse_imp(data, len, off, v);
+    parse_return ret = msgpack::detail::parse_imp(data, len, off, v);
     return ret == PARSE_SUCCESS || ret == PARSE_EXTRA_BYTES;
 }
 
 template <typename Visitor>
 inline bool parse(const char* data, size_t len, Visitor& v) {
     std::size_t off = 0;
-    return parse(data, len, off, v);
+    return msgpack::parse(data, len, off, v);
 }
 
 namespace detail {
 
 template <typename Visitor>
-struct parse_helper : context<parse_helper<Visitor> > {
+struct parse_helper : detail::context<parse_helper<Visitor> > {
     parse_helper(Visitor& v):m_visitor(v) {}
     parse_return execute(const char* data, std::size_t len, std::size_t& off) {
-        return context<parse_helper<Visitor> >::execute(data, len, off);
+        return detail::context<parse_helper<Visitor> >::execute(data, len, off);
     }
     Visitor& visitor() const { return m_visitor; }
     Visitor& m_visitor;
@@ -1059,5 +1065,6 @@ parse_imp(const char* data, size_t len, size_t& off, Visitor& v) {
 
 }  // namespace msgpack
 
+#endif // MSGPACK_DEFAULT_API_VERSION >= 2
 
 #endif // MSGPACK_V2_PARSE_HPP

@@ -38,6 +38,11 @@
 #endif
 #endif
 
+#if defined(_KERNEL_MODE)
+#undef  assert
+#define assert NT_ASSERT
+#endif
+
 msgpack_unpack_struct_decl(_stack) {
     msgpack_unpack_object obj;
     size_t count;
@@ -236,6 +241,7 @@ msgpack_unpack_func(int, _execute)(msgpack_unpack_struct(_context)* ctx, const c
 
             _fixed_trail_again:
                 ++p;
+                // fallthrough
 
             default:
                 if((size_t)(pe - p) < trail) { goto _out; }

@@ -10413,193 +10413,193 @@ inline tuple<> make_tuple()
 /// @cond
 
 template <typename A0>
-inline tuple<A0> make_tuple(typename tuple_type<A0>::transparent_reference a0)
+tuple<A0> make_tuple(A0 const& a0)
 {
     return tuple<A0>(a0);
 }
 
 template <typename A0, typename A1>
-inline tuple<A0, A1> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1)
+tuple<A0, A1> make_tuple(A0 const& a0, A1 const& a1)
 {
     return tuple<A0, A1>(a0, a1);
 }
 
 template <typename A0, typename A1, typename A2>
-inline tuple<A0, A1, A2> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2)
+tuple<A0, A1, A2> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2)
 {
     return tuple<A0, A1, A2>(a0, a1, a2);
 }
 
 template <typename A0, typename A1, typename A2, typename A3>
-inline tuple<A0, A1, A2, A3> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3)
+tuple<A0, A1, A2, A3> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3)
 {
     return tuple<A0, A1, A2, A3>(a0, a1, a2, a3);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4>
-inline tuple<A0, A1, A2, A3, A4> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4)
+tuple<A0, A1, A2, A3, A4> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4)
 {
     return tuple<A0, A1, A2, A3, A4>(a0, a1, a2, a3, a4);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
-inline tuple<A0, A1, A2, A3, A4, A5> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5)
+tuple<A0, A1, A2, A3, A4, A5> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5)
 {
     return tuple<A0, A1, A2, A3, A4, A5>(a0, a1, a2, a3, a4, a5);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
-inline tuple<A0, A1, A2, A3, A4, A5, A6> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6)
+tuple<A0, A1, A2, A3, A4, A5, A6> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6>(a0, a1, a2, a3, a4, a5, a6);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7>(a0, a1, a2, a3, a4, a5, a6, a7);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8>(a0, a1, a2, a3, a4, a5, a6, a7, a8);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23, typename A24>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23, typename tuple_type<A24>::transparent_reference a24)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23, A24 const& a24)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23, typename A24, typename A25>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23, typename tuple_type<A24>::transparent_reference a24, typename tuple_type<A25>::transparent_reference a25)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23, A24 const& a24, A25 const& a25)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23, typename A24, typename A25, typename A26>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23, typename tuple_type<A24>::transparent_reference a24, typename tuple_type<A25>::transparent_reference a25, typename tuple_type<A26>::transparent_reference a26)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23, A24 const& a24, A25 const& a25, A26 const& a26)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23, typename A24, typename A25, typename A26, typename A27>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23, typename tuple_type<A24>::transparent_reference a24, typename tuple_type<A25>::transparent_reference a25, typename tuple_type<A26>::transparent_reference a26, typename tuple_type<A27>::transparent_reference a27)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23, A24 const& a24, A25 const& a25, A26 const& a26, A27 const& a27)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23, typename A24, typename A25, typename A26, typename A27, typename A28>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23, typename tuple_type<A24>::transparent_reference a24, typename tuple_type<A25>::transparent_reference a25, typename tuple_type<A26>::transparent_reference a26, typename tuple_type<A27>::transparent_reference a27, typename tuple_type<A28>::transparent_reference a28)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23, A24 const& a24, A25 const& a25, A26 const& a26, A27 const& a27, A28 const& a28)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23, typename A24, typename A25, typename A26, typename A27, typename A28, typename A29>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23, typename tuple_type<A24>::transparent_reference a24, typename tuple_type<A25>::transparent_reference a25, typename tuple_type<A26>::transparent_reference a26, typename tuple_type<A27>::transparent_reference a27, typename tuple_type<A28>::transparent_reference a28, typename tuple_type<A29>::transparent_reference a29)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23, A24 const& a24, A25 const& a25, A26 const& a26, A27 const& a27, A28 const& a28, A29 const& a29)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23, typename A24, typename A25, typename A26, typename A27, typename A28, typename A29, typename A30>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23, typename tuple_type<A24>::transparent_reference a24, typename tuple_type<A25>::transparent_reference a25, typename tuple_type<A26>::transparent_reference a26, typename tuple_type<A27>::transparent_reference a27, typename tuple_type<A28>::transparent_reference a28, typename tuple_type<A29>::transparent_reference a29, typename tuple_type<A30>::transparent_reference a30)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23, A24 const& a24, A25 const& a25, A26 const& a26, A27 const& a27, A28 const& a28, A29 const& a29, A30 const& a30)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30);
 }
 
 template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9, typename A10, typename A11, typename A12, typename A13, typename A14, typename A15, typename A16, typename A17, typename A18, typename A19, typename A20, typename A21, typename A22, typename A23, typename A24, typename A25, typename A26, typename A27, typename A28, typename A29, typename A30, typename A31>
-inline tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31> make_tuple(typename tuple_type<A0>::transparent_reference a0, typename tuple_type<A1>::transparent_reference a1, typename tuple_type<A2>::transparent_reference a2, typename tuple_type<A3>::transparent_reference a3, typename tuple_type<A4>::transparent_reference a4, typename tuple_type<A5>::transparent_reference a5, typename tuple_type<A6>::transparent_reference a6, typename tuple_type<A7>::transparent_reference a7, typename tuple_type<A8>::transparent_reference a8, typename tuple_type<A9>::transparent_reference a9, typename tuple_type<A10>::transparent_reference a10, typename tuple_type<A11>::transparent_reference a11, typename tuple_type<A12>::transparent_reference a12, typename tuple_type<A13>::transparent_reference a13, typename tuple_type<A14>::transparent_reference a14, typename tuple_type<A15>::transparent_reference a15, typename tuple_type<A16>::transparent_reference a16, typename tuple_type<A17>::transparent_reference a17, typename tuple_type<A18>::transparent_reference a18, typename tuple_type<A19>::transparent_reference a19, typename tuple_type<A20>::transparent_reference a20, typename tuple_type<A21>::transparent_reference a21, typename tuple_type<A22>::transparent_reference a22, typename tuple_type<A23>::transparent_reference a23, typename tuple_type<A24>::transparent_reference a24, typename tuple_type<A25>::transparent_reference a25, typename tuple_type<A26>::transparent_reference a26, typename tuple_type<A27>::transparent_reference a27, typename tuple_type<A28>::transparent_reference a28, typename tuple_type<A29>::transparent_reference a29, typename tuple_type<A30>::transparent_reference a30, typename tuple_type<A31>::transparent_reference a31)
+tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31> make_tuple(A0 const& a0, A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5, A6 const& a6, A7 const& a7, A8 const& a8, A9 const& a9, A10 const& a10, A11 const& a11, A12 const& a12, A13 const& a13, A14 const& a14, A15 const& a15, A16 const& a16, A17 const& a17, A18 const& a18, A19 const& a19, A20 const& a20, A21 const& a21, A22 const& a22, A23 const& a23, A24 const& a24, A25 const& a25, A26 const& a26, A27 const& a27, A28 const& a28, A29 const& a29, A30 const& a30, A31 const& a31)
 {
     return tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31>(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31);
 }
@@ -13506,7 +13506,7 @@ struct object_with_zone<type::tuple<A0> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*1));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*1, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 1;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13519,7 +13519,7 @@ struct object_with_zone<type::tuple<A0, A1> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*2));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*2, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 2;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13533,7 +13533,7 @@ struct object_with_zone<type::tuple<A0, A1, A2> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*3));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*3, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 3;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13548,7 +13548,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*4));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*4, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 4;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13564,7 +13564,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*5));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*5, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 5;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13581,7 +13581,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*6));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*6, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 6;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13599,7 +13599,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*7));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*7, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 7;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13618,7 +13618,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*8));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*8, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 8;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13638,7 +13638,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*9));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*9, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 9;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13659,7 +13659,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9> > {
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*10));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*10, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 10;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13681,7 +13681,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*11));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*11, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 11;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13704,7 +13704,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*12));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*12, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 12;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13728,7 +13728,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*13));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*13, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 13;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13753,7 +13753,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*14));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*14, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 14;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13779,7 +13779,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*15));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*15, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 15;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13806,7 +13806,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*16));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*16, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 16;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13834,7 +13834,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*17));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*17, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 17;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13863,7 +13863,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*18));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*18, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 18;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13893,7 +13893,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*19));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*19, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 19;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13924,7 +13924,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*20));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*20, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 20;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13956,7 +13956,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*21));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*21, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 21;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -13989,7 +13989,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*22));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*22, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 22;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14023,7 +14023,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*23));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*23, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 23;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14058,7 +14058,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*24));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*24, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 24;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14094,7 +14094,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*25));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*25, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 25;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14131,7 +14131,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*26));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*26, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 26;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14169,7 +14169,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*27));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*27, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 27;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14208,7 +14208,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*28));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*28, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 28;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14248,7 +14248,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*29));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*29, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 29;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14289,7 +14289,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*30));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*30, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 30;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14331,7 +14331,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*31));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*31, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 31;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);
@@ -14374,7 +14374,7 @@ struct object_with_zone<type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
         msgpack::object::with_zone& o,
         const type::tuple<A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31>& v) const {
         o.type = msgpack::type::ARRAY;
-        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*32));
+        o.via.array.ptr = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*32, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         o.via.array.size = 32;
         
         o.via.array.ptr[0] = msgpack::object(v.template get<0>(), o.zone);

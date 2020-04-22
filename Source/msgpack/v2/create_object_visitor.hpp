@@ -12,6 +12,7 @@
 
 #include "msgpack/unpack_decl.hpp"
 #include "msgpack/unpack_exception.hpp"
+#include "msgpack/v2/create_object_visitor_decl.hpp"
 #include "msgpack/v2/null_visitor.hpp"
 
 namespace msgpack {
@@ -84,7 +85,7 @@ public:
         msgpack::object* obj = m_stack.back();
         if(v >= 0) {
             obj->type = msgpack::type::POSITIVE_INTEGER;
-            obj->via.u64 = v;
+            obj->via.u64 = static_cast<uint64_t>(v);
         }
         else {
             obj->type = msgpack::type::NEGATIVE_INTEGER;
@@ -92,9 +93,15 @@ public:
         }
         return true;
     }
-    bool visit_float(double v) {
+    bool visit_float32(float v) {
         msgpack::object* obj = m_stack.back();
-        obj->type = msgpack::type::FLOAT;
+        obj->type = msgpack::type::FLOAT32;
+        obj->via.f64 = v;
+        return true;
+    }
+    bool visit_float64(double v) {
+        msgpack::object* obj = m_stack.back();
+        obj->type = msgpack::type::FLOAT64;
         obj->via.f64 = v;
         return true;
     }
@@ -107,7 +114,7 @@ public:
             set_referenced(true);
         }
         else {
-            char* tmp = static_cast<char*>(zone().allocate_align(size));
+            char* tmp = static_cast<char*>(zone().allocate_align(size, MSGPACK_ZONE_ALIGNOF(char)));
             std::memcpy(tmp, v, size);
             obj->via.str.ptr = tmp;
         }
@@ -123,7 +130,7 @@ public:
             set_referenced(true);
         }
         else {
-            char* tmp = static_cast<char*>(zone().allocate_align(size));
+            char* tmp = static_cast<char*>(zone().allocate_align(size, MSGPACK_ZONE_ALIGNOF(char)));
             std::memcpy(tmp, v, size);
             obj->via.bin.ptr = tmp;
         }
@@ -139,7 +146,7 @@ public:
             set_referenced(true);
         }
         else {
-            char* tmp = static_cast<char*>(zone().allocate_align(size));
+            char* tmp = static_cast<char*>(zone().allocate_align(size, MSGPACK_ZONE_ALIGNOF(char)));
             std::memcpy(tmp, v, size);
             obj->via.ext.ptr = tmp;
         }
@@ -156,12 +163,15 @@ public:
             obj->via.array.ptr = MSGPACK_NULLPTR;
         }
         else {
-            size_t size = num_elements*sizeof(msgpack::object);
-            if (size / sizeof(msgpack::object) != num_elements) {
+
+#if SIZE_MAX == UINT_MAX
+            if (num_elements > SIZE_MAX/sizeof(msgpack::object))
                 throw msgpack::array_size_overflow("array size overflow");
-            }
+#endif // SIZE_MAX == UINT_MAX
+
+            size_t size = num_elements*sizeof(msgpack::object);
             obj->via.array.ptr =
-                static_cast<msgpack::object*>(m_zone->allocate_align(size));
+                static_cast<msgpack::object*>(m_zone->allocate_align(size, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         }
         m_stack.push_back(obj->via.array.ptr);
         return true;
@@ -187,12 +197,14 @@ public:
             obj->via.map.ptr = MSGPACK_NULLPTR;
         }
         else {
-            size_t size = num_kv_pairs*sizeof(msgpack::object_kv);
-            if (size / sizeof(msgpack::object_kv) != num_kv_pairs) {
+
+#if SIZE_MAX == UINT_MAX
+            if (num_kv_pairs > SIZE_MAX/sizeof(msgpack::object_kv))
                 throw msgpack::map_size_overflow("map size overflow");
-            }
+#endif // SIZE_MAX == UINT_MAX
+            size_t size = num_kv_pairs*sizeof(msgpack::object_kv);
             obj->via.map.ptr =
-                static_cast<msgpack::object_kv*>(m_zone->allocate_align(size));
+                static_cast<msgpack::object_kv*>(m_zone->allocate_align(size, MSGPACK_ZONE_ALIGNOF(msgpack::object_kv)));
         }
         m_stack.push_back(reinterpret_cast<msgpack::object*>(obj->via.map.ptr));
         return true;

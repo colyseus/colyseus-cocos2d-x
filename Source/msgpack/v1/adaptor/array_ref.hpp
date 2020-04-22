@@ -10,7 +10,6 @@
 #ifndef MSGPACK_V1_TYPE_ARRAY_REF_HPP
 #define MSGPACK_V1_TYPE_ARRAY_REF_HPP
 
-#include "msgpack/v1/adaptor/array_ref.hpp"
 #include "msgpack/adaptor/check_container_size.hpp"
 #include "msgpack/cpp_config.hpp"
 #include <cstring>
@@ -253,7 +252,7 @@ struct object_with_zone<msgpack::type::array_ref<T> > {
         }
         else {
             uint32_t size = checked_get_container_size(v.size());
-            msgpack::object* p = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*size));
+            msgpack::object* p = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*size, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
             msgpack::object* const pend = p + size;
             o.via.array.ptr = p;
             o.via.array.size = size;
@@ -280,7 +279,7 @@ struct object_with_zone<msgpack::type::array_ref<T[N]> > {
         if (!v.data) { throw msgpack::type_error(); }
         o.type = msgpack::type::ARRAY;
         uint32_t size = checked_get_container_size(v.size());
-        msgpack::object* p = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*size));
+        msgpack::object* p = static_cast<msgpack::object*>(o.zone.allocate_align(sizeof(msgpack::object)*size, MSGPACK_ZONE_ALIGNOF(msgpack::object)));
         msgpack::object* const pend = p + size;
         o.via.array.ptr = p;
         o.via.array.size = size;

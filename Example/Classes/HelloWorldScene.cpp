@@ -36,6 +36,15 @@ Room<State>* room;
 
 Map<std::string, Sprite*> players;
 
+struct MessagePayload
+{
+    std::string str;
+    int num;
+    MSGPACK_DEFINE_MAP(str, num); // encode struct as map (fields + values)
+    // MSGPACK_DEFINE(str, num); // encode struct as array (only values)
+};
+
+
 Scene* HelloWorld::createScene()
 {
     return HelloWorld::create();
@@ -121,19 +130,45 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 void HelloWorld::onConnectToServer()
 {
     log("Colyseus: CONNECTED TO SERVER!");
-    client->joinOrCreate<State>("state_handler", {}, [=](const std::string &err, Room<State>* _room) {
-        if (err != "") {
-            std::cout << "JOIN ERROR! " << err << std::endl;
+    client->joinOrCreate<State>("state_handler", {}, [=](MatchMakeError *err, Room<State>* _room) {
+        if (err) {
+            std::cout << "JOIN ERROR! CODE: " << err->code << ", MESSAGE: " << err->message << std::endl;
             return;
         }
 
         room = _room;
 
-        room->onMessage = CC_CALLBACK_1(HelloWorld::onRoomMessage, this);
+        MessagePayload payload;
+        payload.str = "hello";
+        payload.num = 10;
+
+        // Sending a message by number type, without payload
+        room->send(0);
+        room->send(0, payload);
+
+        // Sending a message by string type, without payload
+        room->send("hello");
+        room->send("hello", payload);
+
+        room->onMessage(0, [this](const msgpack::object &message) -> void {
+            std::cout << "--------------------------------------" << std::endl;
+            std::cout << "0 message type:" << std::endl;
+            std::cout << message << std::endl;
+            std::cout << "--------------------------------------" << std::endl;
+        });
+
+        room->onMessage("hello", [this](const msgpack::object &message) -> void {
+            std::cout << "--------------------------------------" << std::endl;
+            std::cout << "'hello' message type:" << std::endl;
+            std::cout << message << std::endl;
+            std::cout << "--------------------------------------" << std::endl;
+        });
+
+        // room->onMessage = CC_CALLBACK_1(HelloWorld::onRoomMessage, this);
         room->onStateChange = CC_CALLBACK_1(HelloWorld::onRoomStateChange, this);
 
-        room->onError = [this](const std::string &message) -> void {
-            std::cout << "ROOM ERROR => " << message.c_str() << std::endl;
+        room->onError = [this](const int& code, const std::string &message) -> void {
+            std::cout << "ROOM ERROR => " << code << " => " << message.c_str() << std::endl;
         };
 
         room->onLeave = [this]() -> void {
@@ -183,9 +218,4 @@ void HelloWorld::onRoomStateChange(State* state)
 {
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "HelloWorld::onRoomStateChange" << std::endl;
-
-    // send command to move x
-    auto data = std::map<std::string, float>();
-    data.insert(std::make_pair("x", 0.1));
-    room->send(data);
 }

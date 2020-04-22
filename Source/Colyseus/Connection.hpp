@@ -35,21 +35,12 @@ public:
     std::function<void()> _onOpen;
     std::function<void()> _onClose;
     std::function<void(const WebSocket::Data&)> _onMessage;
-    std::function<void(const WebSocket::ErrorCode&)> _onError;
+    std::function<void(const int32_t&, const std::string&)> _onError;
 
     // Properties
     std::string endpoint;
 
-    template <typename... Args>
-    inline void send(Args... args)
-    {
-        msgpack::sbuffer buffer;
-        msgpack::packer<msgpack::sbuffer> pk(&buffer);
-        msgpack::type::make_define_array(args...).msgpack_pack(pk);
-        _ws->send((unsigned char *)buffer.data(), buffer.size());
-    }
-
-    inline void send(unsigned char *buffer,unsigned int size)
+    inline void send(const unsigned char *buffer, unsigned int size)
     {
         _ws->send(buffer, size);
     }
