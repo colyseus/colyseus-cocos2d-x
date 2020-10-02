@@ -79,11 +79,30 @@ inline bool IsLittleEndian()
 
 inline string decodeString(unsigned const char bytes[], Iterator *it)
 {
-    auto str_size = (bytes[it->offset] & 0x1f) + 1;
-    char *str = new char[str_size];
-    std::memcpy(str, bytes + it->offset + 1, str_size);
-    str[str_size - 1] = '\0'; // endl
-    it->offset += str_size;
+    unsigned char prefix = bytes[it->offset++];
+    unsigned int length = 0;
+
+    if (prefix < 0xc0)
+    {
+        length = prefix & 0x1f;
+    }
+    else if (prefix == 0xd9)
+    {
+        length = decodeUint8(bytes, it);
+    }
+    else if (prefix == 0xda)
+    {
+        length = decodeUint16(bytes, it);
+    }
+    else if (prefix == 0xdb)
+    {
+        length = decodeUint32(bytes, it);
+    }
+
+    char * str = new char[length + 1];
+    std::memcpy(str, bytes + it->offset, length);
+    str[length] = '\0'; // string termination
+    it->offset += length;
 
     string value(str);
     delete[] str;
